@@ -30,7 +30,13 @@ import json
 import pandas as pd
 import optuna
 from config import EnhancedConfig
-from policy import BetaActorCriticPolicy
+from policy import (
+    BetaActorCriticPolicy,
+    CentralizedCriticActorCriticPolicy,
+    CentralizedCriticBetaActorCriticPolicy,
+    CentralizedCriticPPO,
+    CentralizedCriticRolloutBuffer,
+)
 from logger import (
     get_logger,
     set_console_logging_level,
@@ -56,6 +62,14 @@ EnhancedMemoryTracker = UnifiedMemoryManager
 
 
 def resolve_algo_class(policy_mode: str, agent_name: str, config: Optional[EnhancedConfig] = None):
+    # mappo-2x2 task
+    if (
+        policy_mode == "PPO"
+        and config is not None
+        and str(getattr(config, "algo", "ippo") or "ippo").strip().lower() == "mappo"
+        and agent_name in ("investor_0", "risk_controller_0", "meta_controller_0")
+    ):
+        return CentralizedCriticPPO
     return {"PPO": PPO, "SAC": SAC, "TD3": TD3, "DQN": DQN}[policy_mode]
 
 
@@ -318,6 +332,7 @@ class MultiESGAgent:
         self.verbose = int(getattr(config, "verbose", 0))
         self.debug = bool(debug)
         self.multithreading = bool(getattr(config, "multithreading", False))
+        self.algo = str(getattr(config, "algo", "ippo") or "ippo").strip().lower()
 
         self._logger = logger
         self.logger = self._logger
@@ -338,6 +353,10 @@ class MultiESGAgent:
         self.observation_spaces: Dict[str, spaces.Box] = {}
         self.action_spaces: Dict[str, spaces.Space] = {}
         self._initialize_spaces()
+        # mappo-2x2 task
+        self._central_obs_dim = int(
+            sum(_flat_obs_dim(self.observation_spaces.get(agent)) or 0 for agent in self.possible_agents)
+        )
 
         # ROBUST INITIALIZATION: Verify observation spaces match actual environment output
         # This MUST happen BEFORE creating policies to ensure they're built with correct dimensions
@@ -815,6 +834,11 @@ class MultiESGAgent:
                 "optimizer_kwargs": {"eps": 1e-8, "weight_decay": 0.0},
             }
             policy_class = "MlpPolicy"
+            use_mappo_critic = (
+                policy_mode == "PPO"
+                and self.algo == "mappo"
+                and agent in ("investor_0", "risk_controller_0", "meta_controller_0")
+            )
 
             if (
                 policy_mode == "PPO"
@@ -822,6 +846,16 @@ class MultiESGAgent:
                 and bool(getattr(config, "investor_use_beta_policy", False))
             ):
                 policy_class = BetaActorCriticPolicy
+            if use_mappo_critic:
+                # mappo-2x2 task
+                policy_kwargs["central_obs_dim"] = int(getattr(self, "_central_obs_dim", 1))
+                policy_kwargs["central_net_arch"] = list(
+                    getattr(config, "mappo_central_net_arch", getattr(config, "net_arch", [256, 128, 64]))
+                )
+                if policy_class is BetaActorCriticPolicy:
+                    policy_class = CentralizedCriticBetaActorCriticPolicy
+                else:
+                    policy_class = CentralizedCriticActorCriticPolicy
 
             # Optional: increase initial exploration for continuous actions
             # (helps avoid near-constant actions / premature collapse)
@@ -832,6 +866,8 @@ class MultiESGAgent:
                 except Exception:
                     pass
             if policy_class is BetaActorCriticPolicy:
+                policy_kwargs["beta_epsilon"] = float(getattr(config, "investor_beta_epsilon", 1e-6))
+            if policy_class is CentralizedCriticBetaActorCriticPolicy:
                 policy_kwargs["beta_epsilon"] = float(getattr(config, "investor_beta_epsilon", 1e-6))
 
             algo_kwargs = {
@@ -854,23 +890,35 @@ class MultiESGAgent:
                 # actually binds before drift accumulates.
                 _lr = float(getattr(config, "lr", 3e-4))
                 _n_epochs = int(getattr(config, "n_epochs", 10))
+                _ent_coef = float(getattr(config, "ent_coef", 0.005))
+                _clip_range = float(getattr(config, "clip_range", 0.15))
+                _max_grad_norm = float(getattr(config, "max_grad_norm", 0.5))
+                _target_kl = getattr(config, "target_kl", None)
                 if agent == "meta_controller_0":
                     _lr = float(getattr(config, "meta_lr", min(_lr, 5e-5)))
                     _n_epochs = int(getattr(config, "meta_n_epochs", min(_n_epochs, 5)))
+                    _ent_coef = float(getattr(config, "meta_ent_coef", min(_ent_coef, 0.010)))
+                    _clip_range = float(getattr(config, "meta_clip_range", min(_clip_range, 0.10)))
+                    _max_grad_norm = float(getattr(config, "meta_max_grad_norm", min(_max_grad_norm, 0.30)))
+                    _target_kl = getattr(config, "meta_target_kl", _target_kl)
                 elif agent == "risk_controller_0":
                     _lr = float(getattr(config, "risk_lr", min(_lr, 1e-4)))
                     _n_epochs = int(getattr(config, "risk_n_epochs", min(_n_epochs, 5)))
+                    _ent_coef = float(getattr(config, "risk_ent_coef", min(_ent_coef, 0.008)))
+                    _clip_range = float(getattr(config, "risk_clip_range", min(_clip_range, 0.08)))
+                    _max_grad_norm = float(getattr(config, "risk_max_grad_norm", min(_max_grad_norm, 0.25)))
+                    _target_kl = getattr(config, "risk_target_kl", _target_kl)
                 algo_kwargs["learning_rate"] = _lr
                 algo_kwargs.update(
                     {
-                        "ent_coef": getattr(config, "ent_coef", 0.005),
+                        "ent_coef": _ent_coef,
                         "n_steps": ppo_n_steps,
                         "batch_size": ppo_batch_size,
                         "gae_lambda": float(getattr(config, "gae_lambda", 0.98)),
-                        "clip_range": float(getattr(config, "clip_range", 0.15)),
+                        "clip_range": _clip_range,
                         "normalize_advantage": True,
                         "vf_coef": float(getattr(config, "vf_coef", 0.5)),
-                        "max_grad_norm": float(getattr(config, "max_grad_norm", 0.5)),
+                        "max_grad_norm": _max_grad_norm,
                         "gamma": float(getattr(config, "gamma", 0.995)),
                         "n_epochs": _n_epochs,
                         # Exploration knobs (optional)
@@ -878,9 +926,19 @@ class MultiESGAgent:
                         "sde_sample_freq": int(getattr(config, "ppo_sde_sample_freq", 1)),
                     }
                 )
+                if _target_kl is not None:
+                    algo_kwargs["target_kl"] = float(_target_kl)
+                if use_mappo_critic:
+                    # mappo-2x2 task
+                    algo_kwargs["rollout_buffer_class"] = CentralizedCriticRolloutBuffer
+                    algo_kwargs["rollout_buffer_kwargs"] = {
+                        "central_obs_dim": int(getattr(self, "_central_obs_dim", 1))
+                    }
                 if agent in ("meta_controller_0", "risk_controller_0"):
                     self.logger.info(
-                        f"[PPO_STABILITY] {agent}: lr={_lr}, n_epochs={_n_epochs} (per-agent override)."
+                        f"[PPO_STABILITY] {agent}: lr={_lr}, n_epochs={_n_epochs}, "
+                        f"clip={_clip_range}, max_grad={_max_grad_norm}, ent={_ent_coef}, "
+                        f"target_kl={_target_kl} (per-agent override)."
                     )
             elif policy_mode in ("SAC", "TD3"):
                 algo_kwargs.update(
@@ -1562,17 +1620,28 @@ class MultiESGAgent:
             last_progress_bucket = int(self.total_steps // 1000)
             self._progress_last_time = time.perf_counter()
             self._progress_last_steps = int(self.total_steps)
+            zero_rollout_retries = 0
 
             while self.total_steps < target:
                 try:
                     steps_collected = self._collect_rollouts_enhanced(callbacks)
-                    if steps_collected == 0:
+                    buffers_ready_without_new_steps = bool(self._check_buffers_full())
+                    if steps_collected == 0 and not buffers_ready_without_new_steps:
+                        zero_rollout_retries += 1
                         self._handle_rollout_failure_enhanced()
+                        if zero_rollout_retries >= 2:
+                            raise RuntimeError(
+                                "[FAIL_HARD] Two consecutive zero-step rollout collections inside "
+                                "MultiESGAgent.learn(); refusing to spin indefinitely. "
+                                "Investigate the preceding rollout error logs."
+                            )
                         continue
+                    zero_rollout_retries = 0
 
-                    self.total_steps += steps_collected
-                    self._training_metrics["successful_steps"] += steps_collected
-                    pbar.update(steps_collected)
+                    if steps_collected > 0:
+                        self.total_steps += steps_collected
+                        self._training_metrics["successful_steps"] += steps_collected
+                        pbar.update(steps_collected)
 
                     current_progress_bucket = int(self.total_steps // 1000)
                     if current_progress_bucket > last_progress_bucket:
@@ -1601,10 +1670,43 @@ class MultiESGAgent:
                         raise
                     self._handle_training_error_enhanced(e)
                     if self._consecutive_errors >= self._max_consecutive_errors:
-                        break
+                        raise RuntimeError(
+                            f"[FAIL_HARD] Training aborted after {self._consecutive_errors} "
+                            f"consecutive rollout/training errors."
+                        ) from e
         finally:
             pbar.close()
             restore_console_logging_levels(saved_console_levels)
+
+    def _recover_ppo_after_nan(self, policy, pre_state, pre_optimizer_state, reason: str) -> None:
+        """Restore policy/optimizer state and drop the rollout that caused a NaN update."""
+        if pre_state is not None and hasattr(policy, "policy") and policy.policy is not None:
+            policy.policy.load_state_dict(pre_state)
+            optimizer = getattr(policy.policy, "optimizer", None)
+            if optimizer is not None and pre_optimizer_state is not None:
+                optimizer.load_state_dict(pre_optimizer_state)
+        if hasattr(policy, "rollout_buffer") and policy.rollout_buffer is not None:
+            policy.rollout_buffer.reset()
+        cfg = getattr(self, "config", None)
+        max_rollbacks = int(
+            max(1, getattr(cfg, "ppo_nan_max_rollbacks_per_learn", 1))
+        )
+        rollback_count = int(getattr(policy, "_nan_rollback_count", 0))
+        if rollback_count >= max_rollbacks:
+            raise RuntimeError(
+                f"[NAN_GUARD] {policy.agent_name}: {reason} for the "
+                f"{rollback_count + 1}-th time this learn interval. "
+                f"Rollback budget ({max_rollbacks}) exhausted; refusing to save corrupt training."
+            )
+        policy._nan_rollback_count = rollback_count + 1
+        self.logger.error(
+            f"[NAN_GUARD] {policy.agent_name}: {reason}; restored pre-update "
+            f"snapshot, reset rollout buffer, skipped update "
+            f"(rollback {rollback_count + 1}/{max_rollbacks})."
+        )
+        self._training_metrics["policy_errors"] = (
+            self._training_metrics.get("policy_errors", 0) + 1
+        )
 
     def _train_ppo_enhanced(self, policy):
         """
@@ -1668,14 +1770,19 @@ class MultiESGAgent:
                 # Without this, a single explosive update poisons the policy and
                 # all downstream episodes collect 0 steps (action distribution NaN).
                 _pre_state = None
+                _pre_optimizer_state = None
                 try:
                     if hasattr(policy, "policy") and policy.policy is not None:
                         _pre_state = {
                             k: v.detach().clone()
                             for k, v in policy.policy.state_dict().items()
                         }
+                        optimizer = getattr(policy.policy, "optimizer", None)
+                        if optimizer is not None:
+                            _pre_optimizer_state = deepcopy(optimizer.state_dict())
                 except Exception:
                     _pre_state = None
+                    _pre_optimizer_state = None
 
                 # Train policy and capture training metrics if available.
                 # ROBUSTNESS: SB3's policy.train() can raise mid-loop when an intermediate
@@ -1689,34 +1796,16 @@ class MultiESGAgent:
                 try:
                     train_info = policy.train()
                 except Exception as _train_exc:
-                    if _pre_state is not None:
-                        try:
-                            policy.policy.load_state_dict(_pre_state)
-                        except Exception as _restore_err:
-                            self.logger.error(
-                                f"[NAN_GUARD] {policy.agent_name}: train() raised AND pre-state "
-                                f"restore failed: {_restore_err}. Original error: {_train_exc}"
-                            )
-                            raise
-                    rollback_count = getattr(policy, "_nan_rollback_count", 0)
-                    if rollback_count >= 1:
-                        raise RuntimeError(
-                            f"[NAN_GUARD] {policy.agent_name}: train() raised non-finite distribution "
-                            f"params for the {rollback_count + 1}-th time this policy. One rollback "
-                            f"already used; refusing to silently corrupt training. Investigate reward "
-                            f"scaling, advantage clipping, or learning rate. Original error: {_train_exc}"
-                        ) from _train_exc
-                    policy._nan_rollback_count = rollback_count + 1
-                    self.logger.error(
-                        f"[NAN_GUARD] {policy.agent_name}: policy.train() raised "
-                        f"({type(_train_exc).__name__}: {_train_exc}); rolled back to pre-update "
-                        f"snapshot (use #{rollback_count + 1}/1). Skipping this train step. "
-                        f"NEXT NaN WILL FAIL HARD."
+                    self._recover_ppo_after_nan(
+                        policy,
+                        _pre_state,
+                        _pre_optimizer_state,
+                        (
+                            "policy.train() raised non-finite distribution params "
+                            f"({type(_train_exc).__name__}: {_train_exc})"
+                        ),
                     )
-                    self._training_metrics["policy_errors"] = (
-                        self._training_metrics.get("policy_errors", 0) + 1
-                    )
-                    # train_info stays None; downstream metric logging tolerates this.
+                    return
 
                 # POST-TRAIN log_std CLAMP (root-cause prevention).
                 # PPO's log_std is a free nn.Parameter with no built-in bounds. Under large
@@ -1745,29 +1834,18 @@ class MultiESGAgent:
                                 has_bad = True
                                 break
                     if has_bad:
-                        rollback_count = getattr(policy, "_nan_rollback_count", 0)
                         if _pre_state is None:
                             raise RuntimeError(
                                 f"[NAN_GUARD] {policy.agent_name}: NaN/Inf in params after train() "
                                 f"and no snapshot was taken. Cannot recover — failing hard."
                             )
-                        if rollback_count >= 1:
-                            raise RuntimeError(
-                                f"[NAN_GUARD] {policy.agent_name}: NaN/Inf detected in params for the "
-                                f"{rollback_count + 1}-th time this policy. One rollback already used; "
-                                f"refusing to silently corrupt training. Investigate reward scaling, "
-                                f"advantage clipping, or learning rate."
-                            )
-                        policy.policy.load_state_dict(_pre_state)
-                        policy._nan_rollback_count = rollback_count + 1
-                        self.logger.error(
-                            f"[NAN_GUARD] {policy.agent_name}: NaN/Inf in params after train(); "
-                            f"rolled back to pre-update snapshot (use #{rollback_count + 1}/1). "
-                            f"Buffer reset, training step skipped. NEXT NaN WILL FAIL HARD."
+                        self._recover_ppo_after_nan(
+                            policy,
+                            _pre_state,
+                            _pre_optimizer_state,
+                            "NaN/Inf detected in params after train()",
                         )
-                        self._training_metrics["policy_errors"] = (
-                            self._training_metrics.get("policy_errors", 0) + 1
-                        )
+                        return
                 except RuntimeError:
                     raise
                 except Exception as guard_err:
@@ -2007,7 +2085,7 @@ class MultiESGAgent:
                 # FAIL-HARD: NaN_GUARD must propagate; never silently break the rollout.
                 if isinstance(e, RuntimeError) and "[NAN_GUARD]" in str(e):
                     raise
-                break
+                raise RuntimeError(f"[ROLLOUT_STEP_FATAL] Rollout collection failed: {e}") from e
 
         self._finalize_rollouts_enhanced()
         return steps_collected
@@ -2015,6 +2093,10 @@ class MultiESGAgent:
     def _collect_actions_enhanced(self):
         actions_dict: Dict[str, Any] = {}
         agent_data: Dict[int, Dict[str, Any]] = {}
+        central_obs_np = None
+        if self.algo == "mappo":
+            # mappo-2x2 task
+            central_obs_np = self._build_central_critic_observation(self._last_obs)
 
         # gSDE: resample exploration noise explicitly (SB3 rollout collector is not used here).
         self._maybe_reset_sde_noise(force=False)
@@ -2110,7 +2192,16 @@ class MultiESGAgent:
                         # Stable SB3 API: distribution sampling + log_prob + value
                         distribution = policy.policy.get_distribution(obs_tensor)
                         action_t = distribution.get_actions(deterministic=False)
-                        value_t = policy.policy.predict_values(obs_tensor)
+                        if central_obs_np is not None and hasattr(policy.policy, "predict_central_values"):
+                            # mappo-2x2 task
+                            central_tensor = torch.as_tensor(
+                                central_obs_np,
+                                dtype=torch.float32,
+                                device=policy.device,
+                            ).reshape(1, -1)
+                            value_t = policy.policy.predict_central_values(central_tensor)
+                        else:
+                            value_t = policy.policy.predict_values(obs_tensor)
 
                         raw = action_t.detach().cpu().numpy().flatten()
                         # Keep PPO execution on the same smooth path as the rest of the controller:
@@ -2258,6 +2349,8 @@ class MultiESGAgent:
                             "value_t": value_t,
                             "log_prob_t": log_prob_t,
                         }
+                        if central_obs_np is not None and hasattr(policy.policy, "predict_central_values"):
+                            agent_data[polid]["central_obs"] = central_obs_np.copy()
                         actions_dict[agent_name] = proc
                     else:
                         pred = policy.predict(obs, deterministic=False)[0]
@@ -2398,6 +2491,42 @@ class MultiESGAgent:
             out[agent] = ((spec["low"] + spec["high"]) / 2.0) if spec else np.zeros(10, np.float32)
         return out
 
+    def _flatten_agent_obs_for_central_critic(self, agent: str, obs: Any) -> np.ndarray:
+        """Flatten one agent observation for the MAPPO centralized critic."""
+        expected = _flat_obs_dim(self.observation_spaces.get(agent)) or 0
+        if isinstance(obs, dict):
+            parts = []
+            for key in sorted(obs.keys()):
+                parts.append(np.asarray(obs[key], dtype=np.float32).reshape(-1))
+            arr = np.concatenate(parts).astype(np.float32) if parts else np.zeros(0, dtype=np.float32)
+        else:
+            arr = np.asarray(obs, dtype=np.float32).reshape(-1)
+        if expected <= 0:
+            return arr.astype(np.float32)
+        if arr.size == expected:
+            return arr.astype(np.float32)
+        if arr.size > expected:
+            return arr[:expected].astype(np.float32)
+        return np.pad(arr, (0, expected - arr.size), mode="constant").astype(np.float32)
+
+    def _build_central_critic_observation(self, obs_dict: Optional[Dict[str, Any]] = None) -> np.ndarray:
+        # mappo-2x2 task
+        source = obs_dict if isinstance(obs_dict, dict) else self._last_obs
+        parts = []
+        for agent in self.possible_agents:
+            obs = source.get(agent) if isinstance(source, dict) else None
+            if obs is None:
+                dim = _flat_obs_dim(self.observation_spaces.get(agent)) or 0
+                parts.append(np.zeros(dim, dtype=np.float32))
+            else:
+                parts.append(self._flatten_agent_obs_for_central_critic(agent, obs))
+        central = np.concatenate(parts).astype(np.float32) if parts else np.zeros(1, dtype=np.float32)
+        if central.size != int(getattr(self, "_central_obs_dim", central.size)):
+            raise RuntimeError(
+                f"[MAPPO_CENTRAL_OBS] Expected {self._central_obs_dim}D central obs, got {central.size}D"
+            )
+        return central
+
     def _add_experiences_enhanced(self, agent_data, rewards, dones, truncs, next_obs, infos):
         for polid, policy in enumerate(self.policies):
             agent_name = self.possible_agents[polid]
@@ -2441,8 +2570,18 @@ class MultiESGAgent:
                                 else:
                                     next_batch = np.asarray(next_obs_agent, dtype=np.float32).reshape(1, -1)
                                 with torch.no_grad():
-                                    next_tensor = obs_as_tensor(next_batch, policy.device)
-                                    v_next = policy.policy.predict_values(next_tensor)
+                                    if hasattr(policy.policy, "predict_central_values"):
+                                        # mappo-2x2 task
+                                        central_next = self._build_central_critic_observation(next_obs)
+                                        next_tensor = torch.as_tensor(
+                                            central_next,
+                                            dtype=torch.float32,
+                                            device=policy.device,
+                                        ).reshape(1, -1)
+                                        v_next = policy.policy.predict_central_values(next_tensor)
+                                    else:
+                                        next_tensor = obs_as_tensor(next_batch, policy.device)
+                                        v_next = policy.policy.predict_values(next_tensor)
                                 gamma = float(getattr(policy, "gamma", getattr(self.config, "gamma", 0.99)))
                                 not_done = 0.0 if done else 1.0
                                 v_t_f   = float(v_t.detach().cpu().numpy().flatten()[0])
@@ -2714,6 +2853,9 @@ class MultiESGAgent:
                     f"rollout buffer pos={current_pos} reached/exceeded size={buffer_size} before add()."
                 )
 
+            if hasattr(buffer, "add_central_observation") and "central_obs" in data:
+                # mappo-2x2 task
+                buffer.add_central_observation(current_pos, data["central_obs"])
             policy.rollout_buffer.add(obs_np, action_np, reward_np, starts_np, value_t, log_prob_t)
 
         except Exception as e:
@@ -3002,8 +3144,18 @@ class MultiESGAgent:
                                 )
                         
                         with torch.no_grad():
-                            obs_tensor = obs_as_tensor(final_obs, policy.device)
-                            final_value = policy.policy.predict_values(obs_tensor)
+                            if hasattr(policy.policy, "predict_central_values"):
+                                # mappo-2x2 task
+                                central_final = self._build_central_critic_observation(self._last_obs)
+                                obs_tensor = torch.as_tensor(
+                                    central_final,
+                                    dtype=torch.float32,
+                                    device=policy.device,
+                                ).reshape(1, -1)
+                                final_value = policy.policy.predict_central_values(obs_tensor)
+                            else:
+                                obs_tensor = obs_as_tensor(final_obs, policy.device)
+                                final_value = policy.policy.predict_values(obs_tensor)
                         
                         # CRITICAL FIX: SB3's compute_returns_and_advantage expects last_values as PyTorch tensor
                         # It internally calls .clone() which only works on tensors, not numpy arrays

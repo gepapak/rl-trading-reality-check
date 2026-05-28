@@ -66,6 +66,7 @@ def build_runtime_contract(
     meta_freq_max: int,
     enable_forecast_utilization: bool = False,
     forecast_prior_settings: Optional[Dict[str, Any]] = None,
+    log_sleeve: bool = False,
 ) -> Dict[str, Any]:
     """Produce the canonical Tier1 train/eval consistency contract."""
     contract = {
@@ -78,6 +79,9 @@ def build_runtime_contract(
     }
     if bool(enable_forecast_utilization):
         contract["forecast_prior"] = dict(forecast_prior_settings or {})
+    # sleeve-supplement task
+    if bool(log_sleeve):
+        contract["log_sleeve"] = True
     return contract
 
 

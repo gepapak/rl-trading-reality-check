@@ -134,6 +134,7 @@ class EnhancedConfig:
         self.property_tax_rate = 0.005  # 0.5% of asset value annually
         self.debt_service_rate = 0.015  # 1.5% of asset value annually (realistic debt service)
         self.distribution_rate = 0.10  # 10% of excess cash distributed
+        self.eval_distribution_rate = None  # Eval-only cash-sweeper override; None preserves training/live behavior.
         self.target_cash_ratio = 0.15  # FIXED: Increased to 15% to give agents more working capital
         self.min_distribution_threshold_ratio = 0.01  # FIXED: Increased to 1% to reduce distribution frequency
         self.administration_fee_rate = 0.0001  # 0.01% of fund value annually (basic admin)
@@ -154,6 +155,17 @@ class EnhancedConfig:
         # Trading costs - FIXED: Convert USD to DKK
         self.transaction_fixed_cost = 25.0 / self.dkk_to_usd_rate  # $25/trade â†’ ~172 DKK/trade
         self.transaction_cost_bps = 0.5  # 0.5 basis points (institutional rates)
+        self.friction_cost_multiplier = 1.0  # Eval friction sweep multiplier; 1.0 preserves existing costs.
+        self.half_spread_bp = 0.0  # Eval friction sweep half-spread in basis points; 0.0 preserves v1 behavior.
+        self.impact_coef_bp = 0.0  # Eval-only size-dependent market impact; 0.0 preserves existing behavior.
+        self.impact_exponent = 0.5  # Eval-only square-root temporary impact exponent.
+        self.impact_ref_notional = "sleeve"  # Eval-only impact Q_ref; "sleeve" uses current trading cash.
+        self.impact_volume_data_path = ""  # Eval-only liquidity CSV for impact_ref_notional="volume".
+        self.impact_volume_timestamp_column = "timestamp"  # market-impact task
+        self.impact_volume_column = ""  # market-impact task; blank autodetects a single volume column.
+        self.impact_volume_unit = "mwh"  # market-impact task; {"mwh", "dkk"}.
+        self.impact_volume_max_staleness_minutes = 90.0  # market-impact task
+        self.impact_volume_price_floor_dkk_per_mwh = 50.0  # market-impact task
 
         # Battery dispatch economic thresholds
         self.battery_hurdle_min_dkk = 5.0  # Minimum hurdle rate in DKK/MWh
@@ -461,6 +473,11 @@ class EnhancedConfig:
         # a missing or malformed ANN cache.
         self.forecast_prior_fail_fast = True
 
+        # Per-episode debug/health CSV logging is expensive during multi-seed
+        # training. Keep it disabled by default for paper runs; checkpoints and
+        # evaluation JSON are still written by their normal code paths.
+        self.enable_episode_csv_logs = False
+
         # === Expert Blending Mode ===
         self.expert_blend_mode = "none"       # {"none", "fixed", "adaptive"}: expert blending mode
         self.expert_blend_weight = 0.0        # Blend weight for fixed mode (0.0-1.0)
@@ -481,6 +498,8 @@ class EnhancedConfig:
         self.verbose = 1
         self.seed = 42
         self.multithreading = False
+        self.algo = "ippo"
+        self.mappo_central_net_arch = [256, 128, 64]
 
         # Per-agent reward normalization (Welford online mean/std, applied before buffer insertion).
         # Decouples reward scale from hyperparameter tuning; each agent's reward stream is
@@ -501,6 +520,19 @@ class EnhancedConfig:
         self.max_grad_norm = 0.5
         self.n_epochs = 10  # 10 passes × 4 minibatches = 40 gradient steps per rollout
         self.n_steps = 1024  # SB3 policy buffer size (actual rollout cap capped to 256 in metacontroller)
+        self.meta_lr = 5e-5
+        self.risk_lr = 3e-5
+        self.meta_n_epochs = 4
+        self.risk_n_epochs = 3
+        self.meta_clip_range = 0.10
+        self.risk_clip_range = 0.08
+        self.meta_max_grad_norm = 0.30
+        self.risk_max_grad_norm = 0.25
+        self.meta_ent_coef = 0.010
+        self.risk_ent_coef = 0.008
+        self.meta_target_kl = 0.020
+        self.risk_target_kl = 0.015
+        self.ppo_nan_max_rollbacks_per_learn = 2
 
         # Optional SB3 PPO exploration controls. Keep the default path vanilla:
         # standard Gaussian policy, no gSDE, default policy log_std_init.
@@ -864,6 +896,49 @@ class EnhancedConfig:
         for name, value in rate_params:
             if not (0.0 <= value <= 1.0):
                 errors.append(f"{name}={value} not in [0, 1]")
+        if self.eval_distribution_rate is not None:
+            if not (0.0 <= float(self.eval_distribution_rate) <= 1.0):
+                errors.append(f"eval_distribution_rate={self.eval_distribution_rate} not in [0, 1]")
+        if float(self.friction_cost_multiplier) < 0.0:
+            errors.append(f"friction_cost_multiplier={self.friction_cost_multiplier} must be non-negative")
+        if float(self.half_spread_bp) < 0.0:
+            errors.append(f"half_spread_bp={self.half_spread_bp} must be non-negative")
+        # market-impact task
+        if float(getattr(self, "impact_coef_bp", 0.0)) < 0.0:
+            errors.append(f"impact_coef_bp={self.impact_coef_bp} must be non-negative")
+        if float(getattr(self, "impact_exponent", 0.5)) <= 0.0:
+            errors.append(f"impact_exponent={self.impact_exponent} must be positive")
+        impact_ref = str(getattr(self, "impact_ref_notional", "sleeve")).strip().lower()
+        impact_volume_refs = {"volume", "market_volume", "day_ahead_volume", "liquidity_volume"}
+        # market-impact task
+        if impact_ref not in {"sleeve", *impact_volume_refs}:
+            try:
+                if float(getattr(self, "impact_ref_notional")) <= 0.0:
+                    errors.append(
+                        f"impact_ref_notional={self.impact_ref_notional} must be positive, 'sleeve', or 'volume'"
+                    )
+            except Exception:
+                errors.append(
+                    f"impact_ref_notional={self.impact_ref_notional!r} must be positive, 'sleeve', or 'volume'"
+                )
+        if impact_ref in impact_volume_refs and float(getattr(self, "impact_coef_bp", 0.0)) > 0.0:
+            # market-impact task
+            if not str(getattr(self, "impact_volume_data_path", "") or "").strip():
+                errors.append(
+                    "impact_volume_data_path is required when impact_ref_notional='volume' and impact_coef_bp > 0"
+                )
+        if str(getattr(self, "impact_volume_unit", "mwh")).strip().lower() not in {"mwh", "dkk"}:
+            errors.append("impact_volume_unit must be 'mwh' or 'dkk'")
+        try:
+            if float(getattr(self, "impact_volume_max_staleness_minutes", 90.0)) <= 0.0:
+                errors.append("impact_volume_max_staleness_minutes must be positive")
+        except Exception:
+            errors.append("impact_volume_max_staleness_minutes must be numeric")
+        try:
+            if float(getattr(self, "impact_volume_price_floor_dkk_per_mwh", 50.0)) <= 0.0:
+                errors.append("impact_volume_price_floor_dkk_per_mwh must be positive")
+        except Exception:
+            errors.append("impact_volume_price_floor_dkk_per_mwh must be numeric")
 
         # 10. Forecast horizons should be positive integers
         for horizon_name, horizon_steps in self.forecast_horizons.items():

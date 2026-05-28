@@ -243,15 +243,18 @@ def load_previous_optimization(optimization_dir: str = "optimization_results"):
 def setup_enhanced_training_monitoring(log_path: str, save_dir: str) -> Dict[str, str]:
     monitoring_dirs = {
         'checkpoints': os.path.join(save_dir, 'checkpoints'),
-        'logs': os.path.join(save_dir, 'logs')
     }
+    if log_path:
+        monitoring_dirs['logs'] = os.path.dirname(log_path)
     for _, dir_path in monitoring_dirs.items():
         os.makedirs(dir_path, exist_ok=True)
 
     logger.info("Enhanced monitoring setup:")
-    logger.info(f"   Metrics log: {log_path}")
+    if log_path:
+        logger.info(f"   Metrics log: {log_path}")
     logger.info(f"   Checkpoints: {monitoring_dirs['checkpoints']}")
-    logger.info(f"   Logs:        {monitoring_dirs['logs']}")
+    if 'logs' in monitoring_dirs:
+        logger.info(f"   Logs:        {monitoring_dirs['logs']}")
     return monitoring_dirs
 
 
@@ -378,8 +381,8 @@ def enhanced_training_loop(agent, env, timesteps: int, checkpoint_freq: int, mon
     checkpoint_count = 0
     zero_step_retry_used = False  # NAN_GUARD: allow one zero-step retry per episode call.
 
-    # NAN_GUARD: reset per-episode rollback budget on each policy. Each episode gets one
-    # rollback attempt; a second NaN within the same episode fails hard.
+    # NAN_GUARD: reset per-episode rollback budget on each policy. The budget size is
+    # controlled by config.ppo_nan_max_rollbacks_per_learn.
     try:
         if hasattr(agent, "policies"):
             for _pol in agent.policies:
@@ -1295,16 +1298,17 @@ def run_episode_training(agent, base_env, env, args, monitoring_dirs, config, mw
             # MEMORY FIX: Ensure clean environment creation
             try:
                 # Create episode-specific environment with proper initialization
-                # NEW: Pass logs as log_dir so debug logs are saved in logs folder
-                logs_dir = os.path.join(args.save_dir, 'logs')
-                os.makedirs(logs_dir, exist_ok=True)
+                logs_dir = None
+                if bool(getattr(config, "enable_episode_csv_logs", False)):
+                    logs_dir = os.path.join(args.save_dir, 'logs')
+                    os.makedirs(logs_dir, exist_ok=True)
                 episode_base_env = RenewableMultiAgentEnv(
                     episode_data,
                     config=getattr(base_env, 'config', None),
                     investment_freq=getattr(base_env, 'investment_freq', 12),
                     init_budget=getattr(base_env, 'init_budget', None),
                     enhanced_risk_controller=True,
-                    log_dir=logs_dir  # NEW: Save debug logs in logs folder
+                    log_dir=logs_dir,
                 )
                 
                 # CRITICAL FIX: Set episode number for debug logging
@@ -1823,6 +1827,13 @@ def main():
     parser.add_argument("--data_path", type=str, default="sample.csv", help="Path to energy time series data")
     parser.add_argument("--timesteps", type=int, default=50000, help="TUNED: Increased for full synergy emergence (was 20000)")
     parser.add_argument("--device", type=str, default="cpu", help="Device for RL training (cuda/cpu)")
+    parser.add_argument(
+        "--algo",
+        type=str,
+        default="ippo",
+        choices=["ippo", "mappo"],
+        help="Training algorithm variant. Default ippo preserves the existing independent-critic path.",
+    )
     parser.add_argument("--investment_freq", type=int, default=6, help="Investor action frequency in steps")
     parser.add_argument("--meta_freq_min", type=int, default=None, help="Minimum live investor trade cadence in steps (default: config.meta_freq_min).")
     parser.add_argument("--meta_freq_max", type=int, default=None, help="Maximum live investor trade cadence in steps (default: config.meta_freq_max).")
@@ -1911,37 +1922,48 @@ def main():
             "calibrated cache-derived target exposure."
         ),
     )
+    parser.add_argument(
+        "--enable_episode_csv_logs",
+        action="store_true",
+        default=False,
+        help=(
+            "Write per-episode debug, category, and agent-health CSV logs. "
+            "Disabled by default so training keeps checkpoints without the large CSV telemetry files."
+        ),
+    )
     add_forecast_prior_override_args(parser)
 
     args = parser.parse_args()
     args.tier1_dir = None
+    enable_episode_csv_logs = bool(getattr(args, "enable_episode_csv_logs", False))
 
-    # === SETUP TERMINAL OUTPUT LOGGING ===
-    # Create logs directory in save_dir
-    log_dir = os.path.join(args.save_dir, "logs")
-    os.makedirs(log_dir, exist_ok=True)
-    
-    # Create log file with timestamp
+    # === OPTIONAL TERMINAL OUTPUT LOGGING ===
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    log_file_path = os.path.join(log_dir, f"training_output_{timestamp}.txt")
-    
-    # Setup TeeOutput to capture both print() and logging
-    # Create separate instances for stdout and stderr (both write to same file)
-    tee_output_stdout = TeeOutput(log_file_path)
-    tee_output_stdout._set_stream_type(is_stdout=True)
-    tee_output_stderr = TeeOutput(log_file_path)
-    tee_output_stderr._set_stream_type(is_stderr=True)
-    sys.stdout = tee_output_stdout
-    sys.stderr = tee_output_stderr
-    # Store both for cleanup (use stdout as primary reference)
-    tee_output = tee_output_stdout
-    tee_output._stderr_instance = tee_output_stderr  # Store reference to stderr instance
-    
-    # Reconfigure logging with file handler (centralized in logger.py)
+    log_file_path = None
+    tee_output = None
+    if enable_episode_csv_logs:
+        log_dir = os.path.join(args.save_dir, "logs")
+        os.makedirs(log_dir, exist_ok=True)
+        log_file_path = os.path.join(log_dir, f"training_output_{timestamp}.txt")
+
+        # Setup TeeOutput to capture both print() and logging
+        # Create separate instances for stdout and stderr (both write to same file)
+        tee_output_stdout = TeeOutput(log_file_path)
+        tee_output_stdout._set_stream_type(is_stdout=True)
+        tee_output_stderr = TeeOutput(log_file_path)
+        tee_output_stderr._set_stream_type(is_stderr=True)
+        sys.stdout = tee_output_stdout
+        sys.stderr = tee_output_stderr
+        # Store both for cleanup (use stdout as primary reference)
+        tee_output = tee_output_stdout
+        tee_output._stderr_instance = tee_output_stderr  # Store reference to stderr instance
+
+    # Reconfigure logging with file handler only when file logging is enabled.
     configure_logging(level=logging.INFO, log_file=log_file_path, force_reconfigure=True)
-    
-    logger.info(f"\n[LOG] Terminal output being saved to: {log_file_path}")
-    logger.info(f"[LOG] All logging will be captured in this file\n")
+
+    if log_file_path:
+        logger.info(f"\n[LOG] Terminal output being saved to: {log_file_path}")
+        logger.info(f"[LOG] All logging will be captured in this file\n")
 
     # === AUTO-DEPENDENCY RESOLUTION (PAPER MODES) ===
     def resolve_dependencies(args):
@@ -2042,8 +2064,7 @@ def main():
 
     # Create save dir + metrics subdir
     os.makedirs(args.save_dir, exist_ok=True)
-    metrics_dir = os.path.join(args.save_dir, "metrics")
-    os.makedirs(metrics_dir, exist_ok=True)
+    metrics_dir = os.path.join(args.save_dir, "metrics") if enable_episode_csv_logs else None
 
     # CRITICAL FIX: Create config FIRST before loading data
     # Initialize best_params (must happen before config creation)
@@ -2125,10 +2146,15 @@ def main():
 
     config.forecast_cache_dir = str(getattr(args, "forecast_cache_dir", "forecast_cache"))
     config.enable_forecast_utilization = bool(getattr(args, "enable_forecast_utilization", False))
+    config.enable_episode_csv_logs = bool(getattr(args, "enable_episode_csv_logs", False))
+    # mappo-2x2 task
+    config.algo = str(getattr(args, "algo", "ippo") or "ippo").strip().lower()
     forecast_prior_overrides = apply_forecast_prior_overrides(config, args)
 
     logger.info("\n[TIER1] Enabled: True")
+    logger.info(f"  algo = {config.algo}")
     logger.info(f"  enable_forecast_utilization = {bool(config.enable_forecast_utilization)}")
+    logger.info(f"  enable_episode_csv_logs = {bool(config.enable_episode_csv_logs)}")
     if forecast_prior_overrides:
         logger.info(
             "  forecast_prior_overrides = "
@@ -2227,25 +2253,26 @@ def main():
     # 4) Environment setup
     logger.info("\nSetting up enhanced environment with multi-objective rewards...")
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    log_path = os.path.join(metrics_dir, f"enhanced_metrics_{timestamp}.csv")
+    log_path = os.path.join(metrics_dir, f"enhanced_metrics_{timestamp}.csv") if metrics_dir else None
 
     # CRITICAL FIX: Create base environment first with proper references
     try:
         # Step 1: Create base environment
-        # NEW: Pass logs as log_dir so debug logs are saved in logs folder
-        # Create logs subdirectory inside save_dir
-        logs_dir = os.path.join(args.save_dir, 'logs')
-        os.makedirs(logs_dir, exist_ok=True)
-        # IMPORTANT: In episode training, base_env is a bootstrap env (used for init/wiring).
-        # It should NOT write episode logs into the main logs directory, otherwise it can clobber
-        # tier*_debug_ep0.csv when resuming at a later episode.
-        bootstrap_logs_dir = os.path.join(logs_dir, "_bootstrap") if args.episode_training else logs_dir
-        os.makedirs(bootstrap_logs_dir, exist_ok=True)
+        logs_dir = None
+        bootstrap_logs_dir = None
+        if bool(getattr(config, "enable_episode_csv_logs", False)):
+            logs_dir = os.path.join(args.save_dir, 'logs')
+            os.makedirs(logs_dir, exist_ok=True)
+            # IMPORTANT: In episode training, base_env is a bootstrap env (used for init/wiring).
+            # It should NOT write episode logs into the main logs directory, otherwise it can clobber
+            # tier*_debug_ep0.csv when resuming at a later episode.
+            bootstrap_logs_dir = os.path.join(logs_dir, "_bootstrap") if args.episode_training else logs_dir
+            os.makedirs(bootstrap_logs_dir, exist_ok=True)
         base_env = RenewableMultiAgentEnv(
             data,
-            investment_freq=args.investment_freq,
+            investment_freq=int(getattr(config, "investment_freq", args.investment_freq) or args.investment_freq),
             config=config,  # Pass config to environment
-            log_dir=bootstrap_logs_dir  # Keep bootstrap logs isolated in episode training
+            log_dir=bootstrap_logs_dir,
         )
 
         if args.episode_training:
@@ -2299,7 +2326,11 @@ def main():
     if args.optimize and not best_params:
         logger.info("\nRunning hyperparameter optimization...")
         opt_data = data.head(min(5000, len(data)))
-        opt_base_env = RenewableMultiAgentEnv(opt_data, config=config)
+        opt_base_env = RenewableMultiAgentEnv(
+            opt_data,
+            config=config,
+            investment_freq=int(getattr(config, "investment_freq", args.investment_freq) or args.investment_freq),
+        )
         # Keep Tier-1 observation spaces fixed for a fair comparison.
         opt_env = opt_base_env
 
@@ -2448,19 +2479,21 @@ def main():
             pass
         # Always close log file, even on error
         try:
-            logger.info(f"\n[LOG] Closing log file: {log_file_path}")
-            # Close both tee outputs
-            if hasattr(tee_output, 'close'):
-                tee_output.close()
-            if hasattr(tee_output, '_stderr_instance') and hasattr(tee_output._stderr_instance, 'close'):
-                tee_output._stderr_instance.close()
-            # Restore original stdout/stderr
-            if hasattr(tee_output, 'stdout'):
-                sys.stdout = tee_output.stdout
-            if hasattr(tee_output, '_stderr_instance') and hasattr(tee_output._stderr_instance, 'stderr'):
-                sys.stderr = tee_output._stderr_instance.stderr
-            elif hasattr(tee_output, 'stderr'):
-                sys.stderr = tee_output.stderr
+            if tee_output is not None:
+                if log_file_path:
+                    logger.info(f"\n[LOG] Closing log file: {log_file_path}")
+                # Close both tee outputs
+                if hasattr(tee_output, 'close'):
+                    tee_output.close()
+                if hasattr(tee_output, '_stderr_instance') and hasattr(tee_output._stderr_instance, 'close'):
+                    tee_output._stderr_instance.close()
+                # Restore original stdout/stderr
+                if hasattr(tee_output, 'stdout'):
+                    sys.stdout = tee_output.stdout
+                if hasattr(tee_output, '_stderr_instance') and hasattr(tee_output._stderr_instance, 'stderr'):
+                    sys.stderr = tee_output._stderr_instance.stderr
+                elif hasattr(tee_output, 'stderr'):
+                    sys.stderr = tee_output.stderr
         except Exception:
             pass
 
@@ -2487,14 +2520,18 @@ def main():
                 'data_path': args.data_path,
                 'total_timesteps_budgeted': int(total_trained),
                 'agent_total_steps': int(getattr(agent, 'total_steps', 0)),
+                'seed': int(getattr(config, 'seed', args.seed)),
                 'device': args.device,
                 'flags': {
                     'enable_forecast_utilization': bool(getattr(config, 'enable_forecast_utilization', False)),
                     'one_factor_investor_sleeve': True,
+                    'algo': str(getattr(config, 'algo', 'ippo') or 'ippo'),
                 },
                 'runtime_contract': runtime_contract,
                 'runtime_contract_hash': runtime_contract_hash_value,
                 'final_config': {
+                    'seed': int(getattr(config, 'seed', args.seed)),
+                    'algo': str(getattr(config, 'algo', 'ippo') or 'ippo'),
                     'lr': config.lr,
                     'ent_coef': config.ent_coef,
                     'batch_size': config.batch_size,
@@ -2506,6 +2543,19 @@ def main():
                     'financial_allocation': getattr(config, 'financial_allocation', None),
                     'ppo_use_sde': getattr(config, 'ppo_use_sde', None),
                     'ppo_log_std_init': getattr(config, 'ppo_log_std_init', None),
+                    'meta_lr': getattr(config, 'meta_lr', None),
+                    'risk_lr': getattr(config, 'risk_lr', None),
+                    'meta_n_epochs': getattr(config, 'meta_n_epochs', None),
+                    'risk_n_epochs': getattr(config, 'risk_n_epochs', None),
+                    'meta_clip_range': getattr(config, 'meta_clip_range', None),
+                    'risk_clip_range': getattr(config, 'risk_clip_range', None),
+                    'meta_max_grad_norm': getattr(config, 'meta_max_grad_norm', None),
+                    'risk_max_grad_norm': getattr(config, 'risk_max_grad_norm', None),
+                    'meta_ent_coef': getattr(config, 'meta_ent_coef', None),
+                    'risk_ent_coef': getattr(config, 'risk_ent_coef', None),
+                    'meta_target_kl': getattr(config, 'meta_target_kl', None),
+                    'risk_target_kl': getattr(config, 'risk_target_kl', None),
+                    'ppo_nan_max_rollbacks_per_learn': getattr(config, 'ppo_nan_max_rollbacks_per_learn', None),
                     'investor_use_beta_policy': getattr(config, 'investor_use_beta_policy', None),
                     'investor_beta_epsilon': getattr(config, 'investor_beta_epsilon', None),
                     'investor_clean_reward_contract': getattr(config, 'investor_clean_reward_contract', None),

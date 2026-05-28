@@ -317,11 +317,13 @@ class TeeOutput:
 class RewardLogger:
     """Logs detailed reward, forecast, and portfolio information at every timestep"""
     
-    def __init__(self, log_dir: str = "debug_logs", tier_name: str = "tier1"):
+    def __init__(self, log_dir: str = "debug_logs", tier_name: str = "tier1", enabled: bool = True):
         self.log_dir = log_dir
         self.tier_name = tier_name
+        self.enabled = bool(enabled)
         self.flush_every_steps = 100
-        os.makedirs(log_dir, exist_ok=True)
+        if self.enabled:
+            os.makedirs(log_dir, exist_ok=True)
 
         # Track unknown-field warnings so we only log each unknown field once
         self._warned_unknown_fields = set()
@@ -460,7 +462,7 @@ class RewardLogger:
             ],
             'positions': [
                 'episode', 'timestep',
-                'position_signed', 'position_exposure',
+                'position_signed', 'held_exposure_signed', 'position_exposure',
                 'wind_pos_norm', 'solar_pos_norm', 'hydro_pos_norm',
                 'decision_step', 'exposure_exec', 'action_sign',
                 'trade_signal_active', 'trade_signal_sign',
@@ -526,6 +528,10 @@ class RewardLogger:
         
     def start_episode(self, episode_num: int):
         """Initialize logging for a new episode - creates a new CSV file per episode"""
+        if not self.enabled:
+            self.current_episode = episode_num
+            return
+
         # Close previous episode's file if open
         if self.csv_file_handle is not None:
             self.csv_file_handle.close()
@@ -590,6 +596,8 @@ class RewardLogger:
     
     def _create_category_csvs(self, episode_num: int):
         """Create category-specific CSV files for better organization."""
+        if not self.enabled:
+            return
         try:
             for category, fields in self.category_fields.items():
                 # Single canonical file name per episode/category.
@@ -632,6 +640,7 @@ class RewardLogger:
                  years_elapsed: float = 0.0,
                  # Position info
                  position_signed: float = 0.0,
+                 held_exposure_signed: float = 0.0,
                  position_exposure: float = 0.0,
                  decision_step: float = 0.0,
                  exposure_exec: float = 0.0,
@@ -768,6 +777,9 @@ class RewardLogger:
                  meta_budget_n: float = 0.0,
                  **extra_fields: Any):
         """Log detailed step information"""
+        if not self.enabled:
+            return
+
         # DEBUG to verify log_step is being called
         if timestep % 100 == 0:
             logging.debug(f"[LOGGER] log_step() called at timestep={timestep}")
@@ -814,6 +826,7 @@ class RewardLogger:
             'years_elapsed': years_elapsed,
             # Position info
             'position_signed': position_signed,
+            'held_exposure_signed': held_exposure_signed,
             'position_exposure': position_exposure,
             'decision_step': decision_step,
             'exposure_exec': exposure_exec,
@@ -1193,7 +1206,7 @@ class RewardLogger:
             'distribution_adjusted_trading_sleeve_dkk',
             'depreciation_ratio', 'years_elapsed',
             # Position info (common to both tiers)
-            'position_signed', 'position_exposure', 'decision_step', 'exposure_exec', 'action_sign',
+            'position_signed', 'held_exposure_signed', 'position_exposure', 'decision_step', 'exposure_exec', 'action_sign',
             'trade_signal_active', 'trade_signal_sign',
             'risk_multiplier', 'tradeable_capital', 'mtm_exit_count',
             'forecast_prior_exposure', 'forecast_prior_target', 'forecast_prior_blend',

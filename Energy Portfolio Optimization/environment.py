@@ -553,6 +553,7 @@ class RenewableMultiAgentEnv(ParallelEnv):
             from config import EnhancedConfig
             config = EnhancedConfig()
         self.config = config
+        self.evaluation_mode = False
 
         # Use config values with optional overrides
         self.init_budget = float(init_budget) if init_budget is not None else self.config.init_budget
@@ -698,7 +699,11 @@ class RenewableMultiAgentEnv(ParallelEnv):
         tier_name = "tier1"
         # NEW: Use provided log_dir or default to "debug_logs"
         debug_log_dir = log_dir if log_dir is not None else "debug_logs"
-        self.debug_tracker = RewardLogger(log_dir=debug_log_dir, tier_name=tier_name)
+        self.debug_tracker = RewardLogger(
+            log_dir=debug_log_dir,
+            tier_name=tier_name,
+            enabled=bool(getattr(self.config, "enable_episode_csv_logs", False)),
+        )
         self.current_episode = 0
         self._episode_counter = -1  # Will be incremented to 0 on first reset
 
@@ -733,6 +738,7 @@ class RenewableMultiAgentEnv(ParallelEnv):
 
         # Step 3: PRICE NORMALIZATION - All in DKK
         self._price_raw = price_dkk_filtered.to_numpy()  # Raw DKK prices for revenue calculation
+        self._init_market_impact_liquidity_reference()  # market-impact task
         # Initialize 1-step price return array for Tier 1 PnL reward
         self._price_return_1step = np.zeros(len(self._price_raw), dtype=np.float32)
         
@@ -995,6 +1001,11 @@ class RenewableMultiAgentEnv(ParallelEnv):
         self._investor_mean_clip_hit_rate = 0.0
         self._fund_nav_prev = None
         self._last_investor_transaction_cost = 0.0
+        self._last_market_impact_cost = 0.0
+        self._last_market_impact_ref_notional = 0.0
+        self._last_market_impact_participation = 0.0
+        self._last_market_impact_bp = 0.0
+        self.cumulative_market_impact_costs = 0.0
         self._last_investor_exposure_pretrade = 0.0
         # Diagnostic cumulative MTM tracker; not equal to live sleeve value.
         self.cumulative_mtm_pnl = 0.0
@@ -1028,6 +1039,168 @@ class RenewableMultiAgentEnv(ParallelEnv):
         assert hasattr(self, "_price_raw") and hasattr(self, "_price"), "Price arrays not initialized"
 
         self._action_convert_warned = set()
+
+    def _impact_ref_mode(self) -> str:
+        return str(getattr(self.config, "impact_ref_notional", "sleeve") or "sleeve").strip().lower()
+
+    def _uses_volume_impact_ref(self) -> bool:
+        return self._impact_ref_mode() in {"volume", "market_volume", "day_ahead_volume", "liquidity_volume"}
+
+    @staticmethod
+    def _parse_impact_timestamps(values: pd.Series) -> pd.Series:
+        parsed = pd.to_datetime(values, errors="coerce", utc=True)
+        return parsed.dt.tz_convert(None)
+
+    @staticmethod
+    def _impact_volume_columns(df: pd.DataFrame, configured: str) -> list[str]:
+        configured = str(configured or "").strip()
+        if configured:
+            cols = [c.strip() for c in configured.split(",") if c.strip()]
+            missing = [c for c in cols if c not in df.columns]
+            if missing:
+                raise ValueError(f"impact volume column(s) not found: {missing}")
+            return cols
+
+        lower_to_col = {str(c).strip().lower(): c for c in df.columns}
+        for name in (
+            "volume_mwh",
+            "day_ahead_volume_mwh",
+            "market_volume_mwh",
+            "traded_volume_mwh",
+            "auction_volume_mwh",
+            "matched_volume_mwh",
+            "volume",
+        ):
+            if name in lower_to_col:
+                return [lower_to_col[name]]
+
+        candidates = [
+            c
+            for c in df.columns
+            if ("volume" in str(c).lower() or "mwh" in str(c).lower())
+            and pd.to_numeric(df[c], errors="coerce").notna().any()
+        ]
+        if len(candidates) == 1:
+            return candidates
+        if not candidates:
+            raise ValueError(
+                "Could not autodetect an impact volume column; pass --impact-volume-column explicitly"
+            )
+        raise ValueError(
+            "Multiple possible impact volume columns found; pass --impact-volume-column with one or comma-separated columns: "
+            + ", ".join(map(str, candidates))
+        )
+
+    def _init_market_impact_liquidity_reference(self) -> None:
+        self._impact_ref_notional_by_step = None
+        self._impact_volume_mwh_by_step = None
+        self._impact_liquidity_source = ""
+        if not self._uses_volume_impact_ref():
+            return
+
+        path_raw = str(getattr(self.config, "impact_volume_data_path", "") or "").strip()
+        impact_coef = float(getattr(self.config, "impact_coef_bp", 0.0) or 0.0)
+        if not path_raw:
+            if impact_coef > 0.0:
+                raise ValueError("impact_ref_notional='volume' requires impact_volume_data_path")
+            return
+
+        path = path_raw if os.path.isabs(path_raw) else os.path.abspath(path_raw)
+        if not os.path.isfile(path):
+            if impact_coef > 0.0:
+                raise FileNotFoundError(f"Impact volume data not found: {path_raw}")
+            return
+
+        volume_df = pd.read_csv(path)
+        ts_col = str(getattr(self.config, "impact_volume_timestamp_column", "timestamp") or "timestamp")
+        if ts_col not in volume_df.columns:
+            raise ValueError(f"Impact volume timestamp column '{ts_col}' not found in {path_raw}")
+        if "timestamp" not in self.data.columns:
+            raise ValueError("Evaluation data must include a timestamp column for volume-calibrated impact")
+
+        volume_cols = self._impact_volume_columns(volume_df, getattr(self.config, "impact_volume_column", ""))
+        volume_values = volume_df[volume_cols].apply(pd.to_numeric, errors="coerce").sum(axis=1, min_count=1)
+        source = pd.DataFrame(
+            {
+                "timestamp": self._parse_impact_timestamps(volume_df[ts_col]),
+                "volume_value": volume_values,
+            }
+        ).dropna(subset=["timestamp", "volume_value"])
+        source = source[source["volume_value"] > 0.0].sort_values("timestamp")
+        if source.empty:
+            raise ValueError(f"Impact volume data has no positive usable rows: {path_raw}")
+        source = source.groupby("timestamp", as_index=False)["volume_value"].sum()
+
+        target = pd.DataFrame(
+            {
+                "_row": np.arange(len(self.data), dtype=np.int64),
+                "timestamp": self._parse_impact_timestamps(self.data["timestamp"]),
+            }
+        ).dropna(subset=["timestamp"]).sort_values("timestamp")
+        if len(target) != len(self.data):
+            raise ValueError("Evaluation timestamps could not all be parsed for volume-calibrated impact")
+
+        tolerance = pd.Timedelta(
+            minutes=float(getattr(self.config, "impact_volume_max_staleness_minutes", 90.0) or 90.0)
+        )
+        aligned = pd.merge_asof(
+            target,
+            source,
+            on="timestamp",
+            direction="backward",
+            tolerance=tolerance,
+        ).sort_values("_row")
+        if aligned["volume_value"].isna().any():
+            missing = int(aligned["volume_value"].isna().sum())
+            raise ValueError(
+                f"Impact volume data missing/stale for {missing} eval rows; "
+                f"increase --impact-volume-max-staleness-min or provide complete hourly volumes"
+            )
+
+        unit = str(getattr(self.config, "impact_volume_unit", "mwh") or "mwh").strip().lower()
+        values = aligned["volume_value"].to_numpy(dtype=np.float64)
+        if unit == "mwh":
+            price_floor = float(getattr(self.config, "impact_volume_price_floor_dkk_per_mwh", 50.0) or 50.0)
+            price_abs = np.maximum(np.abs(np.asarray(self._price_raw, dtype=np.float64)), price_floor)
+            ref_notional = values * price_abs
+            self._impact_volume_mwh_by_step = values
+        elif unit == "dkk":
+            ref_notional = values
+            self._impact_volume_mwh_by_step = None
+        else:
+            raise ValueError("impact_volume_unit must be 'mwh' or 'dkk'")
+
+        ref_notional = np.asarray(ref_notional, dtype=np.float64)
+        if not np.all(np.isfinite(ref_notional)) or np.any(ref_notional <= 0.0):
+            raise ValueError("Volume-calibrated impact reference contains non-positive or non-finite notionals")
+
+        self._impact_ref_notional_by_step = ref_notional
+        self._impact_liquidity_source = (
+            f"{path_raw}; columns={','.join(volume_cols)}; unit={unit}; "
+            f"rows={len(source)}; aligned_steps={len(ref_notional)}"
+        )
+        logger.info(
+            "Loaded volume-calibrated impact reference from %s (%s, unit=%s): ref_notional DKK min=%.2f median=%.2f max=%.2f",
+            path_raw,
+            ",".join(volume_cols),
+            unit,
+            float(np.nanmin(ref_notional)),
+            float(np.nanmedian(ref_notional)),
+            float(np.nanmax(ref_notional)),
+        )
+
+    def _market_impact_reference_notional(self, timestep: int) -> float:
+        mode = self._impact_ref_mode()
+        if mode == "sleeve":
+            return max(float(self.budget), 1.0)
+        if self._uses_volume_impact_ref():
+            # market-impact task
+            ref = getattr(self, "_impact_ref_notional_by_step", None)
+            if ref is None:
+                raise RuntimeError("Volume-calibrated impact reference was not initialized")
+            idx = int(np.clip(int(timestep), 0, len(ref) - 1))
+            return max(float(ref[idx]), 1.0)
+        return max(float(getattr(self.config, "impact_ref_notional")), 1.0)
 
     @property
     def battery_energy(self) -> float:
@@ -1432,14 +1605,14 @@ class RenewableMultiAgentEnv(ParallelEnv):
         if is_true_episode_end:
             self.t = 0
             self._episode_counter += 1
-            if hasattr(self, 'debug_tracker'):
+            if hasattr(self, 'debug_tracker') and getattr(self.debug_tracker, "enabled", True):
                 self.debug_tracker.start_episode(self._episode_counter)
             logger.info(f"[RESET] TRUE EPISODE RESET: End of data reached, resetting to start (Episode {self._episode_counter})")
         else:
             # First reset (episode 0) - initialize debug tracker
             if hasattr(self, 'debug_tracker') and self._episode_counter == -1:
                 self._episode_counter = 0
-            if hasattr(self, 'debug_tracker'):
+            if hasattr(self, 'debug_tracker') and getattr(self.debug_tracker, "enabled", True):
                 self.debug_tracker.start_episode(self._episode_counter)
             logger.info(f"[PPO] PPO BUFFER RESET: Preserving financial state at step {current_timestep}")
 
@@ -1609,6 +1782,11 @@ class RenewableMultiAgentEnv(ParallelEnv):
             )
             self._investor_mean_clip_hit_rate = 0.0
         self._last_investor_transaction_cost = 0.0
+        self._last_market_impact_cost = 0.0
+        self._last_market_impact_ref_notional = 0.0
+        self._last_market_impact_participation = 0.0
+        self._last_market_impact_bp = 0.0
+        self.cumulative_market_impact_costs = 0.0
         self._last_investor_exposure_pretrade = 0.0
         self.last_reward_breakdown = {}
         self.last_reward_weights = {}
@@ -1691,6 +1869,11 @@ class RenewableMultiAgentEnv(ParallelEnv):
         self.last_realized_investor_dnav_return = 0.0
         self.last_realized_investor_return_denom = 1.0
         self._last_investor_transaction_cost = 0.0
+        self._last_market_impact_cost = 0.0
+        self._last_market_impact_ref_notional = 0.0
+        self._last_market_impact_participation = 0.0
+        self._last_market_impact_bp = 0.0
+        self.cumulative_market_impact_costs = 0.0
         self._last_investor_exposure_pretrade = 0.0
         self.cumulative_mtm_pnl = 0.0
         self.last_reward_breakdown = {}
@@ -2417,9 +2600,17 @@ class RenewableMultiAgentEnv(ParallelEnv):
         # At timestep 0, we want to log the reset NAV before any trades are executed
         if t == 0:
             self._last_value_diag = {}
+            self._last_market_impact_cost = 0.0
+            self._last_market_impact_ref_notional = 0.0
+            self._last_market_impact_participation = 0.0
+            self._last_market_impact_bp = 0.0
             return 0.0  # No trading at timestep 0 - ensures identical initial NAV
         if not self._is_investor_decision_step(t):
             self._last_value_diag = {}
+            self._last_market_impact_cost = 0.0
+            self._last_market_impact_ref_notional = 0.0
+            self._last_market_impact_participation = 0.0
+            self._last_market_impact_bp = 0.0
             return 0.0
 
         # Clean sizing contract: hard drawdown disables the sleeve by forcing it
@@ -2660,12 +2851,41 @@ class RenewableMultiAgentEnv(ParallelEnv):
             _no_trade_frac = float(getattr(self.config, "no_trade_threshold", 0.0))
             threshold_dkk = float(_no_trade_frac * max(float(max_pos_size), 1.0))
             if total_traded_notional > threshold_dkk:
-                transaction_cost_bps = self.config.transaction_cost_bps
-                fixed_cost = self.config.transaction_fixed_cost
-                transaction_costs = (total_traded_notional * transaction_cost_bps / 10000.0) + fixed_cost
+                # Friction sweep branch: defaults preserve v1 costs unless eval CLI overrides these knobs.
+                friction_multiplier_raw = getattr(self.config, "friction_cost_multiplier", 1.0)
+                half_spread_raw = getattr(self.config, "half_spread_bp", 0.0)
+                friction_multiplier = 1.0 if friction_multiplier_raw is None else float(friction_multiplier_raw)
+                half_spread_bp = 0.0 if half_spread_raw is None else float(half_spread_raw)
+                transaction_cost_bps = float(self.config.transaction_cost_bps) * friction_multiplier
+                fixed_cost = float(self.config.transaction_fixed_cost) * friction_multiplier
+                spread_costs = total_traded_notional * half_spread_bp / 10000.0
+                impact_coef_raw = getattr(self.config, "impact_coef_bp", 0.0)
+                impact_coef_bp = 0.0 if impact_coef_raw is None else float(impact_coef_raw)
+                impact_costs = 0.0
+                if impact_coef_bp > 0.0:
+                    # market-impact task
+                    impact_exponent = float(getattr(self.config, "impact_exponent", 0.5) or 0.5)
+                    impact_ref_notional = self._market_impact_reference_notional(t)
+                    participation = max(float(total_traded_notional), 0.0) / impact_ref_notional
+                    impact_bp = impact_coef_bp * (participation ** impact_exponent)
+                    impact_costs = total_traded_notional * impact_bp / 10000.0
+                    self._last_market_impact_ref_notional = float(impact_ref_notional)
+                    self._last_market_impact_participation = float(participation)
+                    self._last_market_impact_bp = float(impact_bp)
+                else:
+                    self._last_market_impact_ref_notional = 0.0
+                    self._last_market_impact_participation = 0.0
+                    self._last_market_impact_bp = 0.0
+                transaction_costs = (
+                    (total_traded_notional * transaction_cost_bps / 10000.0)
+                    + fixed_cost
+                    + spread_costs
+                    + impact_costs
+                )
 
                 self.budget -= transaction_costs
                 self._last_investor_transaction_cost = float(transaction_costs)
+                self._last_market_impact_cost = float(impact_costs)
                 
                 # Log trade execution proof (periodically to show agents are making decisions)
                 if t % 5000 == 0 and t > 0:
@@ -2673,6 +2893,7 @@ class RenewableMultiAgentEnv(ParallelEnv):
                                f"Wind: {trade_wind:,.0f} DKK, Solar: {trade_solar:,.0f} DKK, "
                                f"Hydro: {trade_hydro:,.0f} DKK | Total notional: {total_traded_notional:,.0f} DKK | "
                                f"Transaction cost: {transaction_costs:,.0f} DKK | "
+                               f"Impact cost: {impact_costs:,.0f} DKK | "
                                f"New positions - Wind: {target_wind:,.0f}, Solar: {target_solar:,.0f}, "
                                f"Hydro: {target_hydro:,.0f} DKK")
 
@@ -2680,6 +2901,9 @@ class RenewableMultiAgentEnv(ParallelEnv):
                 if not hasattr(self, 'cumulative_transaction_costs'):
                     self.cumulative_transaction_costs = 0.0
                 self.cumulative_transaction_costs += transaction_costs
+                if not hasattr(self, 'cumulative_market_impact_costs'):
+                    self.cumulative_market_impact_costs = 0.0
+                self.cumulative_market_impact_costs += impact_costs
 
                 # === STEP 5: Execute trades by updating financial positions ===
                 self.financial_positions['wind_instrument_value'] = target_wind
@@ -2691,6 +2915,10 @@ class RenewableMultiAgentEnv(ParallelEnv):
                 return total_traded_notional
             else:
                 self._last_investor_transaction_cost = 0.0
+                self._last_market_impact_cost = 0.0
+                self._last_market_impact_ref_notional = 0.0
+                self._last_market_impact_participation = 0.0
+                self._last_market_impact_bp = 0.0
                 return 0.0  # Ignore very small trades and incur no costs
 
         except Exception as e:
@@ -3237,12 +3465,25 @@ class RenewableMultiAgentEnv(ParallelEnv):
             from financial_engine import FinancialEngine
             
             current_fund_value = self._calculate_fund_nav()
-            new_budget, distribution_amount = FinancialEngine.distribute_excess_cash(
-                budget=self.budget,
-                current_fund_nav=current_fund_value,
-                init_budget=self.init_budget,
-                config=self.config
+            # Evaluation-only branch for the paper metric-family stress test;
+            # training and default evaluation keep config.distribution_rate unchanged.
+            original_distribution_rate = getattr(self.config, "distribution_rate", None)
+            override_active = (
+                bool(getattr(self, "evaluation_mode", False))
+                and getattr(self.config, "eval_distribution_rate", None) is not None
             )
+            if override_active:
+                self.config.distribution_rate = float(getattr(self.config, "eval_distribution_rate"))
+            try:
+                new_budget, distribution_amount = FinancialEngine.distribute_excess_cash(
+                    budget=self.budget,
+                    current_fund_nav=current_fund_value,
+                    init_budget=self.init_budget,
+                    config=self.config
+                )
+            finally:
+                if override_active and original_distribution_rate is not None:
+                    self.config.distribution_rate = original_distribution_rate
             
             # Update budget
             self.budget = new_budget
@@ -3814,18 +4055,25 @@ class RenewableMultiAgentEnv(ParallelEnv):
                 'reward_components': self.reward_calculator.reward_weights.copy() if self.reward_calculator else {}
             }
             self.last_reward_weights = self.reward_calculator.reward_weights.copy() if self.reward_calculator else {}
-            
-            # DEEP DEBUGGING: Log reward breakdown
-            # CRITICAL FIX: Always log, even if reward_calculator is None (for debugging)
-            if hasattr(self, 'debug_tracker'):
-                # Ensure debug tracker is initialized (safety check)
-                if self.debug_tracker.csv_writer is None:
-                    if self._episode_counter < 0:
-                        self._episode_counter = 0
-                    self.debug_tracker.start_episode(self._episode_counter)
-                    logger.info(f"[DEBUG_TRACKER] Initialized CSV writer for episode {self._episode_counter}")
 
-                # DIAGNOSTIC: Log every 100 steps to verify logging is working
+            # Optional per-step CSV telemetry. Reward assignment above remains active even
+            # when this is disabled, so training can keep only checkpoints and JSON outputs.
+            debug_logging_enabled = bool(
+                hasattr(self, 'debug_tracker')
+                and getattr(self.debug_tracker, "enabled", True)
+            )
+            if not debug_logging_enabled:
+                self._last_nav = fund_nav
+                return
+
+            # Ensure debug tracker is initialized (safety check)
+            if self.debug_tracker.csv_writer is None:
+                if self._episode_counter < 0:
+                    self._episode_counter = 0
+                self.debug_tracker.start_episode(self._episode_counter)
+                logger.info(f"[DEBUG_TRACKER] Initialized CSV writer for episode {self._episode_counter}")
+
+            # DIAGNOSTIC: Log every 100 steps to verify logging is working
             if self.t % 100 == 0:
                 logger.debug(f"[DEBUG_TRACKER] t={self.t} csv_writer={'EXISTS' if self.debug_tracker.csv_writer else 'NONE'} "
                            f"reward_calc={'EXISTS' if self.reward_calculator else 'NONE'}")
@@ -3843,18 +4091,21 @@ class RenewableMultiAgentEnv(ParallelEnv):
                 self.reward_calculator = ProfitFocusedRewardCalculator(initial_budget=post_capex_nav, config=self.config)
                 self.reward_weights = dict(getattr(self.reward_calculator, 'reward_weights', {}))
 
-            if hasattr(self, 'debug_tracker') and self.reward_calculator is not None:
-                # PRINT to console to verify this block is reached
-                if self.t % 100 == 0:
-                    logger.debug(f"[DEBUG_TRACKER] t={self.t} ENTERING MAIN LOGGING BLOCK (reward_calculator EXISTS)")
+            if self.reward_calculator is None:
+                self._last_nav = fund_nav
+                return
 
-                reward_weights = self.reward_calculator.reward_weights
-                
-                # Get reward component scores from calculator (ensure they're floats, not arrays)
-                operational_score = float(getattr(self.reward_calculator, 'last_operational_score', 0.0))
-                risk_score = float(getattr(self.reward_calculator, 'last_risk_score', 0.0))
-                hedging_score = float(getattr(self.reward_calculator, 'last_hedging_score', 0.0))
-                nav_stability_score = float(getattr(self.reward_calculator, 'last_nav_stability_score', 0.0))
+            # PRINT to console to verify this block is reached
+            if self.t % 100 == 0:
+                logger.debug(f"[DEBUG_TRACKER] t={self.t} ENTERING MAIN LOGGING BLOCK (reward_calculator EXISTS)")
+
+            reward_weights = self.reward_calculator.reward_weights
+
+            # Get reward component scores from calculator (ensure they're floats, not arrays)
+            operational_score = float(getattr(self.reward_calculator, 'last_operational_score', 0.0))
+            risk_score = float(getattr(self.reward_calculator, 'last_risk_score', 0.0))
+            hedging_score = float(getattr(self.reward_calculator, 'last_hedging_score', 0.0))
+            nav_stability_score = float(getattr(self.reward_calculator, 'last_nav_stability_score', 0.0))
                 
             # Retrieve latest info dict (may be set in step); fall back to empty
             info = getattr(self, '_latest_info', {})
@@ -4034,6 +4285,10 @@ class RenewableMultiAgentEnv(ParallelEnv):
             investor_position_ratio_log = float(
                 np.clip(investor_total_position_dkk / max_position_notional_dkk, 0.0, 1.0)
             )
+            # sleeve-supplement task: actual held signed exposure after execution-side overrides.
+            held_exposure_signed_log = float(
+                self._estimate_current_investor_exposure(getattr(self, "_last_tradeable_capital", None))
+            )
 
             latest_price_returns = getattr(self, '_latest_price_returns', {}) or {}
             price_return_1step_log = float(latest_price_returns.get('one_step', 0.0))
@@ -4115,6 +4370,7 @@ class RenewableMultiAgentEnv(ParallelEnv):
                     price_current=float(current_price_raw),
                     # Position info (ensure floats)
                     position_signed=float(position_signed_log),
+                    held_exposure_signed=float(held_exposure_signed_log),
                     # Recompute from current financial notional so the log reflects held exposure.
                     position_exposure=float(
                         np.clip(

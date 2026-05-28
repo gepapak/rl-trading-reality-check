@@ -82,10 +82,10 @@ def format_cmd(cmd):
 
 def _run_timeout_seconds() -> int:
     try:
-        hours = float(os.environ.get("TIER_RUN_TIMEOUT_HOURS", "8"))
+        hours = float(os.environ.get("TIER_RUN_TIMEOUT_HOURS", "12"))
         return max(60, int(hours * 3600))
     except Exception:
-        return 8 * 3600
+        return 12 * 3600
 
 
 def run_command(cmd, name: str) -> dict:
@@ -326,12 +326,26 @@ def main():
     parser.add_argument("--meta_freq_max", type=int, default=6)
     parser.add_argument("--cooling_period", type=int, default=0)
     parser.add_argument("--forecast_cache_dir", type=str, default="forecast_cache")
+    parser.add_argument("--algo", type=str, default="ippo", choices=["ippo", "mappo"])
     parser.add_argument("--lr", type=float, default=3e-4)
     parser.add_argument("--ent_coef", type=float, default=0.03)
     parser.add_argument("--ppo_log_std_init", type=float, default=None)
     parser.add_argument("--enable_ppo_use_sde", action="store_true")
     parser.add_argument("--eval_data", type=str, default="evaluation_dataset/unseendata.csv")
     parser.add_argument("--eval_steps", type=int, default=None)
+    parser.add_argument(
+        "--skip_eval",
+        action="store_true",
+        help="Train only and skip the built-in post-training eval. Use a separate eval script afterward.",
+    )
+    parser.add_argument(
+        "--eval_distribution_rate",
+        "--eval-distribution-rate",
+        dest="eval_distribution_rate",
+        type=float,
+        default=None,
+        help="Evaluation-only cash-sweeper distribution rate override; omitted preserves v1 behavior.",
+    )
     parser.add_argument("--output_root", type=str, default="batch_tier_phase_runs")
     parser.add_argument("--suite_dir", type=str, default="",
                         help="Existing suite directory to resume into. If empty, a new one is created.")
@@ -375,6 +389,7 @@ def main():
         "--meta_freq_min", str(args.meta_freq_min),
         "--meta_freq_max", str(args.meta_freq_max),
         "--cooling_period", str(args.cooling_period),
+        "--algo", str(args.algo),
         "--lr", str(args.lr),
         "--ent_coef", str(args.ent_coef),
     ]
@@ -431,6 +446,7 @@ def main():
             compatibility_checks = {
                 "phase": args.phase,
                 "global_norm_mode": str(args.global_norm_mode),
+                "algo": str(args.algo),
                 "investment_freq": int(args.investment_freq),
                 "meta_freq_min": int(args.meta_freq_min),
                 "meta_freq_max": int(args.meta_freq_max),
@@ -438,9 +454,13 @@ def main():
                 "ppo_log_std_init": None if args.ppo_log_std_init is None else float(args.ppo_log_std_init),
                 "runtime_contract_hash": base_contract_hash,
                 "variant_runtime_contract_hashes": active_runtime_contract_hashes,
+                "forecast_args": forecast_args,
+                "forecast_prior_overrides": forecast_prior_overrides,
             }
             for key, expected in compatibility_checks.items():
                 actual = existing_protocol.get(key)
+                if key == "algo" and actual is None:
+                    actual = "ippo"
                 if actual != expected:
                     print(
                         f"Error: suite_dir protocol mismatch for '{key}': "
@@ -464,6 +484,7 @@ def main():
             "phase": args.phase,
             "phase_variants": list(phase_variants),
             "global_norm_mode": str(args.global_norm_mode),
+            "algo": str(args.algo),
             "rolling_past_history_dir": _effective_rolling_past_history_dir(args),
             "runtime_contract": base_contract,
             "runtime_contract_hash": base_contract_hash,
@@ -477,6 +498,7 @@ def main():
             "meta_freq_max": int(args.meta_freq_max),
             "ppo_use_sde": bool(args.enable_ppo_use_sde),
             "ppo_log_std_init": None if args.ppo_log_std_init is None else float(args.ppo_log_std_init),
+            "skip_eval": bool(args.skip_eval),
             "shared_training_args": common_args,
             "forecast_args": forecast_args,
             "forecast_prior_overrides": forecast_prior_overrides,
@@ -616,9 +638,12 @@ def main():
             "training_returncode": train_result.get("returncode", -1),
             "training_duration_seconds": train_result.get("duration_seconds", 0),
             "evaluation_success": False,
+            "evaluation_skipped": bool(args.skip_eval),
         }
 
-        if train_result.get("success"):
+        if train_result.get("success") and args.skip_eval:
+            row["evaluation_success"] = True
+        elif train_result.get("success"):
             eval_dir_arg = EVAL_DIR_ARG_BY_VARIANT[canonical]
             os.makedirs(eval_out, exist_ok=True)
             tiers_only_val = EVAL_TIERS_ONLY_BY_VARIANT[canonical]
@@ -634,6 +659,7 @@ def main():
                 eval_dir_arg, save_dir,
                 "--eval_data", args.eval_data,
                 "--eval_steps", str(eval_steps),
+                "--seed", str(seed),
                 "--output_dir", eval_out,
                 "--investment_freq", str(args.investment_freq),
                 "--meta_freq_min", str(args.meta_freq_min),
@@ -645,6 +671,9 @@ def main():
             eval_cmd.extend(list(spec.get("eval_extra", []) or []))
             if canonical == "tier1_forecast_utilization":
                 eval_cmd.extend(forecast_prior_args)
+            # Evaluation-only paper stress toggle; absent means v1 behavior.
+            if args.eval_distribution_rate is not None:
+                eval_cmd.extend(["--eval-distribution-rate", str(float(args.eval_distribution_rate))])
             if eff_roll:
                 eval_cmd.extend(["--rolling_past_history_dir", eff_roll])
             eval_label = f"[Run {run_no}/{total_runs}] Eval {canonical} (seed={seed})"

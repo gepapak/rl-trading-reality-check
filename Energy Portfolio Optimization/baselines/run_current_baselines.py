@@ -12,6 +12,8 @@ from typing import Any, Dict, Iterable, List, Tuple
 
 BASELINES_ROOT = Path(__file__).resolve().parent
 PROJECT_ROOT = BASELINES_ROOT.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 
 def _json_default(value: Any) -> Any:
@@ -71,9 +73,7 @@ def _first_float(data: Dict[str, Any], keys: Iterable[str], default: float = 0.0
 def normalize_row(name: str, summary: Dict[str, Any]) -> Dict[str, Any]:
     status = str(summary.get("status", "completed"))
     method = str(summary.get("method", name))
-    role = "diagnostic" if name == "Baseline4_IEEE" else "financial_strategy"
-    if name == "Baseline5_SARL":
-        role = "rl_baseline"
+    role = "diagnostic" if name == "IEEE_Compliance_Diagnostic" else "financial_strategy"
 
     final_primary = _first_float(
         summary,
@@ -117,7 +117,7 @@ def normalize_row(name: str, summary: Dict[str, Any]) -> Dict[str, Any]:
         "reported_nav_return_pct": 100.0 * reported_return,
         "reported_nav_sharpe": _safe_float(summary.get("reported_nav_sharpe_ratio")),
         "models_loaded": int(_safe_float(summary.get("models_loaded"), 0.0)),
-        "current_codebase_environment": bool(summary.get("current_codebase_environment", name != "Baseline5_SARL")),
+        "current_codebase_environment": bool(summary.get("current_codebase_environment", True)),
         "run_dir": str(summary.get("run_dir", "")),
         "skip_reason": str(summary.get("skip_reason", "")),
     }
@@ -164,8 +164,7 @@ def write_baseline_report(
 
         f.write("\nPrimary financial metrics use distribution-adjusted investor wealth, matching the current MARL evaluation contract.\n")
         f.write("Raw NAV is kept as a separate reported diagnostic because shareholder distributions reduce accounting NAV.\n")
-        f.write("Baseline4_IEEE is a standards-compliance diagnostic and is not ranked as a financial strategy.\n")
-        f.write("Baseline5_SARL is ranked only when a current SARL model is supplied with `--sarl_model_path`.\n\n")
+        f.write("IEEE_Compliance_Diagnostic is a standards-compliance diagnostic and is not ranked as a financial strategy.\n\n")
 
         f.write("### Output Directories\n\n")
         for row in rows:
@@ -194,6 +193,36 @@ def write_baseline_report(
         json.dump(payload, f, indent=2, default=_json_default)
 
     return csv_path, md_path, json_path
+
+
+def write_baseline_report(
+    *,
+    output_root: Path,
+    results: Dict[str, Dict[str, Any]],
+    data_path: Path,
+    timesteps: int,
+    seed: int,
+) -> Path:
+    """Write the publication baseline result as one aggregate JSON file only."""
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    rows = [normalize_row(name, summary) for name, summary in results.items()]
+
+    json_path = output_root / f"baseline_evaluation_{timestamp}.json"
+    payload = {
+        "evaluation_type": "baseline_comparison",
+        "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "eval_data_path": str(data_path),
+        "timesteps_requested": int(timesteps),
+        "seed": int(seed),
+        "evaluation_contract": "tier1_2026_distribution_adjusted",
+        "artifact_policy": "single_aggregate_json",
+        "baseline_results": results,
+        "comparison_rows": rows,
+    }
+    with json_path.open("w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2, default=_json_default)
+
+    return json_path
 
 
 def main() -> int:
@@ -225,23 +254,7 @@ def main() -> int:
     parser.add_argument(
         "--skip_ieee",
         action="store_true",
-        help="Skip Baseline4_IEEE. By default it runs as a diagnostic baseline.",
-    )
-    parser.add_argument(
-        "--skip_sarl",
-        action="store_true",
-        help="Skip the SARL baseline status/evaluation.",
-    )
-    parser.add_argument(
-        "--sarl_model_path",
-        type=Path,
-        default=None,
-        help="Path to a current-codebase SARL .pth model. Without this, SARL is recorded as skipped.",
-    )
-    parser.add_argument(
-        "--allow_untrained_sarl",
-        action="store_true",
-        help="Evaluate a random/untrained SARL policy. It will not be ranked for publication.",
+        help="Skip the IEEE compliance diagnostic tool.",
     )
     args = parser.parse_args()
 
@@ -250,6 +263,27 @@ def main() -> int:
     if not data_path.is_file():
         raise SystemExit(f"Evaluation data not found: {data_path}")
     output_root.mkdir(parents=True, exist_ok=True)
+
+    if not args.include_ieee:
+        from evaluation import run_traditional_baselines
+
+        results = run_traditional_baselines(
+            str(data_path),
+            timesteps=int(args.timesteps),
+            output_dir=str(output_root),
+            seed=int(args.seed),
+        )
+        json_path = write_baseline_report(
+            output_root=output_root,
+            results=results,
+            data_path=data_path,
+            timesteps=args.timesteps,
+            seed=args.seed,
+        )
+        print("")
+        print(f"Baseline run complete: {output_root}")
+        print(f"Baseline JSON: {json_path}")
+        return 0
 
     py = sys.executable
     runs: List[Tuple[str, List[str], Path]] = [
@@ -306,48 +340,29 @@ def main() -> int:
     if not args.skip_ieee:
         runs.append(
             (
-                "Baseline4_IEEE",
+                "IEEE_Compliance_Diagnostic",
                 [
                     py,
-                    str(BASELINES_ROOT / "Baseline4_IEEE" / "run_ieee_baseline.py"),
+                    str(BASELINES_ROOT / "IEEE Compliance Tool" / "run_ieee_baseline.py"),
                     "--data_path",
                     str(data_path),
                     "--output_dir",
-                    str(output_root / "Baseline4_IEEE"),
+                    str(output_root / "IEEE_Compliance_Diagnostic"),
                     "--timesteps",
                     str(args.timesteps),
                     "--seed",
                     str(args.seed),
                 ],
-                output_root / "Baseline4_IEEE",
+                output_root / "IEEE_Compliance_Diagnostic",
             )
         )
-
-    if not args.skip_sarl:
-        sarl_cmd = [
-            py,
-            str(BASELINES_ROOT / "Baseline5_SARL" / "run_sarl_baseline.py"),
-            "--data_path",
-            str(data_path),
-            "--output_dir",
-            str(output_root / "Baseline5_SARL"),
-            "--timesteps",
-            str(args.timesteps),
-            "--seed",
-            str(args.seed),
-        ]
-        if args.sarl_model_path:
-            sarl_cmd.extend(["--model_path", str(args.sarl_model_path.resolve())])
-        if args.allow_untrained_sarl:
-            sarl_cmd.append("--allow_untrained")
-        runs.append(("Baseline5_SARL", sarl_cmd, output_root / "Baseline5_SARL"))
 
     results: Dict[str, Dict[str, Any]] = {}
     for name, cmd, run_dir in runs:
         run_command(cmd, PROJECT_ROOT)
         results[name] = load_summary(run_dir)
 
-    csv_path, md_path, json_path = write_baseline_report(
+    json_path = write_baseline_report(
         output_root=output_root,
         results=results,
         data_path=data_path,
@@ -357,8 +372,6 @@ def main() -> int:
 
     print("")
     print(f"Baseline run complete: {output_root}")
-    print(f"Baseline report: {md_path}")
-    print(f"Baseline CSV: {csv_path}")
     print(f"Baseline JSON: {json_path}")
     return 0
 

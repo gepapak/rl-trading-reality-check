@@ -40,6 +40,7 @@ import argparse
 import builtins as _builtins
 import math
 import os
+import random
 import sys
 import re
 import warnings
@@ -47,6 +48,7 @@ import glob
 import json
 import subprocess
 from datetime import datetime
+from pathlib import Path
 from typing import Dict, Any, Optional, Tuple
 import numpy as np
 import pandas as pd
@@ -599,7 +601,7 @@ def _annual_rate_to_step_rate(annual_rate: float, periods_per_year: float) -> fl
     return float((1.0 + annual) ** (1.0 / periods) - 1.0)
 
 
-def _infer_periods_per_year(timestamps, default_periods_per_year: float = 52560.0) -> float:
+def _infer_periods_per_year(timestamps, default_periods_per_year: float = 52596.0) -> float:
     try:
         if timestamps is None:
             return float(default_periods_per_year)
@@ -885,6 +887,254 @@ def run_traditional_baselines(eval_data_path: str, timesteps: int = 10000, outpu
     return baseline_results
 
 
+def _prepare_baseline_imports() -> None:
+    """Expose baseline modules for in-process, artifact-free evaluation."""
+    root = Path(__file__).resolve().parent
+    baseline_paths = [
+        root / "baselines",
+        root / "baselines" / "Baseline1_TraditionalPortfolio",
+    ]
+    for path in baseline_paths:
+        s = str(path)
+        if s not in sys.path:
+            sys.path.insert(0, s)
+
+
+def _load_baseline_data(eval_data_path: str, timesteps: int) -> pd.DataFrame:
+    data = load_energy_data(eval_data_path)
+    max_steps = int(max(1, min(int(timesteps), len(data))))
+    return data.iloc[:max_steps].reset_index(drop=True)
+
+
+def _baseline_summary(
+    metrics: Dict[str, Any],
+    *,
+    method: str,
+    role: str,
+    baseline_id: str,
+    extra: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    out = dict(metrics)
+    out.update(
+        {
+            "baseline_id": baseline_id,
+            "method": method,
+            "role": role,
+            "status": "completed",
+            "evaluation_contract": "tier1_2026_distribution_adjusted",
+            "hybrid_benchmark_contract": True,
+            "current_codebase_environment": True,
+            "artifact_free_evaluation": True,
+            "notes": (
+                "Evaluated in-process with the current fixed hybrid-fund accounting: "
+                "88% physical infrastructure, 12% trading sleeve, operating revenue, "
+                "MTM, transaction costs, depreciation, and shareholder distributions."
+            ),
+        }
+    )
+    if extra:
+        out.update(extra)
+    return out
+
+
+def _evaluate_traditional_portfolio_baseline(data: pd.DataFrame, seed: int = 42) -> Dict[str, Any]:
+    _prepare_baseline_imports()
+    from baseline_common import HybridFundLedger
+    from traditional_portfolio_optimizer import Timebase, OptimizerConfig, TraditionalPortfolioOptimizer
+
+    tb = Timebase(time_step_hours=10.0 / 60.0)
+    opt_cfg = OptimizerConfig(
+        method="markowitz_mean_variance",
+        risk_aversion_lambda=5.0,
+        shrinkage=0.1,
+        allow_short=False,
+        seed=int(seed),
+    )
+    opt = TraditionalPortfolioOptimizer(timebase=tb, rf_annual=0.02, opt_cfg=opt_cfg)
+    returns = opt.build_asset_returns(data)
+    ledger = HybridFundLedger(data, seed=seed, timebase_hours=tb.time_step_hours)
+
+    rebalance_every = max(1, int(ledger.investment_freq))
+    lookback_steps = max(int(tb.steps_per_year), rebalance_every)
+    w = {a: 1.0 / len(opt.risky_assets) for a in opt.risky_assets}
+    w["cash"] = 1.0 - sum(w.values())
+    rebalance_count = 0
+    exposure_history = []
+
+    for t in range(len(returns)):
+        target_exposure = None
+        if t > 0 and (t % rebalance_every == 0):
+            start = max(0, t - lookback_steps)
+            window = returns.iloc[start:t]
+            try:
+                w = opt.rebalance_weights(window, method=opt_cfg.method)
+                risky = float(sum(float(w.get(a, 0.0)) for a in opt.risky_assets))
+                target_exposure = float(np.clip(risky, -1.0, 1.0))
+                rebalance_count += 1
+            except Exception:
+                target_exposure = None
+        record = ledger.step(t, target_exposure=target_exposure, battery_action="idle")
+        exposure_history.append(float(record.get("current_abs_exposure_dkk", 0.0)))
+
+    return _baseline_summary(
+        ledger.performance_metrics(),
+        method="Traditional Portfolio - Markowitz Mean-Variance",
+        role="classical_finance_trading_sleeve",
+        baseline_id="baseline_1",
+        extra={
+            "rebalance_count": int(rebalance_count),
+            "rebalance_every_steps": int(rebalance_every),
+            "mean_abs_exposure_dkk": float(np.mean(exposure_history)) if exposure_history else 0.0,
+        },
+    )
+
+
+def _evaluate_rule_based_baseline(data: pd.DataFrame, seed: int = 42) -> Dict[str, Any]:
+    _prepare_baseline_imports()
+    from baseline_common import HybridFundLedger
+
+    ledger = HybridFundLedger(data, seed=seed)
+    price_hist = []
+    target_exposure = 0.0
+    trigger_counts = {
+        "long_price_momentum": 0,
+        "short_price_reversion": 0,
+        "battery_charge": 0,
+        "battery_discharge": 0,
+        "battery_idle": 0,
+    }
+    exposure_history = []
+
+    prices = data.get("price", pd.Series(0.0, index=data.index)).astype(float).to_numpy()
+    wind = data.get("wind", pd.Series(0.0, index=data.index)).astype(float).to_numpy()
+    solar = data.get("solar", pd.Series(0.0, index=data.index)).astype(float).to_numpy()
+    hydro = data.get("hydro", pd.Series(0.0, index=data.index)).astype(float).to_numpy()
+
+    for t in range(len(data)):
+        price = float(prices[t])
+        price_hist.append(price)
+        hist = np.asarray(price_hist[-168:], dtype=float)
+        battery_action = "idle"
+        decision_exposure = None
+
+        if hist.size >= 24:
+            p25 = float(np.percentile(hist, 25))
+            p50 = float(np.percentile(hist, 50))
+            p75 = float(np.percentile(hist, 75))
+            recent = hist[-min(hist.size, 12):]
+            momentum = float((recent[-1] - recent[0]) / max(abs(recent[0]), 1e-6)) if recent.size >= 2 else 0.0
+            start = max(0, t - 168)
+            generation_support = float(
+                np.nanmean(
+                    [
+                        wind[t] / max(np.nanpercentile(wind[start: t + 1], 75), 1e-6),
+                        solar[t] / max(np.nanpercentile(solar[start: t + 1], 75), 1e-6),
+                        hydro[t] / max(np.nanpercentile(hydro[start: t + 1], 75), 1e-6),
+                    ]
+                )
+            )
+
+            if price <= p25:
+                battery_action = "charge"
+                trigger_counts["battery_charge"] += 1
+            elif price >= p75:
+                battery_action = "discharge"
+                trigger_counts["battery_discharge"] += 1
+            else:
+                trigger_counts["battery_idle"] += 1
+
+            if momentum > 0.002 and price >= p50 and generation_support >= 0.75:
+                target_exposure = 0.50
+                trigger_counts["long_price_momentum"] += 1
+            elif momentum < -0.002 and price <= p50:
+                target_exposure = -0.25
+                trigger_counts["short_price_reversion"] += 1
+            else:
+                target_exposure *= 0.90
+                if abs(target_exposure) < 0.05:
+                    target_exposure = 0.0
+
+            decision_exposure = float(np.clip(target_exposure, -0.50, 0.50))
+        else:
+            trigger_counts["battery_idle"] += 1
+
+        record = ledger.step(t, target_exposure=decision_exposure, battery_action=battery_action)
+        exposure_history.append(float(record.get("current_abs_exposure_dkk", 0.0)))
+
+    return _baseline_summary(
+        ledger.performance_metrics(),
+        method="Rule-Based Heuristic - Fixed Hybrid Fund",
+        role="expert_rules_trading_and_battery_sleeves",
+        baseline_id="baseline_2",
+        extra={
+            "rule_triggers": trigger_counts,
+            "mean_abs_exposure_dkk": float(np.mean(exposure_history)) if exposure_history else 0.0,
+            "alignment_fix": (
+                "This rule baseline no longer buys or sells physical infrastructure during evaluation; "
+                "it uses fixed Tier1 physical assets and only controls trading exposure plus battery dispatch."
+            ),
+        },
+    )
+
+
+def _evaluate_buy_and_hold_baseline(data: pd.DataFrame, seed: int = 42) -> Dict[str, Any]:
+    _prepare_baseline_imports()
+    from baseline_common import HybridFundLedger
+
+    ledger = HybridFundLedger(data, seed=seed)
+    for t in range(len(data)):
+        ledger.step(t, target_exposure=None, battery_action="idle")
+
+    return _baseline_summary(
+        ledger.performance_metrics(),
+        method="Hybrid Buy-and-Hold",
+        role="passive_fixed_physical_sleeve_idle_trading_sleeve",
+        baseline_id="baseline_3",
+        extra={
+            "active_decisions": 0,
+            "market_exposure": 0.0,
+            "cash_accrual": "disabled_to_match_current_environment",
+        },
+    )
+
+
+def run_traditional_baselines(
+    eval_data_path: str,
+    timesteps: int = 10000,
+    output_dir: str = "evaluation_results",
+    seed: int = 42,
+) -> Dict[str, Any]:
+    """Run baselines 1-3 in-process and return one aggregate JSON-ready payload."""
+    print_progress("Running aligned hybrid-fund baselines 1-3 in process")
+    data = _load_baseline_data(eval_data_path, timesteps)
+
+    evaluators = [
+        ("baseline_1", _evaluate_traditional_portfolio_baseline),
+        ("baseline_2", _evaluate_rule_based_baseline),
+        ("baseline_3", _evaluate_buy_and_hold_baseline),
+    ]
+    baseline_results: Dict[str, Any] = {}
+    for key, fn in evaluators:
+        try:
+            result = fn(data, seed=seed)
+            baseline_results[key] = result
+            final_wealth = float(result.get("final_portfolio_value", result.get("final_value_usd", 0.0)))
+            total_return = float(result.get("total_return", 0.0)) * 100.0
+            print_progress(
+                f"   {result.get('method', key)}: final wealth ${final_wealth/1e6:.2f}M, "
+                f"return {total_return:+.2f}%"
+            )
+        except Exception as e:
+            baseline_results[key] = {
+                "baseline_id": key,
+                "status": "failed",
+                "error": str(e),
+                "evaluation_contract": "tier1_2026_distribution_adjusted",
+            }
+
+    return baseline_results
+
+
 def find_latest_checkpoint(checkpoint_base_dir: str = "normal/checkpoints") -> Optional[str]:
     """Find the latest checkpoint directory or final models."""
 
@@ -965,7 +1215,13 @@ def load_checkpoint_models(checkpoint_dir: str) -> Dict[str, Any]:
             print(f"Warning: NumPy compatibility shim skipped: {shim_error}")
 
         from stable_baselines3 import PPO, SAC, TD3, DQN
-        from policy import BetaActorCriticPolicy
+        from policy import (
+            BetaActorCriticPolicy,
+            CentralizedCriticActorCriticPolicy,
+            CentralizedCriticBetaActorCriticPolicy,
+            CentralizedCriticPPO,
+            CentralizedCriticRolloutBuffer,
+        )
         print("ÃƒÂ¢Ã…â€œÃ¢â‚¬Â¦ Successfully imported stable-baselines3")
 
         algo_map = {"PPO": PPO, "SAC": SAC, "TD3": TD3, "DQN": DQN}
@@ -975,12 +1231,15 @@ def load_checkpoint_models(checkpoint_dir: str) -> Dict[str, Any]:
             "risk_controller_0": "PPO",
             "meta_controller_0": "PPO",
         }
+        saved_algo = "ippo"
         config_path = os.path.join(checkpoint_dir, "training_config.json")
         if os.path.isfile(config_path):
             try:
                 with open(config_path, "r", encoding="utf-8") as f:
                     saved = json.load(f)
                 final_cfg = saved.get("final_config", {}) or {}
+                flags = saved.get("flags", {}) or {}
+                saved_algo = str(final_cfg.get("algo", flags.get("algo", "ippo")) or "ippo").strip().lower()
                 saved_policies = final_cfg.get("agent_policies", None)
                 agent_order = [
                     "investor_0",
@@ -1000,12 +1259,21 @@ def load_checkpoint_models(checkpoint_dir: str) -> Dict[str, Any]:
             except Exception as e:
                 print(f"ÃƒÂ¢Ã…Â¡Ã‚Â ÃƒÂ¯Ã‚Â¸Ã‚Â Could not read training_config.json for algo detection: {e}")
 
-        _ = BetaActorCriticPolicy
+        _ = (
+            BetaActorCriticPolicy,
+            CentralizedCriticActorCriticPolicy,
+            CentralizedCriticBetaActorCriticPolicy,
+            CentralizedCriticPPO,
+            CentralizedCriticRolloutBuffer,
+        )
+        ppo_loader = CentralizedCriticPPO if saved_algo == "mappo" else PPO
+        # mappo-2x2 task
+        algo_map["PPO"] = ppo_loader
         model_configs = [
-            ("investor_0_policy.zip", algo_map.get(agent_modes["investor_0"], PPO)),
+            ("investor_0_policy.zip", algo_map.get(agent_modes["investor_0"], ppo_loader)),
             ("battery_operator_0_policy.zip", algo_map.get(agent_modes["battery_operator_0"], DQN)),
-            ("risk_controller_0_policy.zip", algo_map.get(agent_modes["risk_controller_0"], PPO)),
-            ("meta_controller_0_policy.zip", algo_map.get(agent_modes["meta_controller_0"], PPO)),
+            ("risk_controller_0_policy.zip", algo_map.get(agent_modes["risk_controller_0"], ppo_loader)),
+            ("meta_controller_0_policy.zip", algo_map.get(agent_modes["meta_controller_0"], ppo_loader)),
         ]
         
         loaded_models = {}
@@ -1045,7 +1313,16 @@ def _resolve_reserved_eval_forecast_context(
     """Resolve the canonical evaluation forecast-cache context."""
 
     cache_root = str(getattr(args, "forecast_cache_dir", "forecast_cache") or "forecast_cache")
-    cache_dir = os.path.join(cache_root, "forecast_cache_eval_episode20_2025", "forecast_cache_eval_episode20_2025-full")
+    direct_csvs = []
+    if os.path.isdir(cache_root):
+        direct_csvs = [
+            p for p in glob.glob(os.path.join(cache_root, "precomputed_forecasts_*.csv"))
+            if "_metadata" not in os.path.basename(p)
+        ]
+    if direct_csvs:
+        cache_dir = cache_root
+    else:
+        cache_dir = os.path.join(cache_root, "forecast_cache_eval_episode20_2025", "forecast_cache_eval_episode20_2025-full")
     if not os.path.isdir(cache_dir):
         cache_dir = os.path.join(cache_root, "forecast_cache_eval_episode20_2025")
 
@@ -1059,6 +1336,33 @@ def _build_eval_config(args):
     from config import EnhancedConfig
 
     cfg = EnhancedConfig()
+    if getattr(args, "seed", None) is not None:
+        cfg.seed = int(args.seed)
+    if getattr(args, "eval_distribution_rate", None) is not None:
+        cfg.eval_distribution_rate = float(args.eval_distribution_rate)
+    if getattr(args, "friction_cost_multiplier", None) is not None:
+        cfg.friction_cost_multiplier = float(args.friction_cost_multiplier)
+    if getattr(args, "half_spread_bp", None) is not None:
+        cfg.half_spread_bp = float(args.half_spread_bp)
+    # market-impact task
+    if getattr(args, "impact_coef_bp", None) is not None:
+        cfg.impact_coef_bp = float(args.impact_coef_bp)
+    if getattr(args, "impact_exponent", None) is not None:
+        cfg.impact_exponent = float(args.impact_exponent)
+    if getattr(args, "impact_ref_notional", None) is not None:
+        cfg.impact_ref_notional = str(args.impact_ref_notional)
+    if getattr(args, "impact_volume_data", None) is not None:
+        cfg.impact_volume_data_path = str(args.impact_volume_data)
+    if getattr(args, "impact_volume_column", None) is not None:
+        cfg.impact_volume_column = str(args.impact_volume_column)
+    if getattr(args, "impact_volume_unit", None) is not None:
+        cfg.impact_volume_unit = str(args.impact_volume_unit)
+    if getattr(args, "impact_volume_timestamp_column", None) is not None:
+        cfg.impact_volume_timestamp_column = str(args.impact_volume_timestamp_column)
+    if getattr(args, "impact_volume_max_staleness_min", None) is not None:
+        cfg.impact_volume_max_staleness_minutes = float(args.impact_volume_max_staleness_min)
+    if getattr(args, "impact_volume_price_floor_dkk_per_mwh", None) is not None:
+        cfg.impact_volume_price_floor_dkk_per_mwh = float(args.impact_volume_price_floor_dkk_per_mwh)
     if getattr(args, "investment_freq", None) is not None:
         cfg.investment_freq = int(args.investment_freq)
     if getattr(args, "meta_freq_min", None) is not None:
@@ -1117,7 +1421,7 @@ def _prime_eval_rolling_past_from_history(cfg):
     """Prime rolling_past state from the newest available causal history file."""
     history_dir = str(getattr(cfg, "rolling_past_history_dir", "") or "").strip()
     if not history_dir:
-        return
+        raise RuntimeError("[ROLLING_PAST][EVAL] rolling_past mode requires rolling_past_history_dir")
     pattern = os.path.join(history_dir, "history_*.csv")
     candidates = []
     for p in glob.glob(pattern):
@@ -1126,8 +1430,7 @@ def _prime_eval_rolling_past_from_history(cfg):
         if m:
             candidates.append((int(m.group(1)), p))
     if not candidates:
-        print(f"[ROLLING_PAST][EVAL] No history file found in {history_dir}; continuing without bootstrap.")
-        return
+        raise RuntimeError(f"[ROLLING_PAST][EVAL] No history_*.csv file found in {history_dir}")
 
     candidates.sort(key=lambda x: x[0])
     history_csv_path = candidates[-1][1]
@@ -1227,34 +1530,72 @@ def run_tier_suite_evaluation(eval_data: pd.DataFrame, args) -> Dict[str, Any]:
     results: Dict[str, Any] = {
         "evaluation_mode": "tier1",
         "eval_data": args.eval_data,
+        "seed": int(getattr(args, "seed", 42)),
         "tiers": {},
     }
 
     steps = args.eval_steps if args.eval_steps is not None else (len(eval_data) - 1)
     steps = int(max(1, steps))
 
-    tier_out = os.path.join(args.output_dir, "tier1")
-    os.makedirs(tier_out, exist_ok=True)
-    env_log_dir = os.path.join(tier_out, "env_logs")
-    os.makedirs(env_log_dir, exist_ok=True)
+    tier_out = args.output_dir
+    env_log_dir = None
+    log_sleeve = bool(getattr(args, "log_sleeve", False))
+    # sleeve-supplement task
+    if log_sleeve:
+        env_log_dir = os.path.join(tier_out, "env_logs")
 
     run_dir = args.tier1_dir
     policy_final_models_dir = os.path.join(run_dir, "final_models")
     models = load_checkpoint_models(policy_final_models_dir)
     cfg = _hydrate_eval_config_from_training_config(_build_eval_config(args), policy_final_models_dir)
+    if getattr(args, "eval_distribution_rate", None) is not None:
+        cfg.eval_distribution_rate = float(args.eval_distribution_rate)
+    if getattr(args, "friction_cost_multiplier", None) is not None:
+        cfg.friction_cost_multiplier = float(args.friction_cost_multiplier)
+    if getattr(args, "half_spread_bp", None) is not None:
+        cfg.half_spread_bp = float(args.half_spread_bp)
+    # market-impact task
+    if getattr(args, "impact_coef_bp", None) is not None:
+        cfg.impact_coef_bp = float(args.impact_coef_bp)
+    if getattr(args, "impact_exponent", None) is not None:
+        cfg.impact_exponent = float(args.impact_exponent)
+    if getattr(args, "impact_ref_notional", None) is not None:
+        cfg.impact_ref_notional = str(args.impact_ref_notional)
+    if getattr(args, "impact_volume_data", None) is not None:
+        cfg.impact_volume_data_path = str(args.impact_volume_data)
+    if getattr(args, "impact_volume_column", None) is not None:
+        cfg.impact_volume_column = str(args.impact_volume_column)
+    if getattr(args, "impact_volume_unit", None) is not None:
+        cfg.impact_volume_unit = str(args.impact_volume_unit)
+    if getattr(args, "impact_volume_timestamp_column", None) is not None:
+        cfg.impact_volume_timestamp_column = str(args.impact_volume_timestamp_column)
+    if getattr(args, "impact_volume_max_staleness_min", None) is not None:
+        cfg.impact_volume_max_staleness_minutes = float(args.impact_volume_max_staleness_min)
+    if getattr(args, "impact_volume_price_floor_dkk_per_mwh", None) is not None:
+        cfg.impact_volume_price_floor_dkk_per_mwh = float(args.impact_volume_price_floor_dkk_per_mwh)
+    cfg.enable_episode_csv_logs = bool(log_sleeve)
 
+    runtime_contract_kwargs = {
+        "global_norm_mode": "global" if bool(getattr(cfg, "use_global_normalization", False)) else "rolling_past",
+        "rolling_past_history_dir": str(getattr(cfg, "rolling_past_history_dir", "") or ""),
+        "investment_freq": int(getattr(cfg, "investment_freq", getattr(args, "investment_freq", 6)) or 6),
+        "meta_freq_min": int(getattr(cfg, "meta_freq_min", getattr(args, "meta_freq_min", 6)) or 6),
+        "meta_freq_max": int(getattr(cfg, "meta_freq_max", getattr(args, "meta_freq_max", 6)) or 6),
+        "enable_forecast_utilization": bool(getattr(cfg, "enable_forecast_utilization", False)),
+        "forecast_prior_settings": forecast_prior_contract_settings(cfg),
+    }
     eval_runtime_contract = build_runtime_contract(
-        global_norm_mode="global" if bool(getattr(cfg, "use_global_normalization", False)) else "rolling_past",
-        rolling_past_history_dir=str(getattr(cfg, "rolling_past_history_dir", "") or ""),
-        investment_freq=int(getattr(cfg, "investment_freq", getattr(args, "investment_freq", 6)) or 6),
-        meta_freq_min=int(getattr(cfg, "meta_freq_min", getattr(args, "meta_freq_min", 6)) or 6),
-        meta_freq_max=int(getattr(cfg, "meta_freq_max", getattr(args, "meta_freq_max", 6)) or 6),
-        enable_forecast_utilization=bool(getattr(cfg, "enable_forecast_utilization", False)),
-        forecast_prior_settings=forecast_prior_contract_settings(cfg),
+        **runtime_contract_kwargs,
+        log_sleeve=log_sleeve,
     )
+    eval_runtime_match_contract = build_runtime_contract(
+        **runtime_contract_kwargs,
+        log_sleeve=False,
+    )
+    eval_runtime_match_hash = runtime_contract_hash(eval_runtime_match_contract)
     eval_runtime_hash = runtime_contract_hash(eval_runtime_contract)
     train_hash = _load_runtime_contract_hash_from_training_config(policy_final_models_dir)
-    if train_hash and eval_runtime_hash != train_hash:
+    if train_hash and eval_runtime_hash != train_hash and eval_runtime_match_hash != train_hash:
         raise RuntimeError(
             f"[EVAL_RUNTIME_CONTRACT] training/eval hash mismatch for tier1: "
             f"train={train_hash}, eval={eval_runtime_hash}"
@@ -1270,7 +1611,7 @@ def run_tier_suite_evaluation(eval_data: pd.DataFrame, args) -> Dict[str, Any]:
     env = create_evaluation_environment(
         eval_data,
         output_dir=tier_out,
-        investment_freq=args.investment_freq,
+        investment_freq=int(getattr(cfg, "investment_freq", args.investment_freq) or args.investment_freq),
         config=cfg,
         env_log_dir=env_log_dir,
         forecast_cache_dir=eval_forecast_cache_dir,
@@ -1281,17 +1622,24 @@ def run_tier_suite_evaluation(eval_data: pd.DataFrame, args) -> Dict[str, Any]:
     if tier_metrics is None:
         tier_metrics = {"status": "failed", "error": "evaluation_failed"}
     else:
-        try:
-            debug_log_path = _find_env_debug_log(env_log_dir)
-            tier_metrics["env_log_dir"] = env_log_dir
-            tier_metrics["env_debug_log"] = debug_log_path or ""
-            if debug_log_path:
-                tier_metrics["sleeve_metrics"] = _compute_sleeve_metrics_from_env_log(
-                    debug_log_path,
-                    dkk_to_usd_rate=float(getattr(cfg, "dkk_to_usd_rate", 0.145) or 0.145),
-                )
-        except Exception as e:
-            tier_metrics["sleeve_metrics"] = {"sleeve_metrics_error": str(e)}
+        if env_log_dir:
+            try:
+                # sleeve-supplement task: flush debug CSVs before reading them into JSON metrics.
+                _close_env_debug_logger(env)
+                debug_log_path = _find_env_debug_log(env_log_dir)
+                tier_metrics["env_log_dir"] = env_log_dir
+                tier_metrics["env_debug_log"] = debug_log_path or ""
+                if debug_log_path:
+                    tier_metrics["sleeve_metrics"] = _compute_sleeve_metrics_from_env_log(
+                        debug_log_path,
+                        dkk_to_usd_rate=float(getattr(cfg, "dkk_to_usd_rate", 0.145) or 0.145),
+                    )
+            except Exception as e:
+                tier_metrics["sleeve_metrics"] = {"sleeve_metrics_error": str(e)}
+        # sleeve-supplement task
+        if log_sleeve:
+            tier_metrics["log_sleeve"] = True
+            tier_metrics["eval_runtime_contract_hash"] = eval_runtime_hash
         tier_metrics.update({
             "status": "completed",
             "run_dir": run_dir,
@@ -1342,6 +1690,21 @@ def _find_env_debug_log(env_log_dir: str) -> Optional[str]:
         return None
 
 
+def _close_env_debug_logger(eval_env) -> None:
+    """Flush and close the environment debug logger if sleeve logging is active."""
+    seen = set()
+    for obj in (eval_env, getattr(eval_env, "env", None)):
+        if obj is None or id(obj) in seen:
+            continue
+        seen.add(id(obj))
+        tracker = getattr(obj, "debug_tracker", None)
+        if tracker is not None and hasattr(tracker, "close"):
+            try:
+                tracker.close()
+            except Exception:
+                pass
+
+
 def _compute_sleeve_metrics_from_env_log(debug_csv_path: str, dkk_to_usd_rate: float = 0.145) -> Dict[str, Any]:
     """Split total NAV into (operating sleeve) and (trading sleeve) from env debug logs.
 
@@ -1370,6 +1733,7 @@ def _compute_sleeve_metrics_from_env_log(debug_csv_path: str, dkk_to_usd_rate: f
         "total_distributions_dkk",
         "distribution_adjusted_nav_dkk",
         "distribution_adjusted_trading_sleeve_dkk",
+        "timestamp",
     }
 
     try:
@@ -1454,24 +1818,21 @@ def _compute_sleeve_metrics_from_env_log(debug_csv_path: str, dkk_to_usd_rate: f
     else:
         metrics["sleeve_operating_return_pct"] = 0.0
 
-    # Trading sleeve "risk" metrics (computed the same way as calculate_performance_metrics()).
+    # Trading sleeve risk metrics use the sleeve-supplement formula.
     try:
         if len(trading_usd) > 1 and float(trading_usd[0]) != 0.0:
             tr = np.diff(trading_usd) / trading_usd[:-1]
             periods_per_year = _infer_periods_per_year(df["timestamp"] if "timestamp" in df.columns else None)
             annual_risk_free_rate = float(getattr(PortfolioAnalysisConfig(), "risk_free_annual", 0.02))
-            risk_stats = _compute_annualized_risk_metrics(
-                tr,
-                periods_per_year=periods_per_year,
-                annual_risk_free_rate=annual_risk_free_rate,
-            )
-            vol = float(risk_stats["annualized_volatility"])
-            sharpe = float(risk_stats["annualized_sharpe"])
+            rf_step = float(annual_risk_free_rate) / float(max(periods_per_year, 1.0))
+            step_vol = float(np.std(tr)) if len(tr) > 1 else 0.0
+            vol = float(step_vol * math.sqrt(periods_per_year))
+            sharpe = float(((np.mean(tr) - rf_step) / step_vol) * math.sqrt(periods_per_year)) if step_vol > 0.0 else 0.0
             peak = np.maximum.accumulate(trading_usd)
             drawdowns = np.where(peak > 0.0, (peak - trading_usd) / peak, 0.0)
             dd = float(np.max(drawdowns)) if len(drawdowns) else 0.0
             metrics["sleeve_trading_volatility"] = vol
-            metrics["sleeve_trading_step_volatility"] = float(risk_stats["step_volatility"])
+            metrics["sleeve_trading_step_volatility"] = step_vol
             metrics["sleeve_trading_sharpe_ratio"] = sharpe
             metrics["sleeve_trading_max_drawdown_pct"] = dd * 100.0
     except Exception as e:
@@ -1657,6 +2018,8 @@ def create_evaluation_environment(
             config=config,
             log_dir=env_log_dir,
         )
+        # Evaluation-only marker for paper metric-family stress tests.
+        base_env.evaluation_mode = True
         print_progress("Environment created")
         return base_env
 
@@ -1779,6 +2142,83 @@ def _get_total_distributions_dkk(env) -> float:
     return 0.0
 
 
+def _attach_eval_override_context(metrics: Dict[str, Any], eval_env) -> Dict[str, Any]:
+    cfg = getattr(eval_env, "config", None)
+    override = getattr(cfg, "eval_distribution_rate", None) if cfg is not None else None
+    metrics["evaluation_mode_env_flag"] = bool(getattr(eval_env, "evaluation_mode", False))
+    metrics["eval_distribution_rate"] = None if override is None else float(override)
+    metrics["cash_sweeper_eval_override_active"] = bool(
+        getattr(eval_env, "evaluation_mode", False) and override is not None
+    )
+    metrics["cash_sweeper_distribution_rate_used"] = (
+        float(override)
+        if override is not None and bool(getattr(eval_env, "evaluation_mode", False))
+        else float(getattr(cfg, "distribution_rate", 0.0) if cfg is not None else 0.0)
+    )
+    # Friction sweep metadata for eval-only stress tests; defaults preserve v1 behavior.
+    metrics["friction_cost_multiplier"] = float(
+        getattr(cfg, "friction_cost_multiplier", 1.0) if cfg is not None else 1.0
+    )
+    metrics["half_spread_bp"] = float(getattr(cfg, "half_spread_bp", 0.0) if cfg is not None else 0.0)
+    metrics["impact_coef_bp"] = float(getattr(cfg, "impact_coef_bp", 0.0) if cfg is not None else 0.0)
+    metrics["impact_exponent"] = float(getattr(cfg, "impact_exponent", 0.5) if cfg is not None else 0.5)
+    metrics["impact_ref_notional"] = str(
+        getattr(cfg, "impact_ref_notional", "sleeve") if cfg is not None else "sleeve"
+    )
+    metrics["impact_volume_data_path"] = str(
+        getattr(cfg, "impact_volume_data_path", "") if cfg is not None else ""
+    )
+    metrics["impact_volume_column"] = str(getattr(cfg, "impact_volume_column", "") if cfg is not None else "")
+    metrics["impact_volume_unit"] = str(getattr(cfg, "impact_volume_unit", "mwh") if cfg is not None else "mwh")
+    metrics["impact_volume_price_floor_dkk_per_mwh"] = float(
+        getattr(cfg, "impact_volume_price_floor_dkk_per_mwh", 50.0) if cfg is not None else 50.0
+    )
+    total_impact_dkk = 0.0
+    last_impact_dkk = 0.0
+    last_ref_notional = 0.0
+    last_participation = 0.0
+    last_impact_bp = 0.0
+    liquidity_source = ""
+    for candidate in _iter_env_chain(eval_env):
+        if hasattr(candidate, "cumulative_market_impact_costs"):
+            try:
+                total_impact_dkk = float(getattr(candidate, "cumulative_market_impact_costs", 0.0))
+            except Exception:
+                total_impact_dkk = 0.0
+        if hasattr(candidate, "_last_market_impact_cost"):
+            try:
+                last_impact_dkk = float(getattr(candidate, "_last_market_impact_cost", 0.0))
+            except Exception:
+                last_impact_dkk = 0.0
+        if hasattr(candidate, "_last_market_impact_ref_notional"):
+            try:
+                last_ref_notional = float(getattr(candidate, "_last_market_impact_ref_notional", 0.0))
+            except Exception:
+                last_ref_notional = 0.0
+        if hasattr(candidate, "_last_market_impact_participation"):
+            try:
+                last_participation = float(getattr(candidate, "_last_market_impact_participation", 0.0))
+            except Exception:
+                last_participation = 0.0
+        if hasattr(candidate, "_last_market_impact_bp"):
+            try:
+                last_impact_bp = float(getattr(candidate, "_last_market_impact_bp", 0.0))
+            except Exception:
+                last_impact_bp = 0.0
+        if hasattr(candidate, "_impact_liquidity_source"):
+            liquidity_source = str(getattr(candidate, "_impact_liquidity_source", "") or "")
+    dkk_to_usd = float(getattr(cfg, "dkk_to_usd_rate", 0.145) if cfg is not None else 0.145)
+    # market-impact task
+    metrics["total_market_impact_cost_dkk"] = float(max(total_impact_dkk, 0.0))
+    metrics["total_market_impact_cost_usd"] = float(max(total_impact_dkk, 0.0) * dkk_to_usd)
+    metrics["last_market_impact_cost_dkk"] = float(max(last_impact_dkk, 0.0))
+    metrics["last_market_impact_ref_notional_dkk"] = float(max(last_ref_notional, 0.0))
+    metrics["last_market_impact_participation"] = float(max(last_participation, 0.0))
+    metrics["last_market_impact_bp"] = float(max(last_impact_bp, 0.0))
+    metrics["impact_liquidity_source"] = liquidity_source
+    return metrics
+
+
 def _attach_distribution_adjusted_context(
     metrics: Dict[str, Any],
     reported_nav_values: list,
@@ -1821,6 +2261,7 @@ def run_checkpoint_evaluation(models: Dict[str, Any],
     print("ÃƒÂ°Ã…Â¸Ã…Â¡Ã¢â€šÂ¬ Starting checkpoint model evaluation...")
 
     if not models or not eval_env:
+        raise RuntimeError("[EVAL FAIL-HARD] No models or evaluation environment available.")
         print("ÃƒÂ¢Ã‚ÂÃ…â€™ No models or environment available")
         return None
 
@@ -1830,8 +2271,19 @@ def run_checkpoint_evaluation(models: Dict[str, Any],
     print(f"ÃƒÂ°Ã…Â¸Ã…Â½Ã‚Â¯ Checkpoint models loaded: {loaded_count}/{model_total}")
 
     if loaded_count == 0:
+        raise RuntimeError("[EVAL FAIL-HARD] No checkpoint models loaded successfully.")
         print("ÃƒÂ¢Ã‚ÂÃ…â€™ No checkpoint models loaded successfully")
         return None
+
+    missing_agents = [
+        agent for agent in getattr(eval_env, "possible_agents", [])
+        if models.get(agent) is None
+    ]
+    if missing_agents:
+        raise RuntimeError(
+            "[EVAL FAIL-HARD] Missing checkpoint model(s) for "
+            f"{missing_agents}; refusing rule/sample fallback because it invalidates tier comparisons."
+        )
 
     # Run evaluation
     obs, _ = eval_env.reset()
@@ -1846,6 +2298,14 @@ def run_checkpoint_evaluation(models: Dict[str, Any],
     total_inference_attempts = 0
     model_inference_successes = 0
     model_inference_attempts = 0
+    if not hasattr(eval_env, "_calculate_fund_nav"):
+        raise RuntimeError("[EVAL FAIL-HARD] Evaluation env lacks _calculate_fund_nav at reset.")
+    initial_nav_dkk = float(eval_env._calculate_fund_nav())
+    initial_rate = float(getattr(getattr(eval_env, "config", None), "dkk_to_usd_rate", 0.145) or 0.145)
+    initial_reported_nav_usd = initial_nav_dkk * initial_rate
+    initial_total_distributions_usd = _get_total_distributions_dkk(eval_env) * initial_rate
+    reported_nav_values.append(initial_reported_nav_usd)
+    portfolio_values.append(initial_reported_nav_usd + initial_total_distributions_usd)
 
     print(f"ÃƒÂ°Ã…Â¸Ã‚Â§Ã‚Âª Running evaluation for {steps} steps...")
 
@@ -1869,28 +2329,15 @@ def run_checkpoint_evaluation(models: Dict[str, Any],
                     successful_inference_actions += 1
                     model_inference_successes += 1
                 except Exception as e:
-                    # FAIL-HARD on the investor agent: silent fallback to
-                    # rule-based actions would invalidate tier comparisons.
-                    if agent in ("investor_0", "investor"):
-                        raise RuntimeError(
-                            f"[EVAL FAIL-HARD] investor model prediction crashed; "
-                            f"refusing to silently fall back to rule-based actions. "
-                            f"Underlying error: {type(e).__name__}: {e}"
-                        ) from e
-                    print(f"[WARN] Prediction error for {agent}: {e}")
-                    if hasattr(eval_env, "get_rule_based_agent_action"):
-                        actions[agent] = eval_env.get_rule_based_agent_action(agent, obs[agent])
-                    else:
-                        actions[agent] = eval_env.action_space(agent).sample()
-            else:
-                if agent in ("investor_0", "investor"):
                     raise RuntimeError(
-                        "[EVAL FAIL-HARD] investor model is missing; refusing rule-based/sample fallback."
-                    )
-                if hasattr(eval_env, "get_rule_based_agent_action"):
-                    actions[agent] = eval_env.get_rule_based_agent_action(agent, obs[agent])
-                else:
-                    actions[agent] = eval_env.action_space(agent).sample()
+                        f"[EVAL FAIL-HARD] {agent} model prediction crashed; "
+                        f"refusing rule/sample fallback because it invalidates tier comparisons. "
+                        f"Underlying error: {type(e).__name__}: {e}"
+                    ) from e
+            else:
+                raise RuntimeError(
+                    f"[EVAL FAIL-HARD] {agent} model is missing; refusing rule/sample fallback."
+                )
 
         # Execute step
         try:
@@ -1930,9 +2377,10 @@ def run_checkpoint_evaluation(models: Dict[str, Any],
                 portfolio_value_dkk = eval_env.env.equity
                 extraction_method = "wrapped.equity"
             else:
-                # Fallback to initial value in DKK (800M USD = ~5.52B DKK)
-                portfolio_value_dkk = 800_000_000 / 0.145  # Convert USD to DKK
-                extraction_method = "fallback"
+                raise RuntimeError(
+                    "[EVAL FAIL-HARD] Could not extract portfolio NAV from evaluation environment; "
+                    "refusing fallback initial value."
+                )
 
             # Convert DKK to USD for consistent analysis
             # Get conversion rate from environment or use default
@@ -1970,9 +2418,16 @@ def run_checkpoint_evaluation(models: Dict[str, Any],
 
             # Handle episode termination
             if any(dones.values()) or any(truncs.values()):
-                obs, _ = eval_env.reset()
+                if completed_steps < steps:
+                    raise RuntimeError(
+                        f"[EVAL FAIL-HARD] Environment terminated early at step "
+                        f"{completed_steps}/{steps}; refusing partial-path metrics."
+                    )
 
         except Exception as e:
+            raise RuntimeError(
+                f"[EVAL FAIL-HARD] Checkpoint evaluation failed at step {step + 1}/{steps}: {e}"
+            ) from e
             print(f"ÃƒÂ¢Ã…Â¡Ã‚Â ÃƒÂ¯Ã‚Â¸Ã‚Â Step execution error: {e}")
             break
 
@@ -2009,6 +2464,7 @@ def run_checkpoint_evaluation(models: Dict[str, Any],
             else 0.0
         ),
     )
+    metrics = _attach_eval_override_context(metrics, eval_env)
 
     # Add checkpoint-specific metrics
     metrics['action_inference_success_rate'] = success_rate
@@ -2064,6 +2520,14 @@ def run_agent_evaluation(agent_system,
     rewards_by_agent = {agent: [] for agent in eval_env.possible_agents}
     risk_levels = []
     actions_taken = {agent: [] for agent in eval_env.possible_agents}
+    if not hasattr(eval_env, "_calculate_fund_nav"):
+        raise RuntimeError("[EVAL FAIL-HARD] Evaluation env lacks _calculate_fund_nav at reset.")
+    initial_nav_dkk = float(eval_env._calculate_fund_nav())
+    initial_rate = float(getattr(getattr(eval_env, "config", None), "dkk_to_usd_rate", 0.145) or 0.145)
+    initial_reported_nav_usd = initial_nav_dkk * initial_rate
+    initial_total_distributions_usd = _get_total_distributions_dkk(eval_env) * initial_rate
+    reported_nav_values.append(initial_reported_nav_usd)
+    portfolio_values.append(initial_reported_nav_usd + initial_total_distributions_usd)
 
     print_progress("ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂÃ¢â‚¬Å¾ Starting evaluation loop...")
 
@@ -2095,11 +2559,10 @@ def run_agent_evaluation(agent_system,
                     if step == 0:
                         print_progress(f"ÃƒÂ¢Ã…â€œÃ¢â‚¬Â¦ Got prediction from {agent}")
                 else:
-                    if agent in ("investor_0", "investor"):
-                        raise RuntimeError(
-                            "[EVAL FAIL-HARD] investor policy has no predict() method; refusing sample fallback."
-                        )
-                    act = eval_env.action_space(agent).sample()
+                    raise RuntimeError(
+                        f"[EVAL FAIL-HARD] {agent} policy has no predict() method; "
+                        "refusing sample fallback."
+                    )
 
                 act = _coerce_action_for_space(act, eval_env.action_space(agent))
                 actions[agent] = act
@@ -2107,12 +2570,10 @@ def run_agent_evaluation(agent_system,
 
             except Exception as e:
                 print_progress(f"ÃƒÂ¢Ã…Â¡Ã‚Â ÃƒÂ¯Ã‚Â¸Ã‚Â Action prediction error for {agent}: {e}")
-                if agent in ("investor_0", "investor"):
-                    raise RuntimeError(
-                        f"[EVAL FAIL-HARD] investor policy prediction crashed in agent evaluation; "
-                        f"refusing sample fallback. Underlying error: {type(e).__name__}: {e}"
-                    ) from e
-                actions[agent] = eval_env.action_space(agent).sample()
+                raise RuntimeError(
+                    f"[EVAL FAIL-HARD] {agent} policy prediction crashed in agent evaluation; "
+                    f"refusing sample fallback. Underlying error: {type(e).__name__}: {e}"
+                ) from e
 
         if step == 0:
             print_progress("ÃƒÂ°Ã…Â¸Ã¢â‚¬ÂÃ¢â‚¬Å¾ Executing first environment step...")
@@ -2149,8 +2610,10 @@ def run_agent_evaluation(agent_system,
                 # Handle wrapped environment case
                 portfolio_value_dkk = eval_env.env.equity
             else:
-                # Fallback to initial value in DKK (800M USD = ~5.52B DKK)
-                portfolio_value_dkk = 800_000_000 / 0.145  # Convert USD to DKK
+                raise RuntimeError(
+                    "[EVAL FAIL-HARD] Could not extract portfolio NAV from evaluation environment; "
+                    "refusing fallback initial value."
+                )
 
             # Convert DKK to USD for consistent analysis
             # Get conversion rate from environment or use default
@@ -2182,9 +2645,17 @@ def run_agent_evaluation(agent_system,
 
             # Handle episode termination
             if any(dones.values()) or any(truncs.values()):
-                obs, _ = eval_env.reset()
+                if completed_steps < evaluation_steps:
+                    raise RuntimeError(
+                        f"[EVAL FAIL-HARD] Environment terminated early at step "
+                        f"{completed_steps}/{evaluation_steps}; refusing partial-path metrics."
+                    )
 
         except Exception as e:
+            raise RuntimeError(
+                f"[EVAL FAIL-HARD] Agent evaluation failed at step "
+                f"{step + 1}/{evaluation_steps}: {e}"
+            ) from e
             print(f"ÃƒÂ¢Ã…Â¡Ã‚Â ÃƒÂ¯Ã‚Â¸Ã‚Â Step execution error: {e}")
             break
 
@@ -2213,6 +2684,7 @@ def run_agent_evaluation(agent_system,
             else 0.0
         ),
     )
+    metrics = _attach_eval_override_context(metrics, eval_env)
     metrics['evaluation_mode'] = 'agents'
 
     return metrics
@@ -2234,7 +2706,12 @@ def run_comprehensive_evaluation(eval_data: pd.DataFrame, args) -> Dict[str, Any
     # 1. Evaluate Baselines (use basic environment)
     print_progress("ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã…Â  [1/3] EVALUATING BASELINES...", 1, 3)
     try:
-        baseline_results = run_traditional_baselines(args.eval_data, args.eval_steps or 8000, args.output_dir)
+        baseline_results = run_traditional_baselines(
+            args.eval_data,
+            args.eval_steps or 10000,
+            args.output_dir,
+            seed=getattr(args, "seed", 42),
+        )
         if baseline_results:
             comprehensive_results['configurations']['baselines'] = baseline_results
             print_progress("ÃƒÂ¢Ã…â€œÃ¢â‚¬Â¦ Baseline evaluation completed")
@@ -2256,7 +2733,7 @@ def run_comprehensive_evaluation(eval_data: pd.DataFrame, args) -> Dict[str, Any
             normal_eval_env = create_evaluation_environment(
                 eval_data,
                 output_dir=args.output_dir,
-                investment_freq=args.investment_freq,
+                investment_freq=int(getattr(normal_cfg, "investment_freq", args.investment_freq) or args.investment_freq),
                 config=normal_cfg,
                 fail_fast=True,
             )
@@ -2302,7 +2779,7 @@ def run_comprehensive_evaluation(eval_data: pd.DataFrame, args) -> Dict[str, Any
             enhanced_eval_env = create_evaluation_environment(
                 eval_data,
                 output_dir=args.output_dir,
-                investment_freq=args.investment_freq,
+                investment_freq=int(getattr(full_cfg, "investment_freq", args.investment_freq) or args.investment_freq),
                 config=full_cfg,
                 forecast_cache_dir=forecast_ctx["forecast_cache_dir"] if forecast_ctx else args.forecast_cache_dir,
                 fail_fast=True,
@@ -2574,8 +3051,114 @@ def main():
     # Evaluation options
     parser.add_argument("--eval_steps", type=int, default=None,
                        help="Number of timesteps to evaluate (default: auto)")
+    parser.add_argument(
+        "--eval-distribution-rate",
+        "--eval_distribution_rate",
+        dest="eval_distribution_rate",
+        type=float,
+        default=None,
+        help="Evaluation-only cash-sweeper distribution rate override. Omit to preserve training/live behavior.",
+    )
+    parser.add_argument(
+        "--friction-cost-multiplier",
+        "--friction_cost_multiplier",
+        dest="friction_cost_multiplier",
+        type=float,
+        default=None,
+        help="Evaluation-only multiplier for trading transaction costs. Omit to preserve saved-config behavior.",
+    )
+    parser.add_argument(
+        "--half-spread-bp",
+        "--half_spread_bp",
+        dest="half_spread_bp",
+        type=float,
+        default=None,
+        help="Evaluation-only half-spread cost in basis points on traded notional. Omit to preserve saved-config behavior.",
+    )
+    parser.add_argument(
+        "--impact-coef-bp",
+        "--impact_coef_bp",
+        dest="impact_coef_bp",
+        type=float,
+        default=None,
+        help="Evaluation-only temporary market-impact coefficient in bp at full-sleeve participation.",
+    )
+    parser.add_argument(
+        "--impact-exponent",
+        "--impact_exponent",
+        dest="impact_exponent",
+        type=float,
+        default=None,
+        help="Evaluation-only market-impact exponent; 0.5 is the square-root law.",
+    )
+    parser.add_argument(
+        "--impact-ref-notional",
+        "--impact_ref_notional",
+        dest="impact_ref_notional",
+        type=str,
+        default=None,
+        help="Evaluation-only market-impact Q_ref in DKK, 'sleeve' for current trading cash, or 'volume' for market-volume calibration.",
+    )
+    parser.add_argument(
+        "--impact-volume-data",
+        "--impact_volume_data",
+        dest="impact_volume_data",
+        type=str,
+        default=None,
+        help="CSV with timestamped market volume for --impact-ref-notional volume.",
+    )
+    parser.add_argument(
+        "--impact-volume-column",
+        "--impact_volume_column",
+        dest="impact_volume_column",
+        type=str,
+        default=None,
+        help="Volume column name, or comma-separated columns to sum. Blank autodetects a single volume column.",
+    )
+    parser.add_argument(
+        "--impact-volume-unit",
+        "--impact_volume_unit",
+        dest="impact_volume_unit",
+        type=str,
+        choices=["mwh", "dkk"],
+        default=None,
+        help="Unit of impact volume data: MWh converted via spot price, or DKK notional.",
+    )
+    parser.add_argument(
+        "--impact-volume-timestamp-column",
+        "--impact_volume_timestamp_column",
+        dest="impact_volume_timestamp_column",
+        type=str,
+        default=None,
+        help="Timestamp column in --impact-volume-data.",
+    )
+    parser.add_argument(
+        "--impact-volume-max-staleness-min",
+        "--impact_volume_max_staleness_min",
+        dest="impact_volume_max_staleness_min",
+        type=float,
+        default=None,
+        help="Maximum minutes to forward-fill hourly market volume onto the 10-minute eval grid.",
+    )
+    parser.add_argument(
+        "--impact-volume-price-floor-dkk-per-mwh",
+        "--impact_volume_price_floor_dkk_per_mwh",
+        dest="impact_volume_price_floor_dkk_per_mwh",
+        type=float,
+        default=None,
+        help="Price floor used when converting MWh volume to DKK notional for volume-calibrated impact.",
+    )
+    parser.add_argument(
+        "--log-sleeve",
+        dest="log_sleeve",
+        action="store_true",
+        default=False,
+        help="Write per-step env debug CSVs for trading-sleeve supplement metrics.",
+    )
     parser.add_argument("--output_dir", type=str, default="evaluation_results",
                        help="Output directory for results")
+    parser.add_argument("--seed", type=int, default=42,
+                       help="Random seed for deterministic baseline diagnostics")
     parser.add_argument("--investment_freq", type=int, default=6,
                        help="Investor action frequency for evaluation (should match training; default 6)")
     parser.add_argument("--meta_freq_min", type=int, default=None,
@@ -2629,6 +3212,12 @@ def main():
             "per-variant eval CLIs stay symmetric with training."
         ),
     )
+    parser.add_argument(
+        "--write_tier_report",
+        action="store_true",
+        default=False,
+        help="Also write tier_result CSV/Markdown reports. By default evaluation writes JSON only.",
+    )
     add_forecast_prior_override_args(parser)
 
     # Analysis options
@@ -2640,6 +3229,17 @@ def main():
                        help="Save plots to files instead of displaying (requires --plot)")
 
     args = parser.parse_args()
+    seed_value = int(getattr(args, "seed", 42))
+    os.environ.setdefault("PYTHONHASHSEED", str(seed_value))
+    random.seed(seed_value)
+    np.random.seed(seed_value)
+    try:
+        import torch
+        torch.manual_seed(seed_value)
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed_all(seed_value)
+    except Exception:
+        pass
 
     # Enable GPU memory growth before any TF graph operations.
     configure_tf_memory()
@@ -2717,17 +3317,20 @@ def main():
     if args.mode == "tiers":
         try:
             results = run_tier_suite_evaluation(eval_data, args)
-            # Always write a single consolidated report (CSV + Markdown)
-            csv_path, md_path = write_tier_report(results.get("tiers", {}), args.output_dir)
-            results["tier_report_csv"] = csv_path
-            results["tier_report_md"] = md_path
-            results["tier_report_scope"] = "single_variant"
+            # Optional consolidated report (CSV + Markdown); JSON is always written.
+            if bool(getattr(args, "write_tier_report", False)):
+                csv_path, md_path = write_tier_report(results.get("tiers", {}), args.output_dir)
+                results["tier_report_csv"] = csv_path
+                results["tier_report_md"] = md_path
+                results["tier_report_scope"] = "single_variant"
 
             analysis = None
             if args.analyze:
                 analysis = analyze_comprehensive_results({"configurations": results.get("tiers", {})})
 
             save_results(results, args.output_dir, mode="tiers", analysis=analysis)
+            if not bool(getattr(args, "write_tier_report", False)):
+                return
             print_progress(f"ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã¢â‚¬Å¾ Tier report written: {md_path}")
             print_progress(f"ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã¢â‚¬Å¾ Tier report CSV written: {csv_path}")
             return
@@ -2746,7 +3349,7 @@ def main():
     eval_env = create_evaluation_environment(
         eval_data,
         output_dir=args.output_dir,
-        investment_freq=args.investment_freq,
+        investment_freq=int(getattr(eval_cfg, "investment_freq", args.investment_freq) or args.investment_freq),
         config=eval_cfg,
         forecast_cache_dir=eval_forecast_cache_dir,
         fail_fast=True,
@@ -2824,7 +3427,8 @@ def main():
         baseline_results = run_traditional_baselines(
             args.eval_data,
             args.eval_steps or 10000,  # Use same default as agents
-            args.output_dir
+            args.output_dir,
+            seed=getattr(args, "seed", 42),
         )
 
         if baseline_results and 'error' not in baseline_results:
@@ -2832,7 +3436,9 @@ def main():
                 'evaluation_type': 'traditional_baselines',
                 'baselines': baseline_results,
                 'eval_data_path': args.eval_data,
-                'eval_steps': args.eval_steps or 8000
+                'eval_steps': args.eval_steps or 10000,
+                'baseline_scope': 'baseline_1_2_3_current_hybrid_fund',
+                'artifact_policy': 'single_aggregate_json'
             }
         else:
             print("ÃƒÂ¢Ã‚ÂÃ…â€™ Traditional baseline evaluation failed")
@@ -2880,7 +3486,12 @@ def main():
                 print("ÃƒÂ¢Ã‚ÂÃ…â€™ No AI models found for comparison")
 
         # Run traditional baselines with same steps as AI agents
-        baseline_results = run_traditional_baselines(args.eval_data, args.eval_steps or 10000, args.output_dir)
+        baseline_results = run_traditional_baselines(
+            args.eval_data,
+            args.eval_steps or 10000,
+            args.output_dir,
+            seed=getattr(args, "seed", 42),
+        )
 
         # Combine results
         if ai_results and baseline_results and 'error' not in baseline_results:
