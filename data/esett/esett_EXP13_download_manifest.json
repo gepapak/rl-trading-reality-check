@@ -1,0 +1,53 @@
+{
+ "source": "https://api.opendata.esett.com/EXP13/ImbalancePowerVolume",
+ "areas": {
+  "DK1": {
+   "rows": 0,
+   "sha256": "eeaa7402a080a9becc9b12e55884caada9999ef01308ef3bb076fea20016a494"
+  },
+  "DK2": {
+   "rows": 0,
+   "sha256": "f75e684de282edf0289c1d3a92babb7007519877411bca0e7730330a0116c370"
+  },
+  "FI": {
+   "rows": 53811,
+   "sha256": "3992657dde9280777efa2e82b42275a8b545725e554064bd871ca0629361f426"
+  },
+  "NO1": {
+   "rows": 53811,
+   "sha256": "01a68cebc86adf868182ec39e327f5f91d5347cf99d11f3c74250255013cded8"
+  },
+  "NO2": {
+   "rows": 53811,
+   "sha256": "5d251aea709b19be3389ca83ae731d00077fb36f9484d7d182852eaadbad91b0"
+  },
+  "NO3": {
+   "rows": 53811,
+   "sha256": "19de57d07d379df9726971d19f511c669778a1020053cde6e5826c1564e8ed11"
+  },
+  "NO4": {
+   "rows": 53811,
+   "sha256": "7e062ba5004a36563f3b4e8e8f5967ba3271495b00e489c0aaa7e4f784e54d3c"
+  },
+  "NO5": {
+   "rows": 53811,
+   "sha256": "a3ff8a22cb8c0bbb8696e697635488c667e6a3b28767e54f5b6c8809fe045281"
+  },
+  "SE1": {
+   "rows": 0,
+   "sha256": "de001b293bc5778bad95ed2b0921f25e1c18bae23f1ee87d5bdbb80a763a4a5c"
+  },
+  "SE2": {
+   "rows": 0,
+   "sha256": "5bb2de4650fcbc2343b6af1958f6d7f0865f633c08c6710c1ebf47b4bb207d68"
+  },
+  "SE3": {
+   "rows": 0,
+   "sha256": "d059c350e79f5ab8479d4093b4ee5a7eb5ac656244b32c37daea5f92c9bc8533"
+  },
+  "SE4": {
+   "rows": 0,
+   "sha256": "9783a2d2b4a2d22b2ea25a5af0b7218870b9736b4a627350f0c94d2f45384035"
+  }
+ }
+}

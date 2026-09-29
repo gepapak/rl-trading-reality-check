@@ -1,0 +1,7 @@
+# Python 3.10
+numpy==1.26.4
+pandas==2.3.2
+scipy==1.15.3
+# literature survey extraction only
+pypdf==6.11.0
+# audit/ additionally needs the Prototype5 engine requirements (not included)

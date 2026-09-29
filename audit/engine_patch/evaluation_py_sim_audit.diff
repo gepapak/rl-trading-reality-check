@@ -1,0 +1,41 @@
+diff --git a/engine/evaluation.py b/engine/evaluation.py
+index 3df9c10..65e9724 100644
+--- a/engine/evaluation.py
++++ b/engine/evaluation.py
+@@ -1902,7 +1902,11 @@ def run_tier_suite_evaluation(eval_data: pd.DataFrame, args) -> Dict[str, Any]:
+         and eval_policy_match_hash == train_hash
+         and eval_runtime_match_hash != train_hash
+     )
+-    if train_hash and eval_runtime_hash != train_hash and eval_runtime_match_hash != train_hash and not overlay_contract_exception:
++    # [SIM_AUDIT PATCH] contract mismatch may be allowed only for audit evaluations
++    _sim_audit_mismatch = bool(train_hash and eval_runtime_hash != train_hash and eval_runtime_match_hash != train_hash and not overlay_contract_exception)
++    if _sim_audit_mismatch and os.environ.get('SIM_AUDIT_ALLOW_PROTOCOL_MISMATCH') == '1':
++        print(f'[SIM_AUDIT] protocol mismatch ALLOWED for audit evaluation: train={train_hash}, eval={eval_runtime_hash}')
++    elif _sim_audit_mismatch:
+         raise RuntimeError(
+             "[EVAL_RUNTIME_CONTRACT] training/eval hash mismatch for tier1: "
+             f"train={train_hash}, eval={eval_runtime_hash}"
+@@ -1920,6 +1924,14 @@ def run_tier_suite_evaluation(eval_data: pd.DataFrame, args) -> Dict[str, Any]:
+         forecast_ctx = _resolve_reserved_eval_forecast_context(args, output_dir=tier_out, config=cfg)
+         eval_forecast_cache_dir = forecast_ctx["forecast_cache_dir"]
+ 
++    # [SIM_AUDIT PATCH] optional config overrides for audit evaluations
++    _sim_audit_overrides = json.loads(os.environ.get('SIM_AUDIT_CFG_OVERRIDES', '') or '{}')
++    for _k, _v in _sim_audit_overrides.items():
++        if not hasattr(cfg, _k):
++            raise AttributeError(f'[SIM_AUDIT] unknown config attribute {_k}')
++        setattr(cfg, _k, _v)
++    if _sim_audit_overrides:
++        print(f'[SIM_AUDIT] config overrides applied: {_sim_audit_overrides}')
+     env = create_evaluation_environment(
+         eval_data,
+         output_dir=tier_out,
+@@ -1957,6 +1969,8 @@ def run_tier_suite_evaluation(eval_data: pd.DataFrame, args) -> Dict[str, Any]:
+         tier_metrics["eval_policy_match_contract_hash"] = eval_policy_match_hash
+         tier_metrics["eval_runtime_contract_hash"] = eval_runtime_hash
+         tier_metrics["engine_file_hashes"] = engine_file_hashes()
++        # [SIM_AUDIT PATCH] provenance of audit evaluations
++        tier_metrics['sim_audit'] = {'protocol_mismatch': bool(_sim_audit_mismatch), 'mismatch_allowed': os.environ.get('SIM_AUDIT_ALLOW_PROTOCOL_MISMATCH') == '1', 'cfg_overrides': _sim_audit_overrides, 'variant': os.environ.get('SIM_AUDIT_VARIANT', '')}
+         tier_metrics["eval_forecast_overlay"] = eval_forecast_overlay
+         tier_metrics["eval_runtime_contract_exception"] = (
+             "forecast_overlay_only" if overlay_contract_exception else ""

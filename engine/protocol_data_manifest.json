@@ -1,0 +1,2458 @@
+{
+  "created_at_utc": "2026-07-20T08:29:23+00:00",
+  "cross_region_design": "DK2 is a price/settlement/liquidity stress test sharing the DK1 physical trajectory.",
+  "files": [
+    {
+      "bytes": 3784131,
+      "end": "2015-06-30 23:50:00",
+      "path": "training_dataset_ffill/scenario_000.csv",
+      "rows": 26064,
+      "sha256": "0e82d7a26851882aebe7bb049d40437949fe41430c977532211faf3d36e38f6d",
+      "start": "2015-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3811852,
+      "end": "2015-12-31 23:50:00",
+      "path": "training_dataset_ffill/scenario_001.csv",
+      "rows": 26496,
+      "sha256": "2267b435f1a014c2718bfd9665e9b001ad0d1252709a027ac98822dd9fe5712d",
+      "start": "2015-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3794966,
+      "end": "2016-06-30 23:50:00",
+      "path": "training_dataset_ffill/scenario_002.csv",
+      "rows": 26208,
+      "sha256": "0738a67291e65c365e41ead312e142b43e538b6400540b2ea63c54df88aa4b40",
+      "start": "2016-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3844764,
+      "end": "2016-12-31 23:50:00",
+      "path": "training_dataset_ffill/scenario_003.csv",
+      "rows": 26496,
+      "sha256": "c640ce79207aee7f613f9ef4e6459396213d37636253ab1817732efb6a21851e",
+      "start": "2016-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3786120,
+      "end": "2017-06-30 23:50:00",
+      "path": "training_dataset_ffill/scenario_004.csv",
+      "rows": 26064,
+      "sha256": "0136f25ca8a50c82e34f2e1d59b860ec3fabd5360e93ed178035fce87956f409",
+      "start": "2017-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3826923,
+      "end": "2017-12-31 23:50:00",
+      "path": "training_dataset_ffill/scenario_005.csv",
+      "rows": 26496,
+      "sha256": "c5417444ab56d49af50e4cd2a05b132bf912b44a1792b987480188efb08f1b19",
+      "start": "2017-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3810082,
+      "end": "2018-06-30 23:50:00",
+      "path": "training_dataset_ffill/scenario_006.csv",
+      "rows": 26064,
+      "sha256": "0fd683299b145411fe64914383c715b33003bf09819da6030f7ff9fecfd77ee5",
+      "start": "2018-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3870658,
+      "end": "2018-12-31 23:50:00",
+      "path": "training_dataset_ffill/scenario_007.csv",
+      "rows": 26496,
+      "sha256": "c579f01f23907ed89f131d341d45ae85827baca70a395dba6eb3e2542fb8a518",
+      "start": "2018-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3806991,
+      "end": "2019-06-30 23:50:00",
+      "path": "training_dataset_ffill/scenario_008.csv",
+      "rows": 26064,
+      "sha256": "76deb40ef9780dbde165f84ac3b9795b8212297bc7803bdcf0e8cbbbfd9b2e08",
+      "start": "2019-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3877495,
+      "end": "2019-12-31 23:50:00",
+      "path": "training_dataset_ffill/scenario_009.csv",
+      "rows": 26496,
+      "sha256": "23c50bcc0023ec8cf4c1a1e6186be28aa15998d8cb125636e77b921d1b20f002",
+      "start": "2019-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3780715,
+      "end": "2020-06-30 23:50:00",
+      "path": "training_dataset_ffill/scenario_010.csv",
+      "rows": 26208,
+      "sha256": "acd7dd6af016e79bdd5ab062d298eae065a36ddbfcdc3e0f2c720bb91f08fb4e",
+      "start": "2020-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3802357,
+      "end": "2020-12-31 23:50:00",
+      "path": "training_dataset_ffill/scenario_011.csv",
+      "rows": 26496,
+      "sha256": "5570bda571af5d2bf7cd2f9e78208390416abf1b9d63cd7605ea82797dd4fbe3",
+      "start": "2020-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3806232,
+      "end": "2021-06-30 23:50:00",
+      "path": "training_dataset_ffill/scenario_012.csv",
+      "rows": 26064,
+      "sha256": "07e3da7991dfd53e7870624a7bc40e3d0a7812a85b8f973ef953b47ee5eb7e9a",
+      "start": "2021-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3852439,
+      "end": "2021-12-31 23:50:00",
+      "path": "training_dataset_ffill/scenario_013.csv",
+      "rows": 26496,
+      "sha256": "96bf54dae1ee5e2e40cb879ca144fab5df649a9c3f618d9d4efa1098c820bd5f",
+      "start": "2021-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3800760,
+      "end": "2022-06-30 23:50:00",
+      "path": "training_dataset_ffill/scenario_014.csv",
+      "rows": 26064,
+      "sha256": "167dfaddbe580252358e5a60c8c3b057a704822f0a5d1b63f40b3bd32ab968d0",
+      "start": "2022-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3882034,
+      "end": "2022-12-31 23:50:00",
+      "path": "training_dataset_ffill/scenario_015.csv",
+      "rows": 26496,
+      "sha256": "2bbdbce30c8a00afce34e138d1a5bc3fe2554efcfa9233fa4814178187c624ac",
+      "start": "2022-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3815432,
+      "end": "2023-06-30 23:50:00",
+      "path": "training_dataset_ffill/scenario_016.csv",
+      "rows": 26064,
+      "sha256": "9c754b945ad65be7a93aa92f62e3f685734b92a09d21c903a4f2d894cfecb7b3",
+      "start": "2023-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3857412,
+      "end": "2023-12-31 23:50:00",
+      "path": "training_dataset_ffill/scenario_017.csv",
+      "rows": 26496,
+      "sha256": "971266d88e0cd9a1350be35ecb90e011c3cd076f49e66f0b783799eecba8d013",
+      "start": "2023-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3791792,
+      "end": "2024-06-30 23:50:00",
+      "path": "training_dataset_ffill/scenario_018.csv",
+      "rows": 26208,
+      "sha256": "aa6ff7a4062e61f2ed2f38e13e637c6e940c20b55431303fabb13045fe98f0a9",
+      "start": "2024-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3864916,
+      "end": "2024-12-31 23:50:00",
+      "path": "training_dataset_ffill/scenario_019.csv",
+      "rows": 26496,
+      "sha256": "db1ca34b3aebbb1a82828207669d3e3477bbcab4722a4236e5015b45326d96e3",
+      "start": "2024-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 9077811,
+      "end": "2014-12-31 23:50:00",
+      "path": "rolling_past_history_dataset_ffill/history_000.csv",
+      "rows": 52560,
+      "sha256": "dcd19fd8544933ab37a85b76f9a051bb8b73753ad87f51db1b13b31d182f3904",
+      "start": "2014-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3784131,
+      "end": "2015-06-30 23:50:00",
+      "path": "rolling_past_history_dataset_ffill/history_001.csv",
+      "rows": 26064,
+      "sha256": "0e82d7a26851882aebe7bb049d40437949fe41430c977532211faf3d36e38f6d",
+      "start": "2015-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3811852,
+      "end": "2015-12-31 23:50:00",
+      "path": "rolling_past_history_dataset_ffill/history_002.csv",
+      "rows": 26496,
+      "sha256": "2267b435f1a014c2718bfd9665e9b001ad0d1252709a027ac98822dd9fe5712d",
+      "start": "2015-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3794966,
+      "end": "2016-06-30 23:50:00",
+      "path": "rolling_past_history_dataset_ffill/history_003.csv",
+      "rows": 26208,
+      "sha256": "0738a67291e65c365e41ead312e142b43e538b6400540b2ea63c54df88aa4b40",
+      "start": "2016-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3844764,
+      "end": "2016-12-31 23:50:00",
+      "path": "rolling_past_history_dataset_ffill/history_004.csv",
+      "rows": 26496,
+      "sha256": "c640ce79207aee7f613f9ef4e6459396213d37636253ab1817732efb6a21851e",
+      "start": "2016-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3786120,
+      "end": "2017-06-30 23:50:00",
+      "path": "rolling_past_history_dataset_ffill/history_005.csv",
+      "rows": 26064,
+      "sha256": "0136f25ca8a50c82e34f2e1d59b860ec3fabd5360e93ed178035fce87956f409",
+      "start": "2017-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3826923,
+      "end": "2017-12-31 23:50:00",
+      "path": "rolling_past_history_dataset_ffill/history_006.csv",
+      "rows": 26496,
+      "sha256": "c5417444ab56d49af50e4cd2a05b132bf912b44a1792b987480188efb08f1b19",
+      "start": "2017-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3810082,
+      "end": "2018-06-30 23:50:00",
+      "path": "rolling_past_history_dataset_ffill/history_007.csv",
+      "rows": 26064,
+      "sha256": "0fd683299b145411fe64914383c715b33003bf09819da6030f7ff9fecfd77ee5",
+      "start": "2018-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3870658,
+      "end": "2018-12-31 23:50:00",
+      "path": "rolling_past_history_dataset_ffill/history_008.csv",
+      "rows": 26496,
+      "sha256": "c579f01f23907ed89f131d341d45ae85827baca70a395dba6eb3e2542fb8a518",
+      "start": "2018-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3806991,
+      "end": "2019-06-30 23:50:00",
+      "path": "rolling_past_history_dataset_ffill/history_009.csv",
+      "rows": 26064,
+      "sha256": "76deb40ef9780dbde165f84ac3b9795b8212297bc7803bdcf0e8cbbbfd9b2e08",
+      "start": "2019-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3877495,
+      "end": "2019-12-31 23:50:00",
+      "path": "rolling_past_history_dataset_ffill/history_010.csv",
+      "rows": 26496,
+      "sha256": "23c50bcc0023ec8cf4c1a1e6186be28aa15998d8cb125636e77b921d1b20f002",
+      "start": "2019-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3780715,
+      "end": "2020-06-30 23:50:00",
+      "path": "rolling_past_history_dataset_ffill/history_011.csv",
+      "rows": 26208,
+      "sha256": "acd7dd6af016e79bdd5ab062d298eae065a36ddbfcdc3e0f2c720bb91f08fb4e",
+      "start": "2020-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3802357,
+      "end": "2020-12-31 23:50:00",
+      "path": "rolling_past_history_dataset_ffill/history_012.csv",
+      "rows": 26496,
+      "sha256": "5570bda571af5d2bf7cd2f9e78208390416abf1b9d63cd7605ea82797dd4fbe3",
+      "start": "2020-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3806232,
+      "end": "2021-06-30 23:50:00",
+      "path": "rolling_past_history_dataset_ffill/history_013.csv",
+      "rows": 26064,
+      "sha256": "07e3da7991dfd53e7870624a7bc40e3d0a7812a85b8f973ef953b47ee5eb7e9a",
+      "start": "2021-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3852439,
+      "end": "2021-12-31 23:50:00",
+      "path": "rolling_past_history_dataset_ffill/history_014.csv",
+      "rows": 26496,
+      "sha256": "96bf54dae1ee5e2e40cb879ca144fab5df649a9c3f618d9d4efa1098c820bd5f",
+      "start": "2021-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3800760,
+      "end": "2022-06-30 23:50:00",
+      "path": "rolling_past_history_dataset_ffill/history_015.csv",
+      "rows": 26064,
+      "sha256": "167dfaddbe580252358e5a60c8c3b057a704822f0a5d1b63f40b3bd32ab968d0",
+      "start": "2022-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3882034,
+      "end": "2022-12-31 23:50:00",
+      "path": "rolling_past_history_dataset_ffill/history_016.csv",
+      "rows": 26496,
+      "sha256": "2bbdbce30c8a00afce34e138d1a5bc3fe2554efcfa9233fa4814178187c624ac",
+      "start": "2022-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3815432,
+      "end": "2023-06-30 23:50:00",
+      "path": "rolling_past_history_dataset_ffill/history_017.csv",
+      "rows": 26064,
+      "sha256": "9c754b945ad65be7a93aa92f62e3f685734b92a09d21c903a4f2d894cfecb7b3",
+      "start": "2023-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3857412,
+      "end": "2023-12-31 23:50:00",
+      "path": "rolling_past_history_dataset_ffill/history_018.csv",
+      "rows": 26496,
+      "sha256": "971266d88e0cd9a1350be35ecb90e011c3cd076f49e66f0b783799eecba8d013",
+      "start": "2023-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3791792,
+      "end": "2024-06-30 23:50:00",
+      "path": "rolling_past_history_dataset_ffill/history_019.csv",
+      "rows": 26208,
+      "sha256": "aa6ff7a4062e61f2ed2f38e13e637c6e940c20b55431303fabb13045fe98f0a9",
+      "start": "2024-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 3864916,
+      "end": "2024-12-31 23:50:00",
+      "path": "rolling_past_history_dataset_ffill/history_020.csv",
+      "rows": 26496,
+      "sha256": "db1ca34b3aebbb1a82828207669d3e3477bbcab4722a4236e5015b45326d96e3",
+      "start": "2024-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 4380,
+      "path": "rolling_past_history_dataset_ffill/history_manifest.csv",
+      "sha256": "af4b2aca7ab5a8860599c91d51f5ed043251c31940914fcae7ccafa2cf23ce9e"
+    },
+    {
+      "bytes": 2313922,
+      "end": "2014-12-31 23:00:00",
+      "path": "forecast_training_dataset_settlement_hourly_v2/forecast_scenario_00.csv",
+      "rows": 8760,
+      "sha256": "6025357c0bbd85ab60a633fbd96f422f55881c7f9ec67515060b2fce8050be0e",
+      "start": "2014-01-01 00:00:00",
+      "ten_minute_regular": false,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2199626,
+      "end": "2015-06-30 23:00:00",
+      "path": "forecast_training_dataset_settlement_hourly_v2/forecast_scenario_01.csv",
+      "rows": 8760,
+      "sha256": "f7856e5fc4afe4eaccfd0562d58aa6fb51685591d0953066d29de9f05e541d2c",
+      "start": "2014-07-01 00:00:00",
+      "ten_minute_regular": false,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2063635,
+      "end": "2015-12-31 23:00:00",
+      "path": "forecast_training_dataset_settlement_hourly_v2/forecast_scenario_02.csv",
+      "rows": 8760,
+      "sha256": "68d36b2255dfb82c9f25808c96e7b2b41306a9588d090b1d9b70bbfd7a033179",
+      "start": "2015-01-01 00:00:00",
+      "ten_minute_regular": false,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2068659,
+      "end": "2016-06-30 23:00:00",
+      "path": "forecast_training_dataset_settlement_hourly_v2/forecast_scenario_03.csv",
+      "rows": 8784,
+      "sha256": "73db1b160dd1c596ca027d19d7811c8edde748e63a76ad4732bdea8863df7ade",
+      "start": "2015-07-01 00:00:00",
+      "ten_minute_regular": false,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2073473,
+      "end": "2016-12-31 23:00:00",
+      "path": "forecast_training_dataset_settlement_hourly_v2/forecast_scenario_04.csv",
+      "rows": 8784,
+      "sha256": "9cb939c6b7e3e9aef990a7f10663334e9f7be652fbeba649d72706ed7ca68a45",
+      "start": "2016-01-01 00:00:00",
+      "ten_minute_regular": false,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2079919,
+      "end": "2017-06-30 23:00:00",
+      "path": "forecast_training_dataset_settlement_hourly_v2/forecast_scenario_05.csv",
+      "rows": 8760,
+      "sha256": "c2cabaa512a8d9b766576a8f5cf3a16da79f2ef503442d31f5f240f537b498c9",
+      "start": "2016-07-01 00:00:00",
+      "ten_minute_regular": false,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2069967,
+      "end": "2017-12-31 23:00:00",
+      "path": "forecast_training_dataset_settlement_hourly_v2/forecast_scenario_06.csv",
+      "rows": 8760,
+      "sha256": "4bf46f86acb6ae6666a3960077f28a02f7591e54b31d149868f87f88ad9dff2d",
+      "start": "2017-01-01 00:00:00",
+      "ten_minute_regular": false,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2076393,
+      "end": "2018-06-30 23:00:00",
+      "path": "forecast_training_dataset_settlement_hourly_v2/forecast_scenario_07.csv",
+      "rows": 8760,
+      "sha256": "cfbbb008c69ff23003582ec21c6eb43736569548137700bcba0f51a76a15b92c",
+      "start": "2017-07-01 00:00:00",
+      "ten_minute_regular": false,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2066438,
+      "end": "2018-12-31 23:00:00",
+      "path": "forecast_training_dataset_settlement_hourly_v2/forecast_scenario_08.csv",
+      "rows": 8760,
+      "sha256": "2834a644481c525a8dd52be1e45cdbd556f7600e4d3a18d0006f7c88cb4d904d",
+      "start": "2018-01-01 00:00:00",
+      "ten_minute_regular": false,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2064935,
+      "end": "2019-06-30 23:00:00",
+      "path": "forecast_training_dataset_settlement_hourly_v2/forecast_scenario_09.csv",
+      "rows": 8760,
+      "sha256": "82006046c43a5cdbfe2702c66e7677bd0bb870b58139e37d9cf8564f6e9cd8f6",
+      "start": "2018-07-01 00:00:00",
+      "ten_minute_regular": false,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2066589,
+      "end": "2019-12-31 23:00:00",
+      "path": "forecast_training_dataset_settlement_hourly_v2/forecast_scenario_10.csv",
+      "rows": 8760,
+      "sha256": "cd80fb513dcc44335b868bb20e5bc429761212e48fe758e4594b7b76e8e67bb6",
+      "start": "2019-01-01 00:00:00",
+      "ten_minute_regular": false,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2059848,
+      "end": "2020-06-30 23:00:00",
+      "path": "forecast_training_dataset_settlement_hourly_v2/forecast_scenario_11.csv",
+      "rows": 8784,
+      "sha256": "835913c68e8bab3aab777d37090c307d8d5898e55744a116a91f44b72def1bf1",
+      "start": "2019-07-01 00:00:00",
+      "ten_minute_regular": false,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2037824,
+      "end": "2020-12-31 23:00:00",
+      "path": "forecast_training_dataset_settlement_hourly_v2/forecast_scenario_12.csv",
+      "rows": 8784,
+      "sha256": "a3764e6b9cf9c2de496fa63383f85d0e07b1a705afacc6cfce193ae933cc9f1e",
+      "start": "2020-01-01 00:00:00",
+      "ten_minute_regular": false,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2042717,
+      "end": "2021-06-30 23:00:00",
+      "path": "forecast_training_dataset_settlement_hourly_v2/forecast_scenario_13.csv",
+      "rows": 8760,
+      "sha256": "83c08510cfde20b7bab1b6c3d89935c724d3e4a24f43a43338a7264ea658e267",
+      "start": "2020-07-01 00:00:00",
+      "ten_minute_regular": false,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2074400,
+      "end": "2021-12-31 23:00:00",
+      "path": "forecast_training_dataset_settlement_hourly_v2/forecast_scenario_14.csv",
+      "rows": 8760,
+      "sha256": "deb0d0366ab54c0417b15e1f48fa9521f75fe79d480eb7dcee1024d7b8a6f77f",
+      "start": "2021-01-01 00:00:00",
+      "ten_minute_regular": false,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2077669,
+      "end": "2022-06-30 23:00:00",
+      "path": "forecast_training_dataset_settlement_hourly_v2/forecast_scenario_15.csv",
+      "rows": 8760,
+      "sha256": "f3306877df87c740b559ac569fe430cbae7be1fe69e8f01a1b489cefe6527630",
+      "start": "2021-07-01 00:00:00",
+      "ten_minute_regular": false,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2099034,
+      "end": "2022-12-31 23:00:00",
+      "path": "forecast_training_dataset_settlement_hourly_v2/forecast_scenario_16.csv",
+      "rows": 8760,
+      "sha256": "4efc29bfe9870f8d712d1b1a58015b4667cf6f487c592d85d5c316e5a91f3ec7",
+      "start": "2022-01-01 00:00:00",
+      "ten_minute_regular": false,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2086233,
+      "end": "2023-06-30 23:00:00",
+      "path": "forecast_training_dataset_settlement_hourly_v2/forecast_scenario_17.csv",
+      "rows": 8760,
+      "sha256": "96cd6e833854feccc84337230f41810ce482ebca064af5507f9ac9ed2c3b8d16",
+      "start": "2022-07-01 00:00:00",
+      "ten_minute_regular": false,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2073148,
+      "end": "2023-12-31 23:00:00",
+      "path": "forecast_training_dataset_settlement_hourly_v2/forecast_scenario_18.csv",
+      "rows": 8760,
+      "sha256": "793dab808ae3a5c7fe39e5cb2e2bbe2687a4d1e436bfd92d3658e0a5a3b9c300",
+      "start": "2023-01-01 00:00:00",
+      "ten_minute_regular": false,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2072608,
+      "end": "2024-06-30 23:00:00",
+      "path": "forecast_training_dataset_settlement_hourly_v2/forecast_scenario_19.csv",
+      "rows": 8784,
+      "sha256": "6834c4eedc2503686934ea47b4bf74762866cb4a903da9b12c2bdc43226385b4",
+      "start": "2023-07-01 00:00:00",
+      "ten_minute_regular": false,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 4130202,
+      "end": "2024-12-31 23:00:00",
+      "path": "forecast_training_dataset_settlement_hourly_v2/forecast_scenario_20.csv",
+      "rows": 17544,
+      "sha256": "b80aac7c1004ba6e1a582b334d7cdd1f1921541c86df20082b5b70c81e956411",
+      "start": "2023-01-01 00:00:00",
+      "ten_minute_regular": false,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2367027,
+      "end": "2015-06-30 23:50:00",
+      "path": "settlement_price_dataset_real_v2/scenario_000.csv",
+      "rows": 26064,
+      "sha256": "0a0106b04b54f0e80a49b0276c310af86e2f4e199b5b23eeb231faa979f1ee65",
+      "start": "2015-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2377443,
+      "end": "2015-12-31 23:50:00",
+      "path": "settlement_price_dataset_real_v2/scenario_001.csv",
+      "rows": 26496,
+      "sha256": "38bc4942e41ccf4a8c9c687b8f41cd74eebecf3db6592f9f7830df97fbaab24e",
+      "start": "2015-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2381871,
+      "end": "2016-06-30 23:50:00",
+      "path": "settlement_price_dataset_real_v2/scenario_002.csv",
+      "rows": 26208,
+      "sha256": "d77c693039fe1ba3c3c6e2d16a5dbf99713e87581d653db032ead8a562dec66e",
+      "start": "2016-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2417367,
+      "end": "2016-12-31 23:50:00",
+      "path": "settlement_price_dataset_real_v2/scenario_003.csv",
+      "rows": 26496,
+      "sha256": "3dff8e4cb45d617d4b4c8b007c03a69b3100102f316ef98b8d3ae64fa2a205e6",
+      "start": "2016-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2374059,
+      "end": "2017-06-30 23:50:00",
+      "path": "settlement_price_dataset_real_v2/scenario_004.csv",
+      "rows": 26064,
+      "sha256": "6f79c71a85998464a6d752ed43b2e64246fb21bbdf89bba6f2b09e56af0e668c",
+      "start": "2017-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2410383,
+      "end": "2017-12-31 23:50:00",
+      "path": "settlement_price_dataset_real_v2/scenario_005.csv",
+      "rows": 26496,
+      "sha256": "6c76b26ac659c53b16153c76d282a34b92371695c97609897eed3003eea49f5c",
+      "start": "2017-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2363463,
+      "end": "2018-06-30 23:50:00",
+      "path": "settlement_price_dataset_real_v2/scenario_006.csv",
+      "rows": 26064,
+      "sha256": "f0a9b4bb90a78c1e2a75d5842dc3e2626da08c72c68b9944c22099469849a3a0",
+      "start": "2018-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2407371,
+      "end": "2018-12-31 23:50:00",
+      "path": "settlement_price_dataset_real_v2/scenario_007.csv",
+      "rows": 26496,
+      "sha256": "83ed2aca189e63f8ec29cba481008a1732348f24f0e67d1e2c93399764f3c7bb",
+      "start": "2018-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2361267,
+      "end": "2019-06-30 23:50:00",
+      "path": "settlement_price_dataset_real_v2/scenario_008.csv",
+      "rows": 26064,
+      "sha256": "68094cf63f30fc29b54c6c8873cf5623cdf225ec893d308dd395e665a1b25a92",
+      "start": "2019-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2410935,
+      "end": "2019-12-31 23:50:00",
+      "path": "settlement_price_dataset_real_v2/scenario_009.csv",
+      "rows": 26496,
+      "sha256": "facbbaee62f198b572b56bc2e44eb7a5efda947afdbd8c48973b7d99be99797c",
+      "start": "2019-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2314647,
+      "end": "2020-06-30 23:50:00",
+      "path": "settlement_price_dataset_real_v2/scenario_010.csv",
+      "rows": 26208,
+      "sha256": "41ec68d69fadbadc8b9e827de90f345d85897214e9edfa0c5f78d2f7840af190",
+      "start": "2020-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2350251,
+      "end": "2020-12-31 23:50:00",
+      "path": "settlement_price_dataset_real_v2/scenario_011.csv",
+      "rows": 26496,
+      "sha256": "6fa2a74616d39d901c0b6fa3a51516dbf16c7d56e91769e3bb5e646587ef41e5",
+      "start": "2020-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2352111,
+      "end": "2021-06-30 23:50:00",
+      "path": "settlement_price_dataset_real_v2/scenario_012.csv",
+      "rows": 26064,
+      "sha256": "98dd85ce5bfb5ce70df90988d7dc4ac58b063a35d84fcbdf05c4bbba0f7c8283",
+      "start": "2021-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2408223,
+      "end": "2021-12-31 23:50:00",
+      "path": "settlement_price_dataset_real_v2/scenario_013.csv",
+      "rows": 26496,
+      "sha256": "badfa81e52b05d801e25678f299167559cd09ed0372adadd3573015ca6420764",
+      "start": "2021-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2377071,
+      "end": "2022-06-30 23:50:00",
+      "path": "settlement_price_dataset_real_v2/scenario_014.csv",
+      "rows": 26064,
+      "sha256": "9a4430b2479ae799ab87084a0a76b534437e8a724d0a0a72ddd1061614bf4630",
+      "start": "2022-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2430927,
+      "end": "2022-12-31 23:50:00",
+      "path": "settlement_price_dataset_real_v2/scenario_015.csv",
+      "rows": 26496,
+      "sha256": "b462c0476dbc02cbccc40870253a38e1046ce6b882832620f08be9246f7d08b1",
+      "start": "2022-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2373207,
+      "end": "2023-06-30 23:50:00",
+      "path": "settlement_price_dataset_real_v2/scenario_016.csv",
+      "rows": 26064,
+      "sha256": "c3c517228e278854409f17081934a683913ad210c7bea9c45ad0286510a2d358",
+      "start": "2023-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2403831,
+      "end": "2023-12-31 23:50:00",
+      "path": "settlement_price_dataset_real_v2/scenario_017.csv",
+      "rows": 26496,
+      "sha256": "8cbbf74318eb4ebf9d39c6b883947b356ce464984243e1e61bbfb9941fb8d6fd",
+      "start": "2023-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2378835,
+      "end": "2024-06-30 23:50:00",
+      "path": "settlement_price_dataset_real_v2/scenario_018.csv",
+      "rows": 26208,
+      "sha256": "12ca9d88064e5d8f2a7cdebbcae82ea9a734a0f1e448a5faa89e96095684cf22",
+      "start": "2024-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 2406939,
+      "end": "2024-12-31 23:50:00",
+      "path": "settlement_price_dataset_real_v2/scenario_019.csv",
+      "rows": 26496,
+      "sha256": "d0a1f79a9abef952cee5c49ce0a0ded3cda75053d93e55b572a0cfad273bcc03",
+      "start": "2024-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 6619791,
+      "end": "2015-06-30 23:50:00",
+      "path": "liquidity_volume_dataset_real_v1/scenario_000.csv",
+      "rows": 26064,
+      "sha256": "86e5d4cf613583760aaf6ba42f6f2b0386817ed903bf4563370d93540d91ba47",
+      "start": "2015-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1366,
+      "path": "liquidity_volume_dataset_real_v1/scenario_000.csv.metadata.json",
+      "sha256": "e74c0a7cc19013e1aaa6264f54e6ea50dadcdd5652eef62e3efb571af4a95550"
+    },
+    {
+      "bytes": 6648909,
+      "end": "2015-12-31 23:50:00",
+      "path": "liquidity_volume_dataset_real_v1/scenario_001.csv",
+      "rows": 26496,
+      "sha256": "7eca94756559cab89f8bdeae900b2012b6e4d853831056ada52c9015159b5938",
+      "start": "2015-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1368,
+      "path": "liquidity_volume_dataset_real_v1/scenario_001.csv.metadata.json",
+      "sha256": "36379838ee2c78437449cc8033ea68273086637155bff222edbd83a387e9f0cd"
+    },
+    {
+      "bytes": 6606537,
+      "end": "2016-06-30 23:50:00",
+      "path": "liquidity_volume_dataset_real_v1/scenario_002.csv",
+      "rows": 26208,
+      "sha256": "1d4c0fa023bb8c5a2879040749bbd8dfe6bd8e50b84636317ef8ddf10128ff69",
+      "start": "2016-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1358,
+      "path": "liquidity_volume_dataset_real_v1/scenario_002.csv.metadata.json",
+      "sha256": "46072b194b2f9c2cb5d590f8ed099f2ad1d13ceecc1e8ffc24f7ea0fb064ea78"
+    },
+    {
+      "bytes": 6618459,
+      "end": "2016-12-31 23:50:00",
+      "path": "liquidity_volume_dataset_real_v1/scenario_003.csv",
+      "rows": 26496,
+      "sha256": "fb7052dc37ce220d10967c5952ddbd653df81f8869148a95932c83d5f1fb93a1",
+      "start": "2016-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1363,
+      "path": "liquidity_volume_dataset_real_v1/scenario_003.csv.metadata.json",
+      "sha256": "255163522ed104f91b0b919500677123c974bb186eff3488952990bbc3a993b9"
+    },
+    {
+      "bytes": 6501435,
+      "end": "2017-06-30 23:50:00",
+      "path": "liquidity_volume_dataset_real_v1/scenario_004.csv",
+      "rows": 26064,
+      "sha256": "0c3b200234119c7f6f5494175a5de41b80ca00350b6fb5762fbb3cc637977329",
+      "start": "2017-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1356,
+      "path": "liquidity_volume_dataset_real_v1/scenario_004.csv.metadata.json",
+      "sha256": "c85bb712d842a80abb71c9e67eb5b7cafe19dd2ca6539bbe485feca62d06d70c"
+    },
+    {
+      "bytes": 6602619,
+      "end": "2017-12-31 23:50:00",
+      "path": "liquidity_volume_dataset_real_v1/scenario_005.csv",
+      "rows": 26496,
+      "sha256": "bb24c2be59919b992c6cc21d5975b205cbb289cc6bf01fa2d401fc225bd8ef6f",
+      "start": "2017-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1368,
+      "path": "liquidity_volume_dataset_real_v1/scenario_005.csv.metadata.json",
+      "sha256": "5ac06ed925b781ed5285a219659cbcc93425933490c9283c31812de8d0d50146"
+    },
+    {
+      "bytes": 6530247,
+      "end": "2018-06-30 23:50:00",
+      "path": "liquidity_volume_dataset_real_v1/scenario_006.csv",
+      "rows": 26064,
+      "sha256": "be844979afead43925cbcc3c5a0f62f2b2b9d933c91488354c903c29b26edbba",
+      "start": "2018-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1367,
+      "path": "liquidity_volume_dataset_real_v1/scenario_006.csv.metadata.json",
+      "sha256": "7271c932251454e5173b03d01a0797b71f6708238ea535f7102ec0edb77ca6fa"
+    },
+    {
+      "bytes": 6624459,
+      "end": "2018-12-31 23:50:00",
+      "path": "liquidity_volume_dataset_real_v1/scenario_007.csv",
+      "rows": 26496,
+      "sha256": "9b6c0677245103462fd02bb83ddc8392b27ad2ffb927f55680c82e99e1f5638e",
+      "start": "2018-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1367,
+      "path": "liquidity_volume_dataset_real_v1/scenario_007.csv.metadata.json",
+      "sha256": "3c2f659aeb046984a241f3a059d9a92e547a75d4149f43838c4051d9a15c4f89"
+    },
+    {
+      "bytes": 6515499,
+      "end": "2019-06-30 23:50:00",
+      "path": "liquidity_volume_dataset_real_v1/scenario_008.csv",
+      "rows": 26064,
+      "sha256": "6ecce2772d619b67f1c9d494422ac663a92e52d911e5b8dae252e2028e9cadcb",
+      "start": "2019-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1368,
+      "path": "liquidity_volume_dataset_real_v1/scenario_008.csv.metadata.json",
+      "sha256": "9e863b615d14a76c0f9b13b28cd777d4649427d31ea16475beacceec5b88fdbb"
+    },
+    {
+      "bytes": 6591621,
+      "end": "2019-12-31 23:50:00",
+      "path": "liquidity_volume_dataset_real_v1/scenario_009.csv",
+      "rows": 26496,
+      "sha256": "1192a784227e91cf8a2d2c79275fbefa4231a8adf4fa91334cd61773ce328ef4",
+      "start": "2019-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1362,
+      "path": "liquidity_volume_dataset_real_v1/scenario_009.csv.metadata.json",
+      "sha256": "c9f56facdf3057da68c0b490cd071ddfbda13026717e8ed141abe0075ba51312"
+    },
+    {
+      "bytes": 6541335,
+      "end": "2020-06-30 23:50:00",
+      "path": "liquidity_volume_dataset_real_v1/scenario_010.csv",
+      "rows": 26208,
+      "sha256": "c154766953200119731b643dfa291dbc0b84f9f252774594806b074da1266e6c",
+      "start": "2020-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1363,
+      "path": "liquidity_volume_dataset_real_v1/scenario_010.csv.metadata.json",
+      "sha256": "0e1139abefe90db5cd5d813ffd9f2032398c36f21add29f1c30e1f20c476ab9b"
+    },
+    {
+      "bytes": 6607407,
+      "end": "2020-12-31 23:50:00",
+      "path": "liquidity_volume_dataset_real_v1/scenario_011.csv",
+      "rows": 26496,
+      "sha256": "b2af9ba133db754ab5459b5db9707f0b6db6d43a6f5df3f087a906438d5301a6",
+      "start": "2020-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1368,
+      "path": "liquidity_volume_dataset_real_v1/scenario_011.csv.metadata.json",
+      "sha256": "04b6f8dfb0944406556ca865c280f370f523e610e5377b2a568a7b8172027c13"
+    },
+    {
+      "bytes": 6540951,
+      "end": "2021-06-30 23:50:00",
+      "path": "liquidity_volume_dataset_real_v1/scenario_012.csv",
+      "rows": 26064,
+      "sha256": "15d0ab478e7e48fd3e2c46cd9fc73f6b47865154b51a5320543277891d0ebafb",
+      "start": "2021-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1368,
+      "path": "liquidity_volume_dataset_real_v1/scenario_012.csv.metadata.json",
+      "sha256": "bb407e445caca828681054f080c8a806938e2787076492939aad8dbe35044c55"
+    },
+    {
+      "bytes": 6630345,
+      "end": "2021-12-31 23:50:00",
+      "path": "liquidity_volume_dataset_real_v1/scenario_013.csv",
+      "rows": 26496,
+      "sha256": "b3e0b79fb6e21aa98f495a3b4364d57524aa019b8049b573c00f2377ec76a16c",
+      "start": "2021-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1367,
+      "path": "liquidity_volume_dataset_real_v1/scenario_013.csv.metadata.json",
+      "sha256": "8d506e69c806820edbfe41276d4641f3d70b8fc1c77069f70fb58955304520e9"
+    },
+    {
+      "bytes": 6548085,
+      "end": "2022-06-30 23:50:00",
+      "path": "liquidity_volume_dataset_real_v1/scenario_014.csv",
+      "rows": 26064,
+      "sha256": "d06caa07be766e29323407ae4f2632a25d75eef76a5b9cccbedd4c26c7798a6f",
+      "start": "2022-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1362,
+      "path": "liquidity_volume_dataset_real_v1/scenario_014.csv.metadata.json",
+      "sha256": "e57e4ef24d50aecf191b27e796df61461d357c244e30e314375b8c33b013ca78"
+    },
+    {
+      "bytes": 6743079,
+      "end": "2022-12-31 23:50:00",
+      "path": "liquidity_volume_dataset_real_v1/scenario_015.csv",
+      "rows": 26496,
+      "sha256": "bccbfebec931bb9888e443eebd06de143f276639344a7930a0d1c1adff3a1a83",
+      "start": "2022-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1366,
+      "path": "liquidity_volume_dataset_real_v1/scenario_015.csv.metadata.json",
+      "sha256": "e94b71751404e7a83cec44d4abd7a8f6e5e28e8575d9ab61f68fea852de958c3"
+    },
+    {
+      "bytes": 6665265,
+      "end": "2023-06-30 23:50:00",
+      "path": "liquidity_volume_dataset_real_v1/scenario_016.csv",
+      "rows": 26064,
+      "sha256": "fdfa7a526bb18b7c912929b6e4aaae56835f1a7d44812c3cc3b5e64ab051c5a7",
+      "start": "2023-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1374,
+      "path": "liquidity_volume_dataset_real_v1/scenario_016.csv.metadata.json",
+      "sha256": "9dce2389ebf3aa81805c6eff4e9a8f90a77b79162f5df587716ccdb9f0a81446"
+    },
+    {
+      "bytes": 6639255,
+      "end": "2023-12-31 23:50:00",
+      "path": "liquidity_volume_dataset_real_v1/scenario_017.csv",
+      "rows": 26496,
+      "sha256": "96cdd9c5ca081eded356ba34ed142c305e1eb8bc7e13397624487622b0f0e4b0",
+      "start": "2023-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1359,
+      "path": "liquidity_volume_dataset_real_v1/scenario_017.csv.metadata.json",
+      "sha256": "fff48bf0d5d2edff45cabc5d08d7ff6320815a28f93ab8db6c6776076e637f3e"
+    },
+    {
+      "bytes": 6583929,
+      "end": "2024-06-30 23:50:00",
+      "path": "liquidity_volume_dataset_real_v1/scenario_018.csv",
+      "rows": 26208,
+      "sha256": "9d01482d36cec79d4154052f96b5694989297217070cdf1326182fc4dffe7a49",
+      "start": "2024-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1359,
+      "path": "liquidity_volume_dataset_real_v1/scenario_018.csv.metadata.json",
+      "sha256": "fc44a8c34b758b4c16919b2d7cb7e3cff7323810db2b520b9b37b036daacc492"
+    },
+    {
+      "bytes": 6639153,
+      "end": "2024-12-31 23:50:00",
+      "path": "liquidity_volume_dataset_real_v1/scenario_019.csv",
+      "rows": 26496,
+      "sha256": "dea9189239fd752542b0929bcb79fd4484500365f5b381bd625de8212af51e7b",
+      "start": "2024-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1358,
+      "path": "liquidity_volume_dataset_real_v1/scenario_019.csv.metadata.json",
+      "sha256": "96cf4c728a6f0f8338b66096e06ce8ce18dbb1055427bcda7c9622595d224b50"
+    },
+    {
+      "bytes": 5739863,
+      "end": "2025-09-30 23:50:00",
+      "path": "evaluation_dataset_ffill/unseendata.csv",
+      "rows": 39312,
+      "sha256": "dbe19c2673c27f27cb47bdc944ad12308ee1c477f77884698ca75db0ec377105",
+      "start": "2025-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 632,
+      "path": "evaluation_dataset_ffill/unseendata.csv.metadata.json",
+      "sha256": "543233e43890005a67e2110d0333f75f285911155ffc1be9231fe0a2baf612cb"
+    },
+    {
+      "bytes": 7960287,
+      "end": "2025-09-30 23:50:00",
+      "path": "evaluation_dataset_ffill/unseendata_liquidity_volume_real_v1.csv",
+      "rows": 39312,
+      "sha256": "0738a6b84aecfc65791d94b6ceda4fe7282be2c7e857dac893f8d78550c4275f",
+      "start": "2025-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1363,
+      "path": "evaluation_dataset_ffill/unseendata_liquidity_volume_real_v1.csv.metadata.json",
+      "sha256": "3ef6d430fd536a607787b8387786bddacf19d01406920e7571578e04cecfdc51"
+    },
+    {
+      "bytes": 3591211,
+      "end": "2025-09-30 23:50:00",
+      "path": "evaluation_dataset_ffill/unseendata_settlement_real_v2.csv",
+      "rows": 39312,
+      "sha256": "7803e4eb0611d1fcc9b0c51518927242dba9f42cc9bb2410eb27bff9fb1e0d13",
+      "start": "2025-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 5795302,
+      "end": "2025-09-30 23:50:00",
+      "path": "evaluation_dataset_ffill/unseendata_v2.csv",
+      "rows": 39312,
+      "sha256": "ba160c40bab6d3ade5b4537de7fc721ff1fc98df629149b6679ff075826bbd8f",
+      "start": "2025-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 656,
+      "path": "evaluation_dataset_ffill/unseendata_v2.csv.metadata.json",
+      "sha256": "e56af1592669ee915369a6bc4328d6d38ccf22a554f2054591343a2baf2e6095"
+    },
+    {
+      "bytes": 7965987,
+      "end": "2025-09-30 23:50:00",
+      "path": "evaluation_dataset_ffill/unseendata_v2_liquidity_volume_real_v1.csv",
+      "rows": 39312,
+      "sha256": "5d0a5acbca8734a6b5e4d52f223d98c73799795498e1f44b69e6dd0aec154caf",
+      "start": "2025-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1374,
+      "path": "evaluation_dataset_ffill/unseendata_v2_liquidity_volume_real_v1.csv.metadata.json",
+      "sha256": "f60d2ddcf74bbcff44107aa619bdd8eb20adeedd42a11bf72414475dfe9e174a"
+    },
+    {
+      "bytes": 3596051,
+      "end": "2025-09-30 23:50:00",
+      "path": "evaluation_dataset_ffill/unseendata_v2_settlement_real_v2.csv",
+      "rows": 39312,
+      "sha256": "870c12a214ddc3298525c73155cd79d901d95d311a7d633cc1a1ad1fac55c22a",
+      "start": "2025-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 6139452,
+      "end": "2015-06-30 23:50:00",
+      "path": "forecast_cache_input_settlement_v2/scenario_000.csv",
+      "rows": 26064,
+      "sha256": "bee2269d14bdff8edc7afaf176dd4419e710f90ec57371725d42a4a0e1b8f1fc",
+      "start": "2015-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 6154996,
+      "end": "2015-12-31 23:50:00",
+      "path": "forecast_cache_input_settlement_v2/scenario_001.csv",
+      "rows": 26496,
+      "sha256": "f1d39995cfdd3e4500799c4459ea06bd926e7d49fcdfd88bbaf2514d28dd9245",
+      "start": "2015-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 6168033,
+      "end": "2016-06-30 23:50:00",
+      "path": "forecast_cache_input_settlement_v2/scenario_002.csv",
+      "rows": 26208,
+      "sha256": "62f919cbdaa5562493c9f0d53e93f2b5fbab22732993111c40795ca9e9f77d0e",
+      "start": "2016-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 6260743,
+      "end": "2016-12-31 23:50:00",
+      "path": "forecast_cache_input_settlement_v2/scenario_003.csv",
+      "rows": 26496,
+      "sha256": "6edb8e174a7a880e0bdc57f233e7f62b0da0ee383e1f30efdc901b31595e89af",
+      "start": "2016-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 6155230,
+      "end": "2017-06-30 23:50:00",
+      "path": "forecast_cache_input_settlement_v2/scenario_004.csv",
+      "rows": 26064,
+      "sha256": "b0571ea1aaa21ba58505768b1f0cd6ef212b0510feb1431efdc7796bfe607566",
+      "start": "2017-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 6230487,
+      "end": "2017-12-31 23:50:00",
+      "path": "forecast_cache_input_settlement_v2/scenario_005.csv",
+      "rows": 26496,
+      "sha256": "c133e70ef832fab224a434063a1a16b4ea3010de3be4bdbbca324160d695405b",
+      "start": "2017-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 6165357,
+      "end": "2018-06-30 23:50:00",
+      "path": "forecast_cache_input_settlement_v2/scenario_006.csv",
+      "rows": 26064,
+      "sha256": "13552959c61623bd402ba9434ad67eecb012b1823b1d145816806183af89ec6d",
+      "start": "2018-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 6273459,
+      "end": "2018-12-31 23:50:00",
+      "path": "forecast_cache_input_settlement_v2/scenario_007.csv",
+      "rows": 26496,
+      "sha256": "3183a17f38543ac720922a65169af5dbde6a38312688eccc48c2917cfac6213e",
+      "start": "2018-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 6158037,
+      "end": "2019-06-30 23:50:00",
+      "path": "forecast_cache_input_settlement_v2/scenario_008.csv",
+      "rows": 26064,
+      "sha256": "cca63590900d4a096745075e79b74fdb498d8a33dbbfb636c1029c5ac6b92b30",
+      "start": "2019-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 6285556,
+      "end": "2019-12-31 23:50:00",
+      "path": "forecast_cache_input_settlement_v2/scenario_009.csv",
+      "rows": 26496,
+      "sha256": "0347746b851895368c58e768af7f08c99b161d51034eaff31eb9c9db8ec35a8f",
+      "start": "2019-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 6034890,
+      "end": "2020-06-30 23:50:00",
+      "path": "forecast_cache_input_settlement_v2/scenario_010.csv",
+      "rows": 26208,
+      "sha256": "ac80e2eab923e0a48a673e8ec62c2da5d973576bbc9f579d72c546b613121a8e",
+      "start": "2020-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 6100900,
+      "end": "2020-12-31 23:50:00",
+      "path": "forecast_cache_input_settlement_v2/scenario_011.csv",
+      "rows": 26496,
+      "sha256": "ac9c55539e23b8b9b714972ee2a153a331c4763e8d661e9bf37264cbf9123233",
+      "start": "2020-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 6143434,
+      "end": "2021-06-30 23:50:00",
+      "path": "forecast_cache_input_settlement_v2/scenario_012.csv",
+      "rows": 26064,
+      "sha256": "7c1c888a7bdb0a8c087765ef02a306c53aedba83214d9022d0d6f40435975706",
+      "start": "2021-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 6262324,
+      "end": "2021-12-31 23:50:00",
+      "path": "forecast_cache_input_settlement_v2/scenario_013.csv",
+      "rows": 26496,
+      "sha256": "fd78e1def3046fc58a665144c66309598063051dc037f664e56ca40b6b90fa2a",
+      "start": "2021-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 6192002,
+      "end": "2022-06-30 23:50:00",
+      "path": "forecast_cache_input_settlement_v2/scenario_014.csv",
+      "rows": 26064,
+      "sha256": "3b92a00b29d2666c50aa30d4b5e0be71076ac48c6d1b12977a7746731c0a22fb",
+      "start": "2022-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 6338163,
+      "end": "2022-12-31 23:50:00",
+      "path": "forecast_cache_input_settlement_v2/scenario_015.csv",
+      "rows": 26496,
+      "sha256": "68874c55662bc226fba51152311eb738396d3ea1e965029ee2f169efaf274c0f",
+      "start": "2022-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 6187287,
+      "end": "2023-06-30 23:50:00",
+      "path": "forecast_cache_input_settlement_v2/scenario_016.csv",
+      "rows": 26064,
+      "sha256": "8596cb65e460a978b5d0ea51ad58001b69fbfcdbaeae9331d711e26f16c0bece",
+      "start": "2023-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 6242082,
+      "end": "2023-12-31 23:50:00",
+      "path": "forecast_cache_input_settlement_v2/scenario_017.csv",
+      "rows": 26496,
+      "sha256": "c960224d6e5a38f903e1cc5e6658304d6243260bd3c799bbb185cbfc31b0bd70",
+      "start": "2023-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 6157384,
+      "end": "2024-06-30 23:50:00",
+      "path": "forecast_cache_input_settlement_v2/scenario_018.csv",
+      "rows": 26208,
+      "sha256": "10b31f32a43e5b84a2df8dbf15904fcccf3df426f3dadd129df84afac726d809",
+      "start": "2024-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 6258454,
+      "end": "2024-12-31 23:50:00",
+      "path": "forecast_cache_input_settlement_v2/scenario_019.csv",
+      "rows": 26496,
+      "sha256": "580314bc5f09cf27d6b180114bd3c4c36e84407cd91b2828e4d82df0e3a7a0da",
+      "start": "2024-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 9227467,
+      "end": "2025-09-30 23:50:00",
+      "path": "forecast_cache_input_settlement_v2/unseendata.csv",
+      "rows": 39312,
+      "sha256": "b35fbf257d41e7c65e3ea6fdb1716d33125bb67a13f730f96d61748fae9198b9",
+      "start": "2025-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 9250745,
+      "end": "2025-09-30 23:50:00",
+      "path": "forecast_cache_input_settlement_v2/unseendata_v2.csv",
+      "rows": 39312,
+      "sha256": "904ad6c7591bece40b30ba26575c1e0284b79d6148fe75ee21a267e42181f7fa",
+      "start": "2025-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 5579,
+      "path": "forecast_models_settlement_hourly_v2/episode_0/price_short_experts/ANN/ann_history.json",
+      "sha256": "96c5977c22413df6adf3baa14a5eda402f10ba0afb2ccbd136e492d1ab0dea26"
+    },
+    {
+      "bytes": 2283,
+      "path": "forecast_models_settlement_hourly_v2/episode_0/price_short_experts/ANN/ann_metadata.json",
+      "sha256": "7e26ed80e0cd8d7982cc32e08c8a23c452bf9e493f766d2555ab15033a4ec8f1"
+    },
+    {
+      "bytes": 1942360,
+      "path": "forecast_models_settlement_hourly_v2/episode_0/price_short_experts/ANN/ann_model.keras",
+      "sha256": "cf633a6c6e78aacf3d13a80746ba07111434428ed238c625975770255c11b574"
+    },
+    {
+      "bytes": 1199,
+      "path": "forecast_models_settlement_hourly_v2/episode_0/price_short_experts/ANN/ann_scaler_x.pkl",
+      "sha256": "4751d89a2f32b4330c8b77625969a061ad0aa11bfad594f2d7cfd220c6e0aa37"
+    },
+    {
+      "bytes": 623,
+      "path": "forecast_models_settlement_hourly_v2/episode_0/price_short_experts/ANN/ann_scaler_y.pkl",
+      "sha256": "7ac4eb79195e6dd7bbec20ef0eddd2cd8fce0f2b7f82a4c9b468998bea7b55d2"
+    },
+    {
+      "bytes": 6998,
+      "path": "forecast_models_settlement_hourly_v2/episode_1/price_short_experts/ANN/ann_history.json",
+      "sha256": "4560f3ff955f8204d558134b132d0483afa971c5c50a383b0c3c02c0e66e2fd8"
+    },
+    {
+      "bytes": 2282,
+      "path": "forecast_models_settlement_hourly_v2/episode_1/price_short_experts/ANN/ann_metadata.json",
+      "sha256": "811bdd4ed79d83c847e498d6f46007e1d5ebc8a8c4dc99e614cbf7e5e3b59093"
+    },
+    {
+      "bytes": 1942376,
+      "path": "forecast_models_settlement_hourly_v2/episode_1/price_short_experts/ANN/ann_model.keras",
+      "sha256": "432e90b53f3220685e34dfae1354e5d2edc4b11e2bc4fe90f0fae222de77d6b9"
+    },
+    {
+      "bytes": 1199,
+      "path": "forecast_models_settlement_hourly_v2/episode_1/price_short_experts/ANN/ann_scaler_x.pkl",
+      "sha256": "8afd19255edf56d24aaf41ffa1a6a7eb3cc20c5c856417f1c1f455413133166a"
+    },
+    {
+      "bytes": 623,
+      "path": "forecast_models_settlement_hourly_v2/episode_1/price_short_experts/ANN/ann_scaler_y.pkl",
+      "sha256": "c44922f20f753e1e9a2d59a3cc537faeef1a2984b191e6e39a43e564754eab6a"
+    },
+    {
+      "bytes": 4632,
+      "path": "forecast_models_settlement_hourly_v2/episode_10/price_short_experts/ANN/ann_history.json",
+      "sha256": "c3dceb17ece3c247ef27e75b42a50f20e278f92857cfc9dbd1f8dca2576836d3"
+    },
+    {
+      "bytes": 2286,
+      "path": "forecast_models_settlement_hourly_v2/episode_10/price_short_experts/ANN/ann_metadata.json",
+      "sha256": "47baca321d9630e4385749939cb527933b2c0755a0954faad80112e9344eb7f9"
+    },
+    {
+      "bytes": 1942392,
+      "path": "forecast_models_settlement_hourly_v2/episode_10/price_short_experts/ANN/ann_model.keras",
+      "sha256": "1a5dad2ae97a9782852f58d4b9e3060e00a6efb09f3aac1a8f05b5b6e1bad227"
+    },
+    {
+      "bytes": 1199,
+      "path": "forecast_models_settlement_hourly_v2/episode_10/price_short_experts/ANN/ann_scaler_x.pkl",
+      "sha256": "9066fe4c846b481f350cfecffb5dd57191ac21b22aa1471f662d651d8fbd1f52"
+    },
+    {
+      "bytes": 623,
+      "path": "forecast_models_settlement_hourly_v2/episode_10/price_short_experts/ANN/ann_scaler_y.pkl",
+      "sha256": "55b1df4f2ae96d9284133f3a494fee48b6edc5950cfa0ca23d41201723786f9e"
+    },
+    {
+      "bytes": 6946,
+      "path": "forecast_models_settlement_hourly_v2/episode_11/price_short_experts/ANN/ann_history.json",
+      "sha256": "404177b388e37be7c1c72558d074f141a999a0df8bd0c8a1c938365d8fa5134b"
+    },
+    {
+      "bytes": 2287,
+      "path": "forecast_models_settlement_hourly_v2/episode_11/price_short_experts/ANN/ann_metadata.json",
+      "sha256": "3bd4fa3796e62c9bf79b4f2bc3c3114f0a0aa94ab7c23ebdf3af2f2e2de27a95"
+    },
+    {
+      "bytes": 1942392,
+      "path": "forecast_models_settlement_hourly_v2/episode_11/price_short_experts/ANN/ann_model.keras",
+      "sha256": "fe984c726ba140ae1b3064b766bea5cadf68b74625a7457e52e2f400fa2995ad"
+    },
+    {
+      "bytes": 1199,
+      "path": "forecast_models_settlement_hourly_v2/episode_11/price_short_experts/ANN/ann_scaler_x.pkl",
+      "sha256": "3ab8c4eada073a70b2cf8f1305a53470a269140933e532ec88c62f0d8a425b61"
+    },
+    {
+      "bytes": 623,
+      "path": "forecast_models_settlement_hourly_v2/episode_11/price_short_experts/ANN/ann_scaler_y.pkl",
+      "sha256": "7515ace05ecfbd47387d69b01151bb27bf12b6379bed1710fe54608b6167a4bf"
+    },
+    {
+      "bytes": 5751,
+      "path": "forecast_models_settlement_hourly_v2/episode_12/price_short_experts/ANN/ann_history.json",
+      "sha256": "23a8f4f054eebc0437d3cf5c1f57c23eaf48f527dc92be8466ea995daa06a9fd"
+    },
+    {
+      "bytes": 2286,
+      "path": "forecast_models_settlement_hourly_v2/episode_12/price_short_experts/ANN/ann_metadata.json",
+      "sha256": "c3151a381c7dc831e32b7a1457978dc753bc0ebcb4952938f3897227d04a2f92"
+    },
+    {
+      "bytes": 1942392,
+      "path": "forecast_models_settlement_hourly_v2/episode_12/price_short_experts/ANN/ann_model.keras",
+      "sha256": "cc9c6ebdb4c38f8690df26589f640af902527ea4f9f5242e05c715db325aab8f"
+    },
+    {
+      "bytes": 1199,
+      "path": "forecast_models_settlement_hourly_v2/episode_12/price_short_experts/ANN/ann_scaler_x.pkl",
+      "sha256": "f64e603fc9836376f838dc811b23cdac1170c19f0c2119c8a92adac75bbb6ee4"
+    },
+    {
+      "bytes": 623,
+      "path": "forecast_models_settlement_hourly_v2/episode_12/price_short_experts/ANN/ann_scaler_y.pkl",
+      "sha256": "b597498641e580ca46614af2ad5f09e918918915bdcc865335d6e5952a7e8d9c"
+    },
+    {
+      "bytes": 4411,
+      "path": "forecast_models_settlement_hourly_v2/episode_13/price_short_experts/ANN/ann_history.json",
+      "sha256": "176af82a9c596d0683044682a8871251e4e83b9e5c7d12271ec2ed38b7c92d18"
+    },
+    {
+      "bytes": 2286,
+      "path": "forecast_models_settlement_hourly_v2/episode_13/price_short_experts/ANN/ann_metadata.json",
+      "sha256": "75b35ce2275dab9e502220098dff443d905290de66d94baf2f7256dd8cd44fdc"
+    },
+    {
+      "bytes": 1942392,
+      "path": "forecast_models_settlement_hourly_v2/episode_13/price_short_experts/ANN/ann_model.keras",
+      "sha256": "794850f7955cd6611e8943c677e7b2ccd9874244dc6df3f286e2e212d52ddcf7"
+    },
+    {
+      "bytes": 1199,
+      "path": "forecast_models_settlement_hourly_v2/episode_13/price_short_experts/ANN/ann_scaler_x.pkl",
+      "sha256": "7e3e9308b29dd760b7220dec6024324ba82cdd549710e426e19d14a539c3a784"
+    },
+    {
+      "bytes": 623,
+      "path": "forecast_models_settlement_hourly_v2/episode_13/price_short_experts/ANN/ann_scaler_y.pkl",
+      "sha256": "33795a06370918218825a80aebf035445dc04074ec500de6b5a414745075254d"
+    },
+    {
+      "bytes": 5781,
+      "path": "forecast_models_settlement_hourly_v2/episode_14/price_short_experts/ANN/ann_history.json",
+      "sha256": "ad113b09238df61676ad3e888e188d414694cb62ad21791cde45a02e5224654b"
+    },
+    {
+      "bytes": 2283,
+      "path": "forecast_models_settlement_hourly_v2/episode_14/price_short_experts/ANN/ann_metadata.json",
+      "sha256": "3e30b00be4aea3a225233b10f2491d1715843c1ed921d9c406367170a24ba1c8"
+    },
+    {
+      "bytes": 1942392,
+      "path": "forecast_models_settlement_hourly_v2/episode_14/price_short_experts/ANN/ann_model.keras",
+      "sha256": "487e9c77c3ac7c1cb6cec4809335dd0cb1f4257ec1b0daa7319c1dcb96f4066b"
+    },
+    {
+      "bytes": 1199,
+      "path": "forecast_models_settlement_hourly_v2/episode_14/price_short_experts/ANN/ann_scaler_x.pkl",
+      "sha256": "5c46f948cd61b4c0c1d71db033ef9285641bb31ba3526d4d7b90b2aa9f5d8738"
+    },
+    {
+      "bytes": 623,
+      "path": "forecast_models_settlement_hourly_v2/episode_14/price_short_experts/ANN/ann_scaler_y.pkl",
+      "sha256": "eb7a0d7139d48dad82525345d5174ba2d88e6fc8fd41eaee9b52d85f194af07f"
+    },
+    {
+      "bytes": 5782,
+      "path": "forecast_models_settlement_hourly_v2/episode_15/price_short_experts/ANN/ann_history.json",
+      "sha256": "743a8dcd93621415b866c6eadad05fb530613f766ccfa1ef575dcf18751088bc"
+    },
+    {
+      "bytes": 2288,
+      "path": "forecast_models_settlement_hourly_v2/episode_15/price_short_experts/ANN/ann_metadata.json",
+      "sha256": "6ca242538465200350f30b86c51b2f7d3b3e2542bbbd56b98553cc1990935497"
+    },
+    {
+      "bytes": 1942392,
+      "path": "forecast_models_settlement_hourly_v2/episode_15/price_short_experts/ANN/ann_model.keras",
+      "sha256": "3140772ac1ddf668597191b5589603f77e76752ac543fd72b1cfad59b632529e"
+    },
+    {
+      "bytes": 1199,
+      "path": "forecast_models_settlement_hourly_v2/episode_15/price_short_experts/ANN/ann_scaler_x.pkl",
+      "sha256": "fe0d54f38b323be6178d6f992565542da7f1d06c3b3f42379fb4ccad8f9c942e"
+    },
+    {
+      "bytes": 623,
+      "path": "forecast_models_settlement_hourly_v2/episode_15/price_short_experts/ANN/ann_scaler_y.pkl",
+      "sha256": "549f707004625f022c67ada1847d3232c5f5ccd57fb5b2fb30632be4a70061d8"
+    },
+    {
+      "bytes": 7178,
+      "path": "forecast_models_settlement_hourly_v2/episode_16/price_short_experts/ANN/ann_history.json",
+      "sha256": "e5eb9d495a205539bae781f60c60b8d0307d173b2dd990acd6cd4d6dbac41686"
+    },
+    {
+      "bytes": 2286,
+      "path": "forecast_models_settlement_hourly_v2/episode_16/price_short_experts/ANN/ann_metadata.json",
+      "sha256": "88e5ad902d735844538d01132885d736b291fe18cb80ac74b43fbcab0362e550"
+    },
+    {
+      "bytes": 1942392,
+      "path": "forecast_models_settlement_hourly_v2/episode_16/price_short_experts/ANN/ann_model.keras",
+      "sha256": "b4a95476adbb810d520da45178ee46dec0d0f6796369f969fa985a4b309a2e74"
+    },
+    {
+      "bytes": 1199,
+      "path": "forecast_models_settlement_hourly_v2/episode_16/price_short_experts/ANN/ann_scaler_x.pkl",
+      "sha256": "cc8933b08e97a66dd7cdc9da222e1656938c503673df901421377cc2d4d4d221"
+    },
+    {
+      "bytes": 623,
+      "path": "forecast_models_settlement_hourly_v2/episode_16/price_short_experts/ANN/ann_scaler_y.pkl",
+      "sha256": "ca156590ed6cf9e804044e8e87e978e94a8a5915fdfd95afd2da820d1c2f99c3"
+    },
+    {
+      "bytes": 12283,
+      "path": "forecast_models_settlement_hourly_v2/episode_17/price_short_experts/ANN/ann_history.json",
+      "sha256": "7ac2d2ce8d6b74b9ae89525cd3d4131ceb4b9768ac796d5604a28a2051bb2218"
+    },
+    {
+      "bytes": 2272,
+      "path": "forecast_models_settlement_hourly_v2/episode_17/price_short_experts/ANN/ann_metadata.json",
+      "sha256": "4ddfe1689338586e1f024fa9f0ad64a2c1d1aa25a2fe2ba7413ef368463b34fa"
+    },
+    {
+      "bytes": 1942392,
+      "path": "forecast_models_settlement_hourly_v2/episode_17/price_short_experts/ANN/ann_model.keras",
+      "sha256": "46d3c36609cc82886fd8302daec48c17d3389e6d82d9b24281ec39ce3ce373ef"
+    },
+    {
+      "bytes": 1199,
+      "path": "forecast_models_settlement_hourly_v2/episode_17/price_short_experts/ANN/ann_scaler_x.pkl",
+      "sha256": "700417b6d9a90af67b74396e3e9e7506fdfd32f5e7dbceb5a206c907a16aadb2"
+    },
+    {
+      "bytes": 623,
+      "path": "forecast_models_settlement_hourly_v2/episode_17/price_short_experts/ANN/ann_scaler_y.pkl",
+      "sha256": "0112cca7ba1609788e51f4311790b2331771cd75bd637f725fa6179f1bfdf2ef"
+    },
+    {
+      "bytes": 4390,
+      "path": "forecast_models_settlement_hourly_v2/episode_18/price_short_experts/ANN/ann_history.json",
+      "sha256": "7ae2fc5e5d334efc11b1b75cb399b84a1aa30801c76867f819549b0e223ba376"
+    },
+    {
+      "bytes": 2268,
+      "path": "forecast_models_settlement_hourly_v2/episode_18/price_short_experts/ANN/ann_metadata.json",
+      "sha256": "9b59aac0bba0b7df56e4b2245c5f5bdda06c193b3b63d7017647e6045cc7baa4"
+    },
+    {
+      "bytes": 1942392,
+      "path": "forecast_models_settlement_hourly_v2/episode_18/price_short_experts/ANN/ann_model.keras",
+      "sha256": "2e2d453a0350d3561b43aa50d359d8caee5f4cc755191c86a5a6cf9225d9eae8"
+    },
+    {
+      "bytes": 1199,
+      "path": "forecast_models_settlement_hourly_v2/episode_18/price_short_experts/ANN/ann_scaler_x.pkl",
+      "sha256": "4b883f30be8fdbf3173b29a92f99d70fe785b81a91060b0757cc58f034f62282"
+    },
+    {
+      "bytes": 623,
+      "path": "forecast_models_settlement_hourly_v2/episode_18/price_short_experts/ANN/ann_scaler_y.pkl",
+      "sha256": "ee480be3306771667a0ca5971b359b4ec4f4ba1ef577e78886da5cdc8f6ca054"
+    },
+    {
+      "bytes": 3683,
+      "path": "forecast_models_settlement_hourly_v2/episode_19/price_short_experts/ANN/ann_history.json",
+      "sha256": "e1bfecd823220cc024c1420d2129c457d2c09b915ee15b9b525efe0530987253"
+    },
+    {
+      "bytes": 2271,
+      "path": "forecast_models_settlement_hourly_v2/episode_19/price_short_experts/ANN/ann_metadata.json",
+      "sha256": "b3afea28efdfd5a3a9963c03e9187504fceb1506ce91df53ca83af3c2db74fe4"
+    },
+    {
+      "bytes": 1942392,
+      "path": "forecast_models_settlement_hourly_v2/episode_19/price_short_experts/ANN/ann_model.keras",
+      "sha256": "54d8bc4469265439e0548137c365dd8a15865f24ddfd9f2da281944647bf7bbc"
+    },
+    {
+      "bytes": 1199,
+      "path": "forecast_models_settlement_hourly_v2/episode_19/price_short_experts/ANN/ann_scaler_x.pkl",
+      "sha256": "6b1f735e87fe4af23910eba3a31bd413c1f3d720538816286cc494dd37132255"
+    },
+    {
+      "bytes": 623,
+      "path": "forecast_models_settlement_hourly_v2/episode_19/price_short_experts/ANN/ann_scaler_y.pkl",
+      "sha256": "a503adb1c51c13a6ad31fa93c35ae291d34e06660b0cac4fd0a96deb7d623e8f"
+    },
+    {
+      "bytes": 3485,
+      "path": "forecast_models_settlement_hourly_v2/episode_2/price_short_experts/ANN/ann_history.json",
+      "sha256": "26e81a485dc090f0b7b20df76ebe139147a2157cc7d0db3e5636bef9885b1597"
+    },
+    {
+      "bytes": 2283,
+      "path": "forecast_models_settlement_hourly_v2/episode_2/price_short_experts/ANN/ann_metadata.json",
+      "sha256": "c176ec478a48bc4d39e89103ee7cd9814376a708e790b29edab5c1e71db8ca06"
+    },
+    {
+      "bytes": 1942376,
+      "path": "forecast_models_settlement_hourly_v2/episode_2/price_short_experts/ANN/ann_model.keras",
+      "sha256": "64b85137f8de0eafb3692366177ee44a96daf94b9b3fa6c5aeb7cb2d48ce07c9"
+    },
+    {
+      "bytes": 1199,
+      "path": "forecast_models_settlement_hourly_v2/episode_2/price_short_experts/ANN/ann_scaler_x.pkl",
+      "sha256": "434c6aee680211e5e2481712b7c51abf42009d968b89784ce7f6768e74119777"
+    },
+    {
+      "bytes": 623,
+      "path": "forecast_models_settlement_hourly_v2/episode_2/price_short_experts/ANN/ann_scaler_y.pkl",
+      "sha256": "58b7de3e045f117d7c5c8c4c37a686fc035933bd0b7242195e4042986e84167c"
+    },
+    {
+      "bytes": 3909,
+      "path": "forecast_models_settlement_hourly_v2/episode_20/price_short_experts/ANN/ann_history.json",
+      "sha256": "a385b1a5fa2eb98443e441462393a62514535dd7d571ffbbe27ff0b0980d8cb8"
+    },
+    {
+      "bytes": 2292,
+      "path": "forecast_models_settlement_hourly_v2/episode_20/price_short_experts/ANN/ann_metadata.json",
+      "sha256": "c2353b69cc43d8599207a16954e81e93fce758305ddd174cf2eb35c63d094d44"
+    },
+    {
+      "bytes": 1942392,
+      "path": "forecast_models_settlement_hourly_v2/episode_20/price_short_experts/ANN/ann_model.keras",
+      "sha256": "b419350add17773f16ac095a6e8e3144ac67e28946ae57726ab9e12f69bb511f"
+    },
+    {
+      "bytes": 1199,
+      "path": "forecast_models_settlement_hourly_v2/episode_20/price_short_experts/ANN/ann_scaler_x.pkl",
+      "sha256": "d889efd87e5e2884b7269d2ec694bbcff018738c07dde758d36d3adcce107e4a"
+    },
+    {
+      "bytes": 623,
+      "path": "forecast_models_settlement_hourly_v2/episode_20/price_short_experts/ANN/ann_scaler_y.pkl",
+      "sha256": "ef051e88d36facf9191056dea81bd2490762fed8f1f43d2b0fff23d8052988e2"
+    },
+    {
+      "bytes": 6791,
+      "path": "forecast_models_settlement_hourly_v2/episode_3/price_short_experts/ANN/ann_history.json",
+      "sha256": "d80e0b0a301dc2ef0423c35b1d1688d91834013a14782fd0a264b83990f39177"
+    },
+    {
+      "bytes": 2269,
+      "path": "forecast_models_settlement_hourly_v2/episode_3/price_short_experts/ANN/ann_metadata.json",
+      "sha256": "b7a3cd3d6ae4867280415543c6090bd31e98f0d44670eb5143e2bf4c9a9d6c03"
+    },
+    {
+      "bytes": 1942392,
+      "path": "forecast_models_settlement_hourly_v2/episode_3/price_short_experts/ANN/ann_model.keras",
+      "sha256": "9725afdf5ad5099c1cd3ac0c3bb388786e9e2949b1bcfee63d19f3599d90885b"
+    },
+    {
+      "bytes": 1199,
+      "path": "forecast_models_settlement_hourly_v2/episode_3/price_short_experts/ANN/ann_scaler_x.pkl",
+      "sha256": "5295eca66f0c3dc83a552716a6a49d0bfe41bc9fb1be65a3b99efd6828ff9961"
+    },
+    {
+      "bytes": 623,
+      "path": "forecast_models_settlement_hourly_v2/episode_3/price_short_experts/ANN/ann_scaler_y.pkl",
+      "sha256": "aaad76bf956a97589d1d72fe687ff69a594ed71601e7fce25e8cb762d9677558"
+    },
+    {
+      "bytes": 4208,
+      "path": "forecast_models_settlement_hourly_v2/episode_4/price_short_experts/ANN/ann_history.json",
+      "sha256": "72d4545958763536553d5b638360ef6e392179b84186d62469aca8a8cde6c09f"
+    },
+    {
+      "bytes": 2281,
+      "path": "forecast_models_settlement_hourly_v2/episode_4/price_short_experts/ANN/ann_metadata.json",
+      "sha256": "aec08e5c6d27e6a5c118be1bcd2cd32d34ed8c0d4afa53fb3d8c330f881c5c52"
+    },
+    {
+      "bytes": 1942392,
+      "path": "forecast_models_settlement_hourly_v2/episode_4/price_short_experts/ANN/ann_model.keras",
+      "sha256": "218276bf63ce7438034f1b2e5d3f236d0facd6a284d4ef10787035df07c723bd"
+    },
+    {
+      "bytes": 1199,
+      "path": "forecast_models_settlement_hourly_v2/episode_4/price_short_experts/ANN/ann_scaler_x.pkl",
+      "sha256": "7dab06467b27543c23ddff6f678230ef7f492d8cc5ac0f3d0a0a07ad294cd1c5"
+    },
+    {
+      "bytes": 623,
+      "path": "forecast_models_settlement_hourly_v2/episode_4/price_short_experts/ANN/ann_scaler_y.pkl",
+      "sha256": "cc17b90e307beff0e12d5d923d88f0b330612906650048a4314d627a4123daec"
+    },
+    {
+      "bytes": 5833,
+      "path": "forecast_models_settlement_hourly_v2/episode_5/price_short_experts/ANN/ann_history.json",
+      "sha256": "545c09030b245ca87d599e069b4a8493a05dbe528895b0e75d8ee8c862d5a3ca"
+    },
+    {
+      "bytes": 2283,
+      "path": "forecast_models_settlement_hourly_v2/episode_5/price_short_experts/ANN/ann_metadata.json",
+      "sha256": "3d63ac2a2d17f0a07bba4bd3b62bd78fe4387b3bc327c8db24c3b2da0ba5fd2a"
+    },
+    {
+      "bytes": 1942392,
+      "path": "forecast_models_settlement_hourly_v2/episode_5/price_short_experts/ANN/ann_model.keras",
+      "sha256": "583eba2065b37cd2578588edd2236ce5a01eb9862f685d6d0b5dc736c97185d4"
+    },
+    {
+      "bytes": 1199,
+      "path": "forecast_models_settlement_hourly_v2/episode_5/price_short_experts/ANN/ann_scaler_x.pkl",
+      "sha256": "177b8d5dbf02c21a1e7bc9b51714e074e658bcfdd0640a42889d9bf296554507"
+    },
+    {
+      "bytes": 623,
+      "path": "forecast_models_settlement_hourly_v2/episode_5/price_short_experts/ANN/ann_scaler_y.pkl",
+      "sha256": "efbd12b5e6586de1d26dd51849dbbb761873fbdc0f99a0e48cf77ee2afb6d5e1"
+    },
+    {
+      "bytes": 3236,
+      "path": "forecast_models_settlement_hourly_v2/episode_6/price_short_experts/ANN/ann_history.json",
+      "sha256": "046a4689aedcfdd4d3d2608c3d9462133c43753ace8cfb427e54862f3a5c540f"
+    },
+    {
+      "bytes": 2281,
+      "path": "forecast_models_settlement_hourly_v2/episode_6/price_short_experts/ANN/ann_metadata.json",
+      "sha256": "ced7742852ca44fb9cb621fbe07fca47633942ae3e5a9125610562ccdd4ef9ac"
+    },
+    {
+      "bytes": 1942392,
+      "path": "forecast_models_settlement_hourly_v2/episode_6/price_short_experts/ANN/ann_model.keras",
+      "sha256": "410cfbeaf86074559806a35c77b7a3a6a9ecbb19dc32510a7e3d2b0dd3d4351c"
+    },
+    {
+      "bytes": 1199,
+      "path": "forecast_models_settlement_hourly_v2/episode_6/price_short_experts/ANN/ann_scaler_x.pkl",
+      "sha256": "2a6136e3faac6419132d00e319c913949d8f3003cd05e485834f329eb64e7c14"
+    },
+    {
+      "bytes": 623,
+      "path": "forecast_models_settlement_hourly_v2/episode_6/price_short_experts/ANN/ann_scaler_y.pkl",
+      "sha256": "1d9f48651d23232616978b6db1e75b870db7235dc7790893a1ac5b7bd5ba0464"
+    },
+    {
+      "bytes": 4163,
+      "path": "forecast_models_settlement_hourly_v2/episode_7/price_short_experts/ANN/ann_history.json",
+      "sha256": "3b73dbe1daae84aef216f2d58679b001b7c79974e35720e2fc5932a7aab9ac59"
+    },
+    {
+      "bytes": 2283,
+      "path": "forecast_models_settlement_hourly_v2/episode_7/price_short_experts/ANN/ann_metadata.json",
+      "sha256": "8890896b3f1369989859a54f2e71da3dfbef121e31cd5de2d73457c937f28119"
+    },
+    {
+      "bytes": 1942392,
+      "path": "forecast_models_settlement_hourly_v2/episode_7/price_short_experts/ANN/ann_model.keras",
+      "sha256": "ad034af925978b4eeebcfffc8a0081718a1ee437d400d1c224e63f16f7c1da36"
+    },
+    {
+      "bytes": 1199,
+      "path": "forecast_models_settlement_hourly_v2/episode_7/price_short_experts/ANN/ann_scaler_x.pkl",
+      "sha256": "9f1d829be9eec9db635e48e655e912df806b3664c052cea65172f0a48e940bc5"
+    },
+    {
+      "bytes": 623,
+      "path": "forecast_models_settlement_hourly_v2/episode_7/price_short_experts/ANN/ann_scaler_y.pkl",
+      "sha256": "6bab212877a9d820ab3fac2e728558ab9ebdf179c793b0b06d23f51808443f07"
+    },
+    {
+      "bytes": 5099,
+      "path": "forecast_models_settlement_hourly_v2/episode_8/price_short_experts/ANN/ann_history.json",
+      "sha256": "dbdd8acbe83c26e68108b5f95b056da594337b67705c1fb1b8747da5b8945e91"
+    },
+    {
+      "bytes": 2281,
+      "path": "forecast_models_settlement_hourly_v2/episode_8/price_short_experts/ANN/ann_metadata.json",
+      "sha256": "8d2ae3319864c9560f5ed30f030b50e1bed285d5d59ce6e7644a3ade54b5db4f"
+    },
+    {
+      "bytes": 1942392,
+      "path": "forecast_models_settlement_hourly_v2/episode_8/price_short_experts/ANN/ann_model.keras",
+      "sha256": "248e070bfcca005208d7019a001fde2490851318e96d2a522c70e6a4d975a736"
+    },
+    {
+      "bytes": 1199,
+      "path": "forecast_models_settlement_hourly_v2/episode_8/price_short_experts/ANN/ann_scaler_x.pkl",
+      "sha256": "bd6c93164b8e43338e90266fe53b7b7e06db036109d0a1bbbadfdbda8f4007e8"
+    },
+    {
+      "bytes": 623,
+      "path": "forecast_models_settlement_hourly_v2/episode_8/price_short_experts/ANN/ann_scaler_y.pkl",
+      "sha256": "15bf4a18e2d41ea241ca235d8cd975d8453ed182dfc970d4d092b27b642bb73f"
+    },
+    {
+      "bytes": 7011,
+      "path": "forecast_models_settlement_hourly_v2/episode_9/price_short_experts/ANN/ann_history.json",
+      "sha256": "716dfa5af2507ad660dfdf1c14ad7c0f7c8a6f242b3067a7bec6b0f080d27416"
+    },
+    {
+      "bytes": 2280,
+      "path": "forecast_models_settlement_hourly_v2/episode_9/price_short_experts/ANN/ann_metadata.json",
+      "sha256": "6397a1a0cf94c1920f05de47ac748532bc828ffdbe4c25a5cbdae18e2d8de8da"
+    },
+    {
+      "bytes": 1942392,
+      "path": "forecast_models_settlement_hourly_v2/episode_9/price_short_experts/ANN/ann_model.keras",
+      "sha256": "3fdd7d5c04a0e87c46a58c65dd5f6128088e0eedafa7119ab58db10ebbcab944"
+    },
+    {
+      "bytes": 1199,
+      "path": "forecast_models_settlement_hourly_v2/episode_9/price_short_experts/ANN/ann_scaler_x.pkl",
+      "sha256": "35d1dbd5ab9c28fe593ca4633fa063486c172653db22a3e6bcb88dabb3c5a6fc"
+    },
+    {
+      "bytes": 623,
+      "path": "forecast_models_settlement_hourly_v2/episode_9/price_short_experts/ANN/ann_scaler_y.pkl",
+      "sha256": "950fbbf6f6bfd8f57eeb9e6f5f45ba77abeb61ace6043cfbfaf1a61e8160be71"
+    },
+    {
+      "bytes": 3864259,
+      "end": "2015-06-30 23:50:00",
+      "path": "forecast_cache_settlement_hourly_v2/episode_0/precomputed_forecasts_20150101_to_20150630_26064rows.csv",
+      "rows": 26064,
+      "sha256": "7c8d2632e079ea302d091c56c22e21b1785b98d1ed67fd0b54f76b86790ec2ad",
+      "start": "2015-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1749,
+      "path": "forecast_cache_settlement_hourly_v2/episode_0/precomputed_forecasts_20150101_to_20150630_26064rows_metadata.json",
+      "sha256": "4ff56b62e27a3b4a3a6b2ddb6929f2ba6b76b54122fa75fbf4dec5335ef63e0e"
+    },
+    {
+      "bytes": 3962689,
+      "end": "2015-12-31 23:50:00",
+      "path": "forecast_cache_settlement_hourly_v2/episode_1/precomputed_forecasts_20150701_to_20151231_26496rows.csv",
+      "rows": 26496,
+      "sha256": "1ea88e51db1f5082832e424b054d7aa1e56108ad6d8e5ff61bcf6ca36e4dcbf0",
+      "start": "2015-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1739,
+      "path": "forecast_cache_settlement_hourly_v2/episode_1/precomputed_forecasts_20150701_to_20151231_26496rows_metadata.json",
+      "sha256": "0a261b924f55ef2b746cc80108cd3bc8aebaf98b994849cbee5675545f4e81d7"
+    },
+    {
+      "bytes": 3901153,
+      "end": "2020-06-30 23:50:00",
+      "path": "forecast_cache_settlement_hourly_v2/episode_10/precomputed_forecasts_20200101_to_20200630_26208rows.csv",
+      "rows": 26208,
+      "sha256": "ea3665cc768cefa8a10403274f6f84d762ccb98c29a5db2e185fe3cb8fb2d5b0",
+      "start": "2020-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1762,
+      "path": "forecast_cache_settlement_hourly_v2/episode_10/precomputed_forecasts_20200101_to_20200630_26208rows_metadata.json",
+      "sha256": "7e3bcea6deffc91a9d5a40bb2ef012c39ab168e2a1fc3294c612772bc3a00ccc"
+    },
+    {
+      "bytes": 3887707,
+      "end": "2020-12-31 23:50:00",
+      "path": "forecast_cache_settlement_hourly_v2/episode_11/precomputed_forecasts_20200701_to_20201231_26496rows.csv",
+      "rows": 26496,
+      "sha256": "06374be9db24863b5e17bf5f3e116d071a677ab4b20b1d1e03684bb9e08cba20",
+      "start": "2020-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1744,
+      "path": "forecast_cache_settlement_hourly_v2/episode_11/precomputed_forecasts_20200701_to_20201231_26496rows_metadata.json",
+      "sha256": "8934b062e25b1bad9baa8c3bcb7dc3639bf7b650118fc63096c7002e098f40b0"
+    },
+    {
+      "bytes": 3911425,
+      "end": "2021-06-30 23:50:00",
+      "path": "forecast_cache_settlement_hourly_v2/episode_12/precomputed_forecasts_20210101_to_20210630_26064rows.csv",
+      "rows": 26064,
+      "sha256": "a7ca327b6ac2a2b6e65a7f66c97aa6fbde02d9e80c95b30336fa156ecc83c8ed",
+      "start": "2021-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1742,
+      "path": "forecast_cache_settlement_hourly_v2/episode_12/precomputed_forecasts_20210101_to_20210630_26064rows_metadata.json",
+      "sha256": "15a8f16df8fff53ec6304bbbeb8067b836bde8a06b3919bc22d6ec075e257b6a"
+    },
+    {
+      "bytes": 3952855,
+      "end": "2021-12-31 23:50:00",
+      "path": "forecast_cache_settlement_hourly_v2/episode_13/precomputed_forecasts_20210701_to_20211231_26496rows.csv",
+      "rows": 26496,
+      "sha256": "a40750fd17d04c702bb9f3220de0cb9fdce9160b6ed9e07fe4d1206818951be5",
+      "start": "2021-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1752,
+      "path": "forecast_cache_settlement_hourly_v2/episode_13/precomputed_forecasts_20210701_to_20211231_26496rows_metadata.json",
+      "sha256": "b085faaffd9feb5ba61d5068e91017f68d994807f88d4e3065e8eb5afc88b60e"
+    },
+    {
+      "bytes": 3854065,
+      "end": "2022-06-30 23:50:00",
+      "path": "forecast_cache_settlement_hourly_v2/episode_14/precomputed_forecasts_20220101_to_20220630_26064rows.csv",
+      "rows": 26064,
+      "sha256": "af13e337bd1f60703102bc6c98789c53cd1c90de531a4f8dcf3b78c2b4c02d14",
+      "start": "2022-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1744,
+      "path": "forecast_cache_settlement_hourly_v2/episode_14/precomputed_forecasts_20220101_to_20220630_26064rows_metadata.json",
+      "sha256": "dee3bc4587e93e0b0d5219ddc42f0ee71e3660828d7daf225e076b86c7af59d4"
+    },
+    {
+      "bytes": 3906187,
+      "end": "2022-12-31 23:50:00",
+      "path": "forecast_cache_settlement_hourly_v2/episode_15/precomputed_forecasts_20220701_to_20221231_26496rows.csv",
+      "rows": 26496,
+      "sha256": "23960e7f605b18f43efe00e23cece68e74a72c5ff9831cabc684c0d619906f9e",
+      "start": "2022-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1754,
+      "path": "forecast_cache_settlement_hourly_v2/episode_15/precomputed_forecasts_20220701_to_20221231_26496rows_metadata.json",
+      "sha256": "2404a3998aafa2a971717ad7dc6849aabb35826b861ffc3ec6cd0928632cb0b6"
+    },
+    {
+      "bytes": 3855361,
+      "end": "2023-06-30 23:50:00",
+      "path": "forecast_cache_settlement_hourly_v2/episode_16/precomputed_forecasts_20230101_to_20230630_26064rows.csv",
+      "rows": 26064,
+      "sha256": "893a817fb54992d80f18afc950837ea2e7261c1e6fc0bd127b6d1e3c19d8d57a",
+      "start": "2023-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1768,
+      "path": "forecast_cache_settlement_hourly_v2/episode_16/precomputed_forecasts_20230101_to_20230630_26064rows_metadata.json",
+      "sha256": "e4f5f05959f5fea6e6a8e60b21ed74d223740b709485f3a643b6eb8ba936be8f"
+    },
+    {
+      "bytes": 3906589,
+      "end": "2023-12-31 23:50:00",
+      "path": "forecast_cache_settlement_hourly_v2/episode_17/precomputed_forecasts_20230701_to_20231231_26496rows.csv",
+      "rows": 26496,
+      "sha256": "b996ac9d303203181154fd041f5915ce1804b94dc98af3babb7033692d55cd1b",
+      "start": "2023-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1764,
+      "path": "forecast_cache_settlement_hourly_v2/episode_17/precomputed_forecasts_20230701_to_20231231_26496rows_metadata.json",
+      "sha256": "a07e103eee2d10fd7c759a5a6ede0da1dbb3fc70a761dcfedbe24474402fda68"
+    },
+    {
+      "bytes": 3932893,
+      "end": "2024-06-30 23:50:00",
+      "path": "forecast_cache_settlement_hourly_v2/episode_18/precomputed_forecasts_20240101_to_20240630_26208rows.csv",
+      "rows": 26208,
+      "sha256": "e9ae40fd6ea8eba5c6e058f5ec7dd0b17d8cd4329713f49517accdf4a85f2b4b",
+      "start": "2024-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1754,
+      "path": "forecast_cache_settlement_hourly_v2/episode_18/precomputed_forecasts_20240101_to_20240630_26208rows_metadata.json",
+      "sha256": "28a47a34449384973aed706366cab9f12ea81711c3bb486379387be6daf9edd7"
+    },
+    {
+      "bytes": 3948025,
+      "end": "2024-12-31 23:50:00",
+      "path": "forecast_cache_settlement_hourly_v2/episode_19/precomputed_forecasts_20240701_to_20241231_26496rows.csv",
+      "rows": 26496,
+      "sha256": "21fc7f6bfde9b2066500cd601854afb1009eda0042dd3c8ce0cf553c3f9da057",
+      "start": "2024-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1762,
+      "path": "forecast_cache_settlement_hourly_v2/episode_19/precomputed_forecasts_20240701_to_20241231_26496rows_metadata.json",
+      "sha256": "42a6f9043c15d8848b30e4e3335f3159b7ae381aebc5eb6bdfdb16c02906420a"
+    },
+    {
+      "bytes": 3950131,
+      "end": "2016-06-30 23:50:00",
+      "path": "forecast_cache_settlement_hourly_v2/episode_2/precomputed_forecasts_20160101_to_20160630_26208rows.csv",
+      "rows": 26208,
+      "sha256": "a4e61b2d1cba23831a2a56b579b72105d1e88ba5b2c5b9161786782b40e79a2e",
+      "start": "2016-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1739,
+      "path": "forecast_cache_settlement_hourly_v2/episode_2/precomputed_forecasts_20160101_to_20160630_26208rows_metadata.json",
+      "sha256": "637735c0719255ea2b64fb95c6e0828f2c1826b11c1763989ad42dbe83e14b44"
+    },
+    {
+      "bytes": 3982657,
+      "end": "2016-12-31 23:50:00",
+      "path": "forecast_cache_settlement_hourly_v2/episode_3/precomputed_forecasts_20160701_to_20161231_26496rows.csv",
+      "rows": 26496,
+      "sha256": "4cb1dd2919902091094b45a664e97c0a94e76b350ce8f26db13edfa94048d5e7",
+      "start": "2016-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1759,
+      "path": "forecast_cache_settlement_hourly_v2/episode_3/precomputed_forecasts_20160701_to_20161231_26496rows_metadata.json",
+      "sha256": "3be3ecad43cbc86306b7e270f4501cd6fb093a65f5b7fac037216770da3ad702"
+    },
+    {
+      "bytes": 3935983,
+      "end": "2017-06-30 23:50:00",
+      "path": "forecast_cache_settlement_hourly_v2/episode_4/precomputed_forecasts_20170101_to_20170630_26064rows.csv",
+      "rows": 26064,
+      "sha256": "793882c7b00e80b7a76350142a96aac62dfda70fe4922af57378429c327f4312",
+      "start": "2017-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1749,
+      "path": "forecast_cache_settlement_hourly_v2/episode_4/precomputed_forecasts_20170101_to_20170630_26064rows_metadata.json",
+      "sha256": "9cc6aafd7a08dfba9984d7e873eacfbbb912fdfbfd1983a97f1a26813477f49c"
+    },
+    {
+      "bytes": 3992407,
+      "end": "2017-12-31 23:50:00",
+      "path": "forecast_cache_settlement_hourly_v2/episode_5/precomputed_forecasts_20170701_to_20171231_26496rows.csv",
+      "rows": 26496,
+      "sha256": "9b512ecac7ff968eaaf032c18098519a4228e60cfe9f90616a471a58a79d296c",
+      "start": "2017-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1749,
+      "path": "forecast_cache_settlement_hourly_v2/episode_5/precomputed_forecasts_20170701_to_20171231_26496rows_metadata.json",
+      "sha256": "ac608b231c1296293f33fa0ea805ff81012a4964e54c40ce264f970d238c325c"
+    },
+    {
+      "bytes": 3873283,
+      "end": "2018-06-30 23:50:00",
+      "path": "forecast_cache_settlement_hourly_v2/episode_6/precomputed_forecasts_20180101_to_20180630_26064rows.csv",
+      "rows": 26064,
+      "sha256": "41daac2c44657ab933be1e97ac2764f0cb21e28b72fafefb26017ddaf7c45c77",
+      "start": "2018-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1747,
+      "path": "forecast_cache_settlement_hourly_v2/episode_6/precomputed_forecasts_20180101_to_20180630_26064rows_metadata.json",
+      "sha256": "4746820d93367ba1cca6fe1fd736840133293c0b0a94fbbc215dcb08eb76d643"
+    },
+    {
+      "bytes": 3970057,
+      "end": "2018-12-31 23:50:00",
+      "path": "forecast_cache_settlement_hourly_v2/episode_7/precomputed_forecasts_20180701_to_20181231_26496rows.csv",
+      "rows": 26496,
+      "sha256": "db418b3ee72df994c25a36de83761f46b7549cef97022d048fa76552cccfd4f1",
+      "start": "2018-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1739,
+      "path": "forecast_cache_settlement_hourly_v2/episode_7/precomputed_forecasts_20180701_to_20181231_26496rows_metadata.json",
+      "sha256": "8a4b3175409528a449e26035bad41a08e982cada6eb047c6b258daf986022151"
+    },
+    {
+      "bytes": 3904051,
+      "end": "2019-06-30 23:50:00",
+      "path": "forecast_cache_settlement_hourly_v2/episode_8/precomputed_forecasts_20190101_to_20190630_26064rows.csv",
+      "rows": 26064,
+      "sha256": "9fdc5e4c363658b90ac3d8b22e6ec5d28181f89cb00fb55b6ec81194c90db583",
+      "start": "2019-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1747,
+      "path": "forecast_cache_settlement_hourly_v2/episode_8/precomputed_forecasts_20190101_to_20190630_26064rows_metadata.json",
+      "sha256": "27ac0b4cfc8a74393ca3b736dd6cbd612c85335d9d46e531be0d27cf1e30d350"
+    },
+    {
+      "bytes": 3963817,
+      "end": "2019-12-31 23:50:00",
+      "path": "forecast_cache_settlement_hourly_v2/episode_9/precomputed_forecasts_20190701_to_20191231_26496rows.csv",
+      "rows": 26496,
+      "sha256": "3f51d4e627ebc7eb028b19dbbc8804bc27b335d5765f62a5d8df821eef2d934f",
+      "start": "2019-07-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1739,
+      "path": "forecast_cache_settlement_hourly_v2/episode_9/precomputed_forecasts_20190701_to_20191231_26496rows_metadata.json",
+      "sha256": "aee1feaf3367905b71340318065b7d1f37e5ef346c1e95e157e1be0f662a6ec8"
+    },
+    {
+      "bytes": 5805547,
+      "end": "2025-09-30 23:50:00",
+      "path": "forecast_cache_settlement_hourly_v2/forecast_cache_eval_episode20_2025/forecast_cache_eval_episode20_2025-full/precomputed_forecasts_20250101_to_20250930_39312rows.csv",
+      "rows": 39312,
+      "sha256": "8d16e1be6e258ae8289f93a1f861694d1b9f8e82d4133c0e34dd88611d367ea1",
+      "start": "2025-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1812,
+      "path": "forecast_cache_settlement_hourly_v2/forecast_cache_eval_episode20_2025/forecast_cache_eval_episode20_2025-full/precomputed_forecasts_20250101_to_20250930_39312rows_metadata.json",
+      "sha256": "75a97ca1716888783144dcf72dd04af93e78b86847d59ffec8fb9ef328f20b65"
+    },
+    {
+      "bytes": 5799607,
+      "end": "2025-09-30 23:50:00",
+      "path": "forecast_cache_settlement_hourly_v2/forecast_cache_eval_episode20_2025/forecast_cache_eval_episode20_2025-unseendata_v2/precomputed_forecasts_20250101_to_20250930_39312rows.csv",
+      "rows": 39312,
+      "sha256": "7370d45397f872fc891dba403438c5327a4fec4e6a8fd38a43279e6018bdd76d",
+      "start": "2025-01-01 00:00:00",
+      "ten_minute_regular": true,
+      "timestamps_monotonic": true,
+      "timestamps_unique": true
+    },
+    {
+      "bytes": 1826,
+      "path": "forecast_cache_settlement_hourly_v2/forecast_cache_eval_episode20_2025/forecast_cache_eval_episode20_2025-unseendata_v2/precomputed_forecasts_20250101_to_20250930_39312rows_metadata.json",
+      "sha256": "05ea23b4a2176263a2bd1a08e8a3d7b2473ea0fa76e15b020267066def92ed54"
+    },
+    {
+      "bytes": 1741,
+      "path": "forecast_cache_settlement_hourly_v2/hourly_forecast_cache_v2_manifest.json",
+      "sha256": "8f1ab603991ce8773570a392ad237a0405e318c9f59d090491c288a893ef2182"
+    },
+    {
+      "bytes": 2884,
+      "path": "real_settlement_protocol_v2_manifest.json",
+      "sha256": "95c2b215d00890cce38bbdab2ba1ae881964d1816b15e1c4e61ddeeb34be9e8d"
+    },
+    {
+      "bytes": 3509,
+      "path": "real_liquidity_volume_protocol_v1_manifest.json",
+      "sha256": "c135e49ea487cc8d5f0fea33b3215216e978f79a8079030e81d3cf6d19d37241"
+    }
+  ],
+  "generator_seed_recoverable_for_frozen_physical_artifacts": false,
+  "history_eval_handoff": "rolling_past_history_dataset_ffill/history_020.csv",
+  "history_manifest": "rolling_past_history_dataset_ffill/history_manifest.csv",
+  "protocol": "Prototype4_same_delivery_causal_v3_MWh_real_settlement_liquidity_margin",
+  "reproducibility_basis": "The exact experiment inputs are frozen by SHA-256. Future stochastic regeneration scripts use explicit deterministic seeds, but are not claimed to recreate the historical frozen trajectories without their original seed."
+}

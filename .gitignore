@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+# excluded by design (size / copyright); see README "Not included"
+campaign_runs/
+literature/pdfs/
+literature/text/
+literature/evidence/
+code_audit/evidence/
+code_audit/evidence_flags.csv
+# eSett raw files are fetched locally, not redistributed
+data/esett/*.csv.gz

@@ -1,0 +1,28 @@
+{
+  "physical_template": "training_dataset_ffill/scenario_001.csv",
+  "physical_template_sha256": "2267b435f1a014c2718bfd9665e9b001ad0d1252709a027ac98822dd9fe5712d",
+  "price_source": "Energi Data Service Elspotprices, timezone=dk",
+  "results": [
+    {
+      "path": "evaluation_dataset_ffill/unseendata.csv",
+      "rows": 39312,
+      "sha256": "dbe19c2673c27f27cb47bdc944ad12308ee1c477f77884698ca75db0ec377105",
+      "status": "already_complete"
+    },
+    {
+      "area": "DK2",
+      "end": "2025-09-30 23:50:00",
+      "missing_rows_added": 6,
+      "path": "evaluation_dataset_ffill/unseendata_v2.csv",
+      "rows_after": 39312,
+      "rows_before": 39306,
+      "sha256": "ba160c40bab6d3ade5b4537de7fc721ff1fc98df629149b6679ff075826bbd8f",
+      "start": "2025-01-01 00:00:00",
+      "status": "completed"
+    }
+  ],
+  "script": "scripts/complete_evaluation_window.py",
+  "target_end": "2025-09-30 23:50:00",
+  "wind_source": "dataset generation/wind speed data/2025.nc",
+  "wind_source_sha256": "07650fea4a6fec5a210ee09e1216d4a1cc08b63c027fca6e0fbc7df061638820"
+}

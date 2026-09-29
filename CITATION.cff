@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this software, data or results, please cite it as below."
+type: software
+title: "The simulator decides the verdict: a pre-registered audit of evaluation shortcuts for AI trading agents in electricity balancing markets"
+authors:
+  - alias: gepapak
+version: "1.0.0"
+date-released: "2026-09-29"
+license:
+  - MIT
+  - CC-BY-4.0
+keywords:
+  - reinforcement learning
+  - multi-agent reinforcement learning
+  - electricity markets
+  - imbalance settlement
+  - backtesting
+  - evaluation methodology
+  - reproducibility
+abstract: >-
+  Controlled, internally pre-registered audit of how simulator shortcuts (no liquidity cap, no solvency,
+  zero-floor cash accounting, percent-of-price payoffs, interpolated prices) change the verdict on AI trading
+  agents in the Danish imbalance-settlement market. Includes the engine source, an audit patch, aggregated
+  results of 264 engine evaluations, a ledger-reconciliation tool, an evaluation checklist and a code-level
+  prevalence audit of 21 public electricity-RL environments.

@@ -1,0 +1,4 @@
+# Normalise line endings in the repository; keep data files byte-exact
+* text=auto eol=lf
+*.gz binary
+*.csv text eol=lf

@@ -1,0 +1,12 @@
+V01_percent_payoff_reference_price exit 0 seconds 329
+V02_no_liquidity_cap exit 0 seconds 326
+V03_load_proxy_liquidity exit 0 seconds 347
+V04_legacy_flat_fee exit 0 seconds 343
+V05_no_collateral_no_margin exit 0 seconds 282
+V06_no_impact_no_spread exit 0 seconds 294
+V07_legacy_settlement_clip exit 0 seconds 302
+V08_interpolated_prices exit 0 seconds 361
+V09_cash_sweeper exit 0 seconds 296
+V10_continuous_mtm exit 0 seconds 296
+V11_percent_capped_mtm exit 0 seconds 282
+V12_thesis_like_cumulative exit 0 seconds 285

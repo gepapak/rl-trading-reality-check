@@ -1,0 +1,310 @@
+{
+ "2111.13609": {
+  "chars": 60846,
+  "counts": {
+   "C1_liquidity": 8,
+   "C2_costs": 7,
+   "C3_solvency": 1,
+   "C4_lookahead": 2,
+   "C5_spikes": 20,
+   "C6_metrics": 17,
+   "C7_seeds": 0,
+   "C8_baselines": 26
+  },
+  "title_snippet": "A REINFORCEMENT LEARNING APPROACH FOR THE CONTINUOUS ELECTRICITY MARKET OF GERMANY : T RADING FROM THE PERSPECTIVE OF A WIND PARK OPERATOR Malte Lehna, Bj\u00f6rn Ho"
+ },
+ "2004.05940": {
+  "chars": 119055,
+  "counts": {
+   "C1_liquidity": 98,
+   "C2_costs": 6,
+   "C3_solvency": 1,
+   "C4_lookahead": 1,
+   "C5_spikes": 1,
+   "C6_metrics": 33,
+   "C7_seeds": 0,
+   "C8_baselines": 9
+  },
+  "title_snippet": "A Deep Reinforcement Learning Framework for Continuous Intraday Market Bidding Ioannis Boukas 1 Damien Ernst 1 Thibaut Th\u00b4eate 1 Adrien Bolland 1 Alexandre Huyn"
+ },
+ "2510.16021": {
+  "chars": 74436,
+  "counts": {
+   "C1_liquidity": 17,
+   "C2_costs": 0,
+   "C3_solvency": 6,
+   "C4_lookahead": 34,
+   "C5_spikes": 8,
+   "C6_metrics": 55,
+   "C7_seeds": 10,
+   "C8_baselines": 45
+  },
+  "title_snippet": "Feature-driven reinforcement learning for intraday photovoltaic trading: Reward design and cross-zone transfer in Nordic electricity markets Arega Getaneh Abate"
+ },
+ "2401.00015": {
+  "chars": 59117,
+  "counts": {
+   "C1_liquidity": 6,
+   "C2_costs": 3,
+   "C3_solvency": 4,
+   "C4_lookahead": 3,
+   "C5_spikes": 0,
+   "C6_metrics": 50,
+   "C7_seeds": 0,
+   "C8_baselines": 2
+  },
+  "title_snippet": "DISTRIBUTIONAL REINFORCEMENT LEARNING -BASED ENERGY ARBITRAGE STRATEGIES IN IMBALANCE SETTLEMENT MECHANISM Seyed Soroush Karimi Madahi Ghent University seyedsor"
+ },
+ "2404.18821": {
+  "chars": 53254,
+  "counts": {
+   "C1_liquidity": 2,
+   "C2_costs": 2,
+   "C3_solvency": 0,
+   "C4_lookahead": 0,
+   "C5_spikes": 1,
+   "C6_metrics": 32,
+   "C7_seeds": 0,
+   "C8_baselines": 4
+  },
+  "title_snippet": "CONTROL POLICY CORRECTION FRAMEWORK FOR REINFORCEMENT LEARNING -BASED ENERGY ARBITRAGE STRATEGIES \u2217 Seyed Soroush Karimi Madahi IDLab, Ghent University \u2014 imec s"
+ },
+ "2402.19110": {
+  "chars": 78673,
+  "counts": {
+   "C1_liquidity": 13,
+   "C2_costs": 4,
+   "C3_solvency": 2,
+   "C4_lookahead": 1,
+   "C5_spikes": 3,
+   "C6_metrics": 67,
+   "C7_seeds": 0,
+   "C8_baselines": 24
+  },
+  "title_snippet": "Temporal-Aware Deep Reinforcement Learning for Energy Storage Bidding in Energy and Contingency Reserve Markets Jinhao Li, Changlong Wang, Yanru Zhang, Member I"
+ },
+ "2212.06551": {
+  "chars": 27875,
+  "counts": {
+   "C1_liquidity": 0,
+   "C2_costs": 1,
+   "C3_solvency": 1,
+   "C4_lookahead": 1,
+   "C5_spikes": 3,
+   "C6_metrics": 8,
+   "C7_seeds": 0,
+   "C8_baselines": 4
+  },
+  "title_snippet": "Proximal Policy Optimization Based Reinforcement Learning for Joint Bidding in Energy and Frequency Regulation Markets Muhammad Anwar Faculty of Information Tec"
+ },
+ "2410.11180": {
+  "chars": 78408,
+  "counts": {
+   "C1_liquidity": 1,
+   "C2_costs": 2,
+   "C3_solvency": 2,
+   "C4_lookahead": 0,
+   "C5_spikes": 7,
+   "C6_metrics": 61,
+   "C7_seeds": 0,
+   "C8_baselines": 8
+  },
+  "title_snippet": "JOURNAL OF MODERN POWER SYSTEMS AND CLEAN ENERGY , VOL. XX, NO. XX, XXXX 1 Reinforcement Learning Based Bidding Framework with High-dimensional Bids in Power Ma"
+ },
+ "2404.17683": {
+  "chars": 43228,
+  "counts": {
+   "C1_liquidity": 18,
+   "C2_costs": 4,
+   "C3_solvency": 2,
+   "C4_lookahead": 3,
+   "C5_spikes": 6,
+   "C6_metrics": 58,
+   "C7_seeds": 0,
+   "C8_baselines": 19
+  },
+  "title_snippet": "Energy Storage Arbitrage in Two-settlement Markets: A Transformer-Based Approach Saud Alghumayjan \u2217, Jiajun Han \u2020, Ningkun Zheng \u2217, Ming Yi \u2021, Bolun Xu \u2217 \u2217 Eart"
+ },
+ "2303.16266": {
+  "chars": 56311,
+  "counts": {
+   "C1_liquidity": 2,
+   "C2_costs": 4,
+   "C3_solvency": 0,
+   "C4_lookahead": 4,
+   "C5_spikes": 2,
+   "C6_metrics": 23,
+   "C7_seeds": 2,
+   "C8_baselines": 4
+  },
+  "title_snippet": "Graphical Abstract On-line reinforcement learning for optimization of real-life energy trading strategy Lukasz Lepak, Pawe l Wawrzy\u00b4 nski We optimize the biddin"
+ },
+ "2411.15422": {
+  "chars": 42174,
+  "counts": {
+   "C1_liquidity": 0,
+   "C2_costs": 1,
+   "C3_solvency": 4,
+   "C4_lookahead": 5,
+   "C5_spikes": 4,
+   "C6_metrics": 34,
+   "C7_seeds": 4,
+   "C8_baselines": 17
+  },
+  "title_snippet": "Learning a Local Trading Strategy: Deep Reinforcement Learning for Grid-scale Renewable Energy Integration Caleb Ju\u2217 Industrial and Systems Engineering Georgia "
+ },
+ "2411.16519": {
+  "chars": 40038,
+  "counts": {
+   "C1_liquidity": 0,
+   "C2_costs": 9,
+   "C3_solvency": 3,
+   "C4_lookahead": 0,
+   "C5_spikes": 2,
+   "C6_metrics": 18,
+   "C7_seeds": 0,
+   "C8_baselines": 0
+  },
+  "title_snippet": "Highlights Reinforcement Learning for Bidding Strategy Optimization in Day- Ahead Energy Market Luca Di Persio, Matteo Garbelli, Luca Maria Giordano \u2022 We propos"
+ },
+ "2606.27032": {
+  "chars": 40870,
+  "counts": {
+   "C1_liquidity": 1,
+   "C2_costs": 0,
+   "C3_solvency": 0,
+   "C4_lookahead": 8,
+   "C5_spikes": 3,
+   "C6_metrics": 30,
+   "C7_seeds": 10,
+   "C8_baselines": 28
+  },
+  "title_snippet": "State Representation Matters in Deep Reinforcement Learning: Application to Energy Trading Jesper Klicks\u2217, Sander Vr\u017eina\u2217 \u2020, Vincent Fran\u00e7ois-Lavet\u2021 Abstract En"
+ },
+ "2507.16479": {
+  "chars": 85238,
+  "counts": {
+   "C1_liquidity": 1,
+   "C2_costs": 0,
+   "C3_solvency": 4,
+   "C4_lookahead": 0,
+   "C5_spikes": 1,
+   "C6_metrics": 36,
+   "C7_seeds": 1,
+   "C8_baselines": 15
+  },
+  "title_snippet": "1 Arbitrage Tactics in Local Markets via Hierarchical Multi-agent Reinforcement Learning Haoyang Zhang, Graduate Student Member , IEEE, Mina Montazeri, Member ,"
+ },
+ "2605.23964": {
+  "chars": 30589,
+  "counts": {
+   "C1_liquidity": 11,
+   "C2_costs": 0,
+   "C3_solvency": 5,
+   "C4_lookahead": 3,
+   "C5_spikes": 1,
+   "C6_metrics": 31,
+   "C7_seeds": 0,
+   "C8_baselines": 16
+  },
+  "title_snippet": "Multi-market value-stacking: Battery control for combined imbalance participation and non-uniform FCR bidding Celle Hendrickx Gent University - imec, IDLab Ghen"
+ },
+ "2106.02396": {
+  "chars": 35477,
+  "counts": {
+   "C1_liquidity": 12,
+   "C2_costs": 2,
+   "C3_solvency": 5,
+   "C4_lookahead": 0,
+   "C5_spikes": 0,
+   "C6_metrics": 13,
+   "C7_seeds": 0,
+   "C8_baselines": 6
+  },
+  "title_snippet": "A Learning-based Optimal Market Bidding Strategy for Price-Maker Energy Storage Mathilde D. Badoual 1 and Scott J. Moura 1 Abstract\u2014 Load serving entities with "
+ },
+ "2510.03657": {
+  "chars": 181969,
+  "counts": {
+   "C1_liquidity": 14,
+   "C2_costs": 6,
+   "C3_solvency": 5,
+   "C4_lookahead": 19,
+   "C5_spikes": 17,
+   "C6_metrics": 154,
+   "C7_seeds": 0,
+   "C8_baselines": 90
+  },
+  "title_snippet": "Optimising Battery Energy Storage System Trading via Energy Market Operator Price Forecast Aymeric Marie Fran\u00e7ois Fabre Department of Engineering Science Univer"
+ },
+ "2604.19580": {
+  "chars": 139589,
+  "counts": {
+   "C1_liquidity": 2,
+   "C2_costs": 1,
+   "C3_solvency": 29,
+   "C4_lookahead": 3,
+   "C5_spikes": 2,
+   "C6_metrics": 138,
+   "C7_seeds": 0,
+   "C8_baselines": 44
+  },
+  "title_snippet": "Probabilistic Forecasting for Day-ahead Electricity Prices, Battery Trading Strategies and the Economic Evaluation of Predictive Accuracy Simon Hirsch ( ,1,2) a"
+ },
+ "2608.26122": {
+  "chars": 68110,
+  "counts": {
+   "C1_liquidity": 2,
+   "C2_costs": 3,
+   "C3_solvency": 8,
+   "C4_lookahead": 11,
+   "C5_spikes": 0,
+   "C6_metrics": 2,
+   "C7_seeds": 0,
+   "C8_baselines": 7
+  },
+  "title_snippet": "From electricity prices to pro\ufb01ts: multidimensional proba bilistic forecasting for BESS trading Tomasz Werona,\u2217, Katarzyna Maciejowska b aDepartment of Applied "
+ },
+ "2504.06932": {
+  "chars": 91453,
+  "counts": {
+   "C1_liquidity": 62,
+   "C2_costs": 27,
+   "C3_solvency": 4,
+   "C4_lookahead": 7,
+   "C5_spikes": 1,
+   "C6_metrics": 68,
+   "C7_seeds": 0,
+   "C8_baselines": 48
+  },
+  "title_snippet": "High-frequency intraday trading for battery storages David Schaureckera, David Wozabalb, Nils L\u00f6hndorfc, Thorsten Staakea,d aETH Zurich, R\u00e4mistrasse 101, 8092 Z"
+ },
+ "2402.01215": {
+  "chars": 73953,
+  "counts": {
+   "C1_liquidity": 19,
+   "C2_costs": 1,
+   "C3_solvency": 4,
+   "C4_lookahead": 6,
+   "C5_spikes": 4,
+   "C6_metrics": 35,
+   "C7_seeds": 0,
+   "C8_baselines": 10
+  },
+  "title_snippet": "Optimal Intraday Power Trading for Single-Price Balancing Markets: An Adaptive Risk-Averse Strategy using Mixture Models Robin Bruneela,\u2217, Mathijs Schuurmansa, "
+ },
+ "2505.14133": {
+  "chars": 22185,
+  "counts": {
+   "C1_liquidity": 1,
+   "C2_costs": 0,
+   "C3_solvency": 4,
+   "C4_lookahead": 1,
+   "C5_spikes": 0,
+   "C6_metrics": 14,
+   "C7_seeds": 0,
+   "C8_baselines": 1
+  },
+  "title_snippet": "arXiv:2505.14133v1 [eess.SY] 20 May 2025 Gaming Strategies in European Imbalance Settlement Mechanisms Seyed Soroush Karimi Madahi IDLab, Ghent University \u2013 ime"
+ }
+}

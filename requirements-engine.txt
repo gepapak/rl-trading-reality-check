@@ -1,0 +1,13 @@
+# Additional packages for the engine-dependent experiments in audit/ and engine/ (Python 3.10).
+# Versions are those the campaign ran with.
+torch==2.8.0
+tensorflow==2.12.0
+stable-baselines3==2.7.0
+gymnasium==1.2.0
+pettingzoo==1.22.0
+scikit-learn==1.7.2
+joblib==1.5.2
+psutil==7.0.0
+optuna==4.5.0
+matplotlib==3.5.3
+tqdm==4.67.1
