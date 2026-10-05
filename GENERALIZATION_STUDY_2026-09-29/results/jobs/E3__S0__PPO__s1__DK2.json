@@ -1,0 +1,16 @@
+{
+ "env": "E3",
+ "regime": "S0",
+ "algo": "PPO",
+ "seed": 1,
+ "region": "DK2",
+ "steps": 200000,
+ "seconds": 756.9,
+ "eval_split": "test",
+ "reported": 15474865.273249898,
+ "reality": 15474865.273249898,
+ "rep_revenue_eur": 15474865.273249898,
+ "rep_shading_value_eur": -129999.69738636911,
+ "real_revenue_eur": 15474865.273249898,
+ "real_shading_value_eur": -129999.69738636911
+}

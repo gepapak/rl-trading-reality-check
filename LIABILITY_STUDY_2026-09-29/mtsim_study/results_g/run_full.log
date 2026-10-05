@@ -1,0 +1,22 @@
+2026-10-03 14:51:47 Study H runner 7312 has exited; starting Study G
+20 jobs, 0 complete, running 20 with 7 workers
+15:15:58 done ORIG__PPO__s1.json (1397.4s): x(0.1)=0.00 x(1)=0.00 rep=+0.0 booked=+0.0
+15:16:02 done ORIG__PPO__s0.json (1402.5s): x(0.1)=0.00 x(1)=0.00 rep=+0.0 booked=+0.0
+15:16:13 done FLPATCH__PPO__s0.json (1413.0s): x(0.1)=0.00 x(1)=0.00 rep=+0.0 booked=+0.0
+15:16:13 done FLPATCH__PPO__s2.json (1412.8s): x(0.1)=0.00 x(1)=0.00 rep=+0.0 booked=+0.0
+15:16:18 done ORIG__PPO__s3.json (1418.0s): x(0.1)=0.00 x(1)=0.00 rep=+0.0 booked=+0.0
+15:16:33 done FLPATCH__PPO__s1.json (1432.0s): x(0.1)=0.00 x(1)=0.00 rep=+0.0 booked=+0.0
+15:16:50 done ORIG__PPO__s2.json (1450.0s): x(0.1)=0.00 x(1)=0.00 rep=+0.0 booked=+0.0
+15:39:16 done FLPATCH__PPO__s3.json (1398.6s): x(0.1)=0.00 x(1)=0.00 rep=+0.0 booked=+0.0
+15:39:20 done FLPATCH__PPO__s4.json (1387.5s): x(0.1)=0.00 x(1)=0.00 rep=+0.0 booked=+0.0
+15:39:21 done ORIG__PPO__s4.json (1398.6s): x(0.1)=0.00 x(1)=0.00 rep=+0.0 booked=+0.0
+15:39:33 done FLPATCH__PPO__s5.json (1395.2s): x(0.1)=0.00 x(1)=0.00 rep=+0.0 booked=+0.0
+15:39:39 done ORIG__PPO__s5.json (1405.9s): x(0.1)=0.00 x(1)=0.00 rep=+0.0 booked=+0.0
+15:39:55 done ORIG__PPO__s6.json (1402.6s): x(0.1)=0.00 x(1)=0.00 rep=+0.0 booked=+0.0
+15:40:16 done FLPATCH__PPO__s6.json (1405.7s): x(0.1)=0.00 x(1)=0.00 rep=+0.0 booked=+0.0
+16:03:09 done ORIG__PPO__s7.json (1432.9s): x(0.1)=0.00 x(1)=0.00 rep=+0.0 booked=+0.0
+16:03:13 done ORIG__PPO__s8.json (1432.4s): x(0.1)=0.00 x(1)=0.00 rep=+0.0 booked=+0.0
+16:03:26 done FLPATCH__PPO__s8.json (1432.2s): x(0.1)=0.00 x(1)=0.00 rep=+0.0 booked=+0.0
+16:03:39 done FLPATCH__PPO__s7.json (1458.7s): x(0.1)=0.00 x(1)=0.00 rep=+0.0 booked=+0.0
+16:03:50 done FLPATCH__PPO__s9.json (1435.0s): x(0.1)=0.00 x(1)=0.00 rep=+0.0 booked=+0.0
+16:03:54 done ORIG__PPO__s9.json (1454.4s): x(0.1)=0.00 x(1)=0.00 rep=+0.0 booked=+0.0

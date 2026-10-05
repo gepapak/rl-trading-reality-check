@@ -1,0 +1,14 @@
+{
+ "env": "E1-large",
+ "regime": "S1",
+ "algo": "PPO",
+ "seed": 4,
+ "region": "DK2",
+ "steps": 200000,
+ "seconds": 673.4,
+ "eval_split": "test",
+ "reported": 2820952.700000003,
+ "reality": 2374665.1633618046,
+ "rep_profit_eur": 2820952.700000003,
+ "real_profit_eur": 2374665.1633618046
+}

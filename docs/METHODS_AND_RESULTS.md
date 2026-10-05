@@ -1,5 +1,7 @@
 # Methods and results
 
+> **Scope.** This document covers the engine audit (Section 4 and Supplementary Sections S1–S5 of the paper). Studies A–J are documented by their pre-registrations, run logs and verdict files in `GENERALIZATION_STUDY_2026-09-29/` and `LIABILITY_STUDY_2026-09-29/` (see the README).
+
 This document describes the study design, every protocol and prediction, and all results, including failed predictions. The numbers can be recomputed from the files in `results/` with `tools/verify_release.py`.
 
 ## 1. Setting

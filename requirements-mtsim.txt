@@ -1,0 +1,8 @@
+# Study G only (LIABILITY_STUDY_2026-09-29/mtsim_study/), in a separate virtual environment, Python 3.10.
+# gym-mtsim's bundled data are pickles that load with pandas 2.0.x only.
+gym-mtsim==2.0.0
+pandas==2.0.3
+numpy==1.26.4
+gymnasium==1.2.0
+stable-baselines3==2.7.0
+torch==2.8.0

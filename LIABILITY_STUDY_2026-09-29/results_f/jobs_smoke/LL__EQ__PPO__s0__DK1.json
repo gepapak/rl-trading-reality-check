@@ -1,0 +1,31 @@
+{
+ "rule": "LL",
+ "obsset": "EQ",
+ "algo": "PPO",
+ "seed": 0,
+ "region": "DK1",
+ "steps": 16384,
+ "eval_split": "train",
+ "lev": {
+  "0": 4.0,
+  "0.02": 4.0,
+  "0.05": 4.0,
+  "0.1": 4.0,
+  "0.25": 4.0,
+  "0.5": 4.0,
+  "1": 4.0,
+  "2": 4.0,
+  "3": 4.0
+ },
+ "drawmean_reported_return_pct": 107.65362499999651,
+ "drawmean_ledger_return_pct": 106.7947572916653,
+ "drawmean_mean_abs_lev_open": 4.0,
+ "drawshare_floor_bound": 0.3333333333333333,
+ "drawshare_closed": 0.3333333333333333,
+ "draws_reported_return_pct": [
+  80.83866562502034,
+  342.1222093749692,
+  -100.0
+ ],
+ "seconds": 68.0
+}

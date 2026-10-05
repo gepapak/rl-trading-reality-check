@@ -1,125 +1,130 @@
-# The simulator decides the verdict
+# When the simulator forgives losses
 
-**A pre-registered audit of evaluation shortcuts for AI trading agents in electricity balancing markets** (working title)
+**Reinforcement-learning trading agents learn to gamble for resurrection in electricity balancing markets** — code, data pipelines, pre-registrations and aggregated results.
 
 ## The question
-A multi-agent RL fund trades Danish imbalance-settlement exposure (DK1 / DK2, 2025 held-out data). Over one year of development, the verdict "does the learned agent beat the rules?" flipped several times as the simulator changed. This repository asks *which evaluation shortcuts decide that verdict*. It answers with controlled, pre-registered experiments on a validated engine, and with a reconciliation check that detects the failure.
+Trading simulators often floor an account's cash at zero, or end an episode at bankruptcy, as a guard against negative balances. Corporate finance has long known what a truncated downside does to a decision maker: limited liability rewards risk, most strongly near zero equity ("gambling for resurrection"). This repository asks whether reinforcement-learning (RL) agents *learn* that incentive from a simulator's accounting, and whether standard evaluation then reports the behavior as profit.
 
 ## Main results
+- **Theory.** Five propositions with proofs: in a market without edge, full liability makes staying flat optimal, while a zero floor on fixed positions makes maximal leverage optimal, most valuably near zero equity. Capping only the final loss forgives at most one overshoot. With equity-scaled positions the hazard appears only above a leverage threshold, and a log reward removes it under a computable condition.
+- **Origin.** In an audit of a validated electricity-market engine, a legacy protocol reported a learned controller first (**+270%**) while its booked P&L was **−535%**. A missing liquidity cap and missing solvency rules were jointly necessary.
+- **Agents learn the incentive** (placebo market with sign-randomized imbalance spreads, where no policy can profit):
+  - with default training, floor-trained agents raised leverage as equity fell and reported **+38% to +148%** while booking **−15% to −57%** (Study B); this replicated on fresh seeds and grew with training (Study C);
+  - when learning was well posed, **all ten floor-trained PPO agents learned the theory's threshold policy**, 11.1 leverage units of 16 above full-liability agents (Cohen's d = 2.6, one-sided permutation p = 0.0004; Study F);
+  - with A2C and DQN the floor raised leverage near zero equity by 9.2 units pooled, though about a third of their floor-trained agents gambled at every equity level (Study I);
+  - in Finland PPO agents again learned the threshold policy, exactly where the Finnish optimum is maximal; in calm southern Norway, where the theory makes the incentive negligible, the effect vanished (Study J).
+- **Boundaries.** With realistic trading costs (Study H), inside the public simulator gym-mtsim (Study G) and with equity-scaled positions (Study E), agents did not learn to gamble, or did so only weakly. Reported returns still exceed booked ones wherever a floor binds.
+- **Prevalence.** One of the 18 most-starred public RL trading environments meets both enabling conditions (Study D); FinRL and TensorTrade do not; 20 of 21 public electricity-RL environments have no capital account.
+- **Tools.** A reconciliation check of reported against booked returns (flagged 53 of 54 affected engine runs, none of 246 others), a placebo-market test, and an evaluation checklist (`CHECKLIST.md`).
 
-**1. The audit engine is validated.** Under the strict protocol it reproduces the frozen final campaign to within 1e-8 percentage points (MARL, feasible-action MAPPO and a deterministic anchor, both regions).
+All pre-registered hypotheses are reported, including the 19 of 43 liability hypotheses that were not supported.
 
-**2. No liquidity cap (price-taker).**
-- The anchor's return grows ×307 / ×997 (+154% / +480%). Feasible-action MAPPO averages +140% / +426%.
-- Plain MAPPO (MARL) instead loses 95–100% in all 20 runs.
-- The same shortcut inflates some policies by orders of magnitude and ruins others.
+## Studies and where to find them
+| Study | Question | Folder | Pre-registration | Aggregated results |
+|---|---|---|---|---|
+| Engine audit | Which evaluation shortcuts decide the verdict on frozen controllers? | `engine/`, `audit/`, `results/` | `docs/PREREGISTRATION.md` | `results/` |
+| A | When do simulator shortcuts reverse "learning beats the rule" (three environment designs)? | `GENERALIZATION_STUDY_2026-09-29/` | `PREREGISTRATION_A.md` | `results/` there |
+| B | Do agents learn to gamble under a zero floor? | `LIABILITY_STUDY_2026-09-29/` | `PREREGISTRATION_B.md` | `results/` |
+| C | Does the gambling grow with training (fresh seeds)? | `LIABILITY_STUDY_2026-09-29/scaling/` | `PREREGISTRATION_C.md` | `scaling/results/` |
+| D | How common are the enabling conditions in public trading environments? | `LIABILITY_STUDY_2026-09-29/env_audit/` | `PREREGISTRATION_D.md` | `coding_d.csv` |
+| E | Equity-scaled positions and the log reward | `LIABILITY_STUDY_2026-09-29/` | `PREREGISTRATION_E.md` | `results_e/` |
+| F | Well-posed learning (PPO, equity as the only input) | `LIABILITY_STUDY_2026-09-29/` | `PREREGISTRATION_F.md` | `results_f/`, pilot `results_pilot_f/` |
+| G | A public simulator (gym-mtsim) | `LIABILITY_STUDY_2026-09-29/mtsim_study/` | `PREREGISTRATION_G.md` | `results_g/` |
+| H | Realistic trading costs | `LIABILITY_STUDY_2026-09-29/` | `PREREGISTRATION_H.md` | `results_h/` |
+| I | Other learners (A2C, DQN) | `LIABILITY_STUDY_2026-09-29/` | `PREREGISTRATION_I.md` | `results_i/`, pilot `results_pilot_i/` |
+| J | Other markets (Finland, southern Norway) | `LIABILITY_STUDY_2026-09-29/` | `PREREGISTRATION_J.md` | `results_j/` |
 
-**3. Silent loss forgiveness (no liquidity cap + no solvency).**
-- The engine floors trading cash at zero.
-- With margin and loss exit switched off, MARL's booked P&L loses **7–33× its capital** (−737% to −3,338%).
-- Yet the engine reports a *positive* return in 13 of 20 runs, with a fund return up to +12.5%, above every agent's strict-protocol 8.1–8.5%.
-
-**4. A thesis-like protocol reproduces "MARL wins" from checkpoints that come last under strict evaluation (10 seeds).**
-
-| | DK1 | DK2 |
-|---|---|---|
-| MARL reported, **mean** | **+270%** | **+122%** |
-| MARL reported, IQM | +73% | −6% |
-| MARL reported, median | −101% | −101% |
-| MARL fund return, mean | **+40.5%** | **+23.0%** |
-| MARL booked P&L (ledger), mean | **−535%** | **−431%** |
-| Anchor reported | −36% | −41% |
-
-The mean and the IQM of seeds are fooled; only the median is not.
-
-**5. Leave-one-out decomposition (56 runs).**
-- Two components are **necessary**: no liquidity cap *and* no solvency.
-- Removing either one eliminates the false positive and closes the reported-vs-ledger gap (to within 0.4 pp).
-- The percent-of-price payoff is *not* necessary. The pre-registered prediction that it was (R1) failed.
-
-**6. Ledger reconciliation detects the failure.** Reported and booked-P&L returns agree within 1.3 pp in all 174 runs under sound accounting (138 re-runs plus 36 frozen strict baselines), and diverge by thousands of pp exactly where losses are forgiven (`tools/ledger_check.py`).
-
-**7. Prevalence in public code (21 electricity-RL repositories, pre-registered, static reading).**
-- 20 of 21 have no capital account; 0 of 21 model solvency.
-- **0 of 21** have a zero floor or a percent-of-price payoff.
-- 11 of 12 single-agent environments on historical prices are price-takers.
-- **Findings 3–5 are therefore hazards of finance-style simulators (capital account + percent returns); they are not a documented pattern in public electricity-RL code.**
-
-## Pre-registration scorecard
-**Internal pre-registration.** Every prediction was written into timestamped files before the corresponding runs (`docs/PREREGISTRATION.md`, `docs/CODE_AUDIT_PROTOCOL.md`). The files were not deposited with an independent registry; their header times were later corrected to match file-modification times, as noted in the files. Every outcome is reported: 10 of 18 predictions were supported (one trivially) and 8 were not.
-
-| Set | Supported | Not supported |
-|---|---|---|
-| Main campaign P1–P5 | P2, P5 (see the wording note below) | P1, P3, P4 |
-| Cross-market X1–X4 | X2 (negligible size) | X1, X3, X4 (the spike-thin-liquidity mechanism is refuted) |
-| 10-seed extension Q1–Q4 | Q2, Q3, Q4 | Q1 |
-| Leave-one-out R1–R5 | R2, R3, R4; R5 technically met but trivial (<0.5 pp) | R1 |
-| Code-audit expectations | solvency ≤ 20% | price-taker ≥ 70%, zero floor ≥ 1, percent payoff ≥ 1 |
-
-*Wording note.* P2 and P5 are worded on the *reported* return. The first aggregator version tested them on the reconstructed ledger; it was corrected after results were seen. Both readings are printed in `results/campaign/PREDICTION_VERDICTS.md`.
+Each study folder also holds `PREREGISTRATION_HASHES.txt` (SHA-256 of every registered file, with UTC timestamps) and `RUN_LOG.md` (launches, interruptions, relaunches and changes of job order). Theory solvers: `dp_theory.py` (Denmark), `dp_frictions.py` (Study H), `dp_j.py` (Study J). Placebo-market test: `placebo_market.py`. Exploratory analyses are in `review_rigor.py` and `explore_i.py`.
 
 ## Repository layout
 ```
-README.md, DESCRIPTION.md        overview; short description, abstract and repository metadata
+README.md, DESCRIPTION.md        overview; short description and repository metadata
 CITATION.cff                     citation metadata
-CHECKLIST.md                     evaluation checklist for AI trading agents
+CHECKLIST.md                     evaluation checklist for RL trading agents and their simulators
 LICENSE, LICENSE-docs.md         MIT (code); CC BY 4.0 (docs, results, derived tables)
 THIRD_PARTY_LICENSES.md          sources, licenses and attribution for all third-party material
-requirements.txt                 standalone analyses; requirements-engine.txt adds the engine stack
-docs/METHODS_AND_RESULTS.md      full study design, every protocol, prediction and result
-docs/                            also: pre-registration, code-audit protocol and results, campaign guide
-tools/ledger_check.py            standalone reported-vs-booked-P&L reconciliation (no engine needed)
-tools/verify_release.py          recomputes every headline number from the shipped results
-engine/                          multi-agent simulator source (the patched audit copy that produced the results)
-analysis/                        standalone cross-market liquidity test (runs on data/ only)
-audit/                           engine-dependent audit code (verbatim record of what ran) + engine patch
-code_audit/                      search, scan and coding of 21 public repositories (own coding, pinned SHAs)
+requirements*.txt                standalone analyses; engine stack; Studies A-J; Study G (gym-mtsim)
+tools/verify_studies.py          checks every pre-registration hash of Studies A-J and recomputes their headline numbers
+tools/verify_release.py          recomputes every headline number of the engine audit
+tools/ledger_check.py            standalone reported-vs-booked-P&L reconciliation
+GENERALIZATION_STUDY_2026-09-29/ Study A: environments, runner, aggregation, Energinet data and panels, results
+LIABILITY_STUDY_2026-09-29/      Studies B-J: environments, runners, aggregation, theory solvers, results
+engine/, audit/                  engine audit: simulator source (patched audit copy) and audit code
+analysis/, code_audit/           cross-market liquidity test; code audit of 21 electricity-RL repositories
 literature/                      pilot literature survey coding (no PDFs)
-results/                         campaign, variant, decision-replay, cross-market and ledger-example results
+results/                         engine-audit results
 data/                            Energinet data (CC BY 4.0), engine liquidity series, derived tables;
                                  fetch_esett.py downloads the eSett files (not redistributed)
+docs/                            engine-audit protocols, pre-registration and methods
 ```
 
 ## Reproducing
-Python 3.10 (`pip install -r requirements.txt`).
+Python 3.10. CPU only.
 
-**Without the engine (minutes):**
+**Verification without training (minutes).**
 ```
-python tools/verify_release.py                                                      # recomputes all headline numbers
-python tools/ledger_check.py results/ledger_examples/L3_marl_seed7_DK1.csv.gz      # reported +21%, ledger -3,332%: flagged
-python tools/ledger_check.py results/ledger_examples/L0_strict_marl_seed7_DK1.csv.gz  # reconciled
-python data/fetch_esett.py                                                          # downloads eSett data, verifies hashes
-python analysis/cross_market_liquidity_test.py                                      # regenerates results/cross_market/
-python code_audit/search_repos.py && python code_audit/scan_repos.py                # network; re-fetches public code
+pip install -r requirements-studies.txt
+python tools/verify_studies.py      # pre-registration hashes of Studies A-J and their headline numbers
+python tools/verify_release.py      # headline numbers of the engine audit
+python tools/ledger_check.py results/ledger_examples/L3_marl_seed7_DK1.csv.gz   # a flagged run
 ```
 
-**With the engine (hours).** The engine source is in `engine/`. Its datasets and trained checkpoints (about 57 GB) are not included. `pip install -r requirements-engine.txt`.
-- `audit/setup_audit_engine.py` copies the engine and applies the three-block patch in `audit/engine_patch/`.
-- The patch has two effects:
-  - it bypasses the train/eval contract-hash check, only when `SIM_AUDIT_ALLOW_PROTOCOL_MISMATCH=1`;
-  - it applies config overrides from `SIM_AUDIT_CFG_OVERRIDES`.
-- `audit/run_scarcity_tail_campaign.py` runs the phases: validate (gate) → evals → retrain → l7_ext → l7_loo → aggregate.
+**Theory and aggregation from the shipped per-run results.** In `LIABILITY_STUDY_2026-09-29/`:
+```
+python dp_theory.py                 # optimal policies, Denmark (Section 3 of the paper)
+python aggregate_b.py               # and aggregate_e.py, aggregate_f.py, aggregate_h.py, aggregate_i.py, aggregate_j.py
+python placebo_market.py --demo     # the placebo-market test on a floor and a full-liability agent
+```
+Figure and table scripts (`make_*.py`) write to `outputs/` inside each study folder.
 
-See `docs/RUNNING_THE_CAMPAIGN.md`.
+**Retraining (hours to days on a multi-core CPU).** Each runner is resume-safe and skips finished jobs.
+```
+cd GENERALIZATION_STUDY_2026-09-29 && python run_study.py --phase rules && python run_study.py --phase rl --workers 6
+cd LIABILITY_STUDY_2026-09-29
+python run_b.py --phase rules && python run_b.py --phase rl --workers 6   # Study B (the study relaunched with run_b_order.py; see RUN_LOG.md)
+python scaling/run_c.py --workers 7                                       # Study C
+python run_e.py --workers 7 ; python run_f.py --workers 7 ; python run_h.py --workers 7 ; python run_i.py --workers 7
+```
+Study B took about 8 hours and Study I about 2 hours with 7 workers on an 8-core CPU.
+
+**Study J (Finland, southern Norway).** eSett data are not redistributed:
+```
+python data/fetch_esett.py                                   # from the repository root; verifies content hashes
+cd LIABILITY_STUDY_2026-09-29
+python get_esett_j.py && python build_panel_j.py && python dp_j.py && python run_j.py --workers 7
+python ../tools/verify_studies.py                            # the rebuilt panels must match their registered hashes
+```
+
+**Study G (gym-mtsim)** needs its own environment, because gym-mtsim's bundled data load only with pandas 2.0.x:
+```
+cd LIABILITY_STUDY_2026-09-29/mtsim_study
+python -m venv .venv && .venv\Scripts\pip install -r ../../requirements-mtsim.txt
+.venv\Scripts\python run_g.py --workers 7 && .venv\Scripts\python aggregate_g.py
+```
+
+**Engine audit (hours).** The engine source is in `engine/`; its datasets and trained checkpoints (about 57 GB) are not included. `pip install -r requirements-engine.txt`, then see `docs/RUNNING_THE_CAMPAIGN.md`. `audit/setup_audit_engine.py` copies the engine and applies the three-block patch in `audit/engine_patch/`, which bypasses the train/eval contract-hash check only when `SIM_AUDIT_ALLOW_PROTOCOL_MISMATCH=1` and applies config overrides from `SIM_AUDIT_CFG_OVERRIDES`.
+
+## Pre-registration
+All pre-registrations are internal: written and hashed before the corresponding test-period evaluation, not deposited with an independent registry. Their records disclose smoke tests on training data, design changes made before registration, a change of job submission order during Study B, a configuration-selection rule for Study I written after its pilot had been seen, aggregation scripts written after the runs for Study C, and, in the engine audit, timestamp corrections and one post-hoc correction of an aggregation script. `tools/verify_studies.py` checks every registered file against its recorded hash.
 
 ## Not included
-- Engine datasets and trained checkpoints (~57 GB) and raw per-run logs (~105 GB). Aggregated results are in `results/`.
-- The 22 paper PDFs and their extracted text (copyright).
-- Verbatim third-party code excerpts from the code audit (copyright). `code_audit/scan_repos.py` regenerates them from the pinned commits.
-- Raw eSett Open Data files: public, but with no explicit redistribution license. `data/fetch_esett.py` re-downloads them.
+- Trained checkpoints and raw per-run logs (size). Per-run summaries are in each study's results folder (`jobs/` and `runs_*.csv`).
+- Engine datasets and checkpoints (about 57 GB) and raw engine logs (about 105 GB).
+- Raw eSett Open Data and the Study J panels derived from them (no explicit redistribution license); `data/fetch_esett.py` re-downloads them.
+- Third-party source code from the audits (copyright); the scan scripts regenerate the excerpts from pinned commits.
+- The paper PDFs of the literature survey (copyright).
 
 ## Data sources
-- **Energinet, Energi Data Service** (`ImbalancePrice`; `RegulatingBalancePowerdata` for the engine's activation-volume series). CC BY 4.0. Source: Energinet (www.energidataservice.dk). Subsetted and, for the liquidity series, aggregated by the authors.
-- **eSett Open Data** (EXP13 imbalance volumes, EXP14 imbalance prices; FI and NO1–NO5). Public under eSett's terms of use, which grant no explicit redistribution license, so the files are fetched rather than shipped. `data/fetch_esett.py` verifies each download against hashes recorded in the study.
+- **Energinet, Energi Data Service** (`ImbalancePrice`, `ProductionConsumptionSettlement`, `Forecasts_Hour`; `RegulatingBalancePowerdata` for the engine's activation-volume series). CC BY 4.0. Source: Energinet (www.energidataservice.dk).
+- **eSett Open Data** (EXP14 imbalance prices, EXP13 imbalance volumes; FI, NO1–NO5, SE1–SE4). Public under eSett's terms of use, which grant no explicit redistribution license.
 
 Details and required attribution: `THIRD_PARTY_LICENSES.md`.
 
 ## Limitations
-- One engine and one agent family.
-- The false positive reproduced is the authors' own earlier result.
-- The L7 headline rests on 3 long-saturated seeds out of 10.
-- Code-audit coding was done by a single coder from static reading.
-- The literature survey is a 21-paper pilot, not a systematic review.
+- Three Nordic markets, one allocation size and a deliberately simple trading sleeve; the real-market payoff is stylized, so the claims rest on the placebo market.
+- The learned gambling appears in low-cost simulators with a zero floor; the evaluation hazard appears wherever a floor binds.
+- The threshold policy was reliable for PPO only; full-liability agents rarely learned to stay flat.
+- Audits were coded by a single coder from static code; the literature survey is a pilot.
 - Pre-registration was internal (see above).
 
 ## License

@@ -1,0 +1,39 @@
+{
+ "rule": "LINFL",
+ "levset": "HIGH",
+ "algo": "PPO",
+ "seed": 0,
+ "region": "DK1",
+ "steps": 3000,
+ "eval_split": "train(SMOKE)",
+ "draws_reported_return_pct": [
+  -159.21985362864913,
+  -100.73523961156408,
+  -100.00046943460208
+ ],
+ "drawmean_reported_return_pct": -119.98518755827176,
+ "draws_ledger_return_pct": [
+  -159.21985362864913,
+  -100.73523961156408,
+  -100.00046943460208
+ ],
+ "drawmean_ledger_return_pct": -119.98518755827176,
+ "draws_mean_abs_lev_open": [
+  3.810471657291216,
+  6.697569015245159,
+  6.5450659250103005
+ ],
+ "drawmean_mean_abs_lev_open": 5.684368865848891,
+ "draws_share_top_lev_open": [
+  0.005625270445694505,
+  0.020756077461887103,
+  0.02034404614750721
+ ],
+ "drawmean_share_top_lev_open": 0.01557513135169627,
+ "drawshare_bust": 1.0,
+ "probe_e0.1": 6.40963511972634,
+ "probe_e0.25": 6.026795895096921,
+ "probe_e1": 3.9578107183580387,
+ "probe_e2": 2.477194982896237,
+ "seconds": 45.8
+}

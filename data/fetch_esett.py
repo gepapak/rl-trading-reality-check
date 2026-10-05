@@ -1,4 +1,5 @@
-"""Re-download the eSett Open Data files used by analysis/cross_market_liquidity_test.py.
+"""Re-download the eSett Open Data files used by analysis/cross_market_liquidity_test.py and by Study J
+(LIABILITY_STUDY_2026-09-29/get_esett_j.py copies the FI and NO2 files into place).
 
 eSett's terms of use (https://opendata.esett.com/terms) make the data public without authorization but grant no
 explicit redistribution license, so the raw files are not shipped in this repository. This script fetches exactly the

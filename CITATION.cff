@@ -1,25 +1,28 @@
 cff-version: 1.2.0
 message: "If you use this software, data or results, please cite it as below."
 type: software
-title: "The simulator decides the verdict: a pre-registered audit of evaluation shortcuts for AI trading agents in electricity balancing markets"
+title: "When the Simulator Forgives Losses: Reinforcement-Learning Trading Agents Learn to Gamble for Resurrection in Electricity Balancing Markets"
 authors:
   - alias: gepapak
-version: "1.0.0"
-date-released: "2026-09-29"
+version: "2.0.0"
+date-released: "2026-10-05"
 license:
   - MIT
   - CC-BY-4.0
 keywords:
   - reinforcement learning
-  - multi-agent reinforcement learning
+  - limited liability
+  - gambling for resurrection
+  - simulation-based evaluation
+  - reward misspecification
   - electricity markets
   - imbalance settlement
-  - backtesting
-  - evaluation methodology
-  - reproducibility
+  - pre-registration
 abstract: >-
-  Controlled, internally pre-registered audit of how simulator shortcuts (no liquidity cap, no solvency,
-  zero-floor cash accounting, percent-of-price payoffs, interpolated prices) change the verdict on AI trading
-  agents in the Danish imbalance-settlement market. Includes the engine source, an audit patch, aggregated
-  results of 264 engine evaluations, a ledger-reconciliation tool, an evaluation checklist and a code-level
-  prevalence audit of 21 public electricity-RL environments.
+  Code, data pipelines, internal pre-registrations and aggregated results for a study of how a common simulator
+  accounting convention, flooring an account's cash at zero, teaches reinforcement-learning trading agents to gamble
+  for resurrection and makes standard evaluation report the behavior as profit. Includes the theory solvers, the
+  environments and runners of eleven studies (an engine audit, an environment-design study, and liability studies B-J
+  with PPO, A2C and DQN agents on Danish, Finnish and Norwegian imbalance spreads, a public simulator and realistic
+  trading costs), an audit of public RL trading environments, a reconciliation tool, a placebo-market test and an
+  evaluation checklist.

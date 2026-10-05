@@ -1,0 +1,14 @@
+{
+ "env": "E1-large",
+ "regime": "S4",
+ "algo": "DQN",
+ "seed": 2,
+ "region": "DK2",
+ "steps": 200000,
+ "seconds": 492.6,
+ "eval_split": "test",
+ "reported": 2641218.7791583333,
+ "reality": 1789278.684118751,
+ "rep_profit_eur": 2641218.7791583333,
+ "real_profit_eur": 1789278.684118751
+}

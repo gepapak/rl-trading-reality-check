@@ -1,0 +1,40 @@
+{
+  "created_at_utc": "2026-08-30T05:32:09.040903+00:00",
+  "dataset": "Forecasts_Hour",
+  "source": "https://api.energidataservice.dk/dataset/Forecasts_Hour",
+  "request_url": "https://api.energidataservice.dk/dataset/Forecasts_Hour?start=2025-03-03T00%3A00&end=2026-08-19T00%3A00&filter=%7B%22PriceArea%22%3A+%5B%22DK1%22%2C+%22DK2%22%5D%7D&limit=0",
+  "required_start_utc": "2025-03-03 23:00:00+00:00",
+  "required_end_utc": "2026-08-17 22:00:00+00:00",
+  "rows": 75966,
+  "start_utc": "2025-03-03 23:00:00+00:00",
+  "end_utc": "2026-08-17 22:00:00+00:00",
+  "areas": [
+    "DK1",
+    "DK2"
+  ],
+  "forecast_types": [
+    "Offshore Wind",
+    "Onshore Wind",
+    "Solar"
+  ],
+  "sha256": "b5d2de9ce3aeed4a4c0008feb9797db1ad08180cd39f1bde977fd93b8e364768",
+  "claim_boundary": "TimestampUTC is a record-update timestamp, not a separately archived issue timestamp for each forecast vintage.",
+  "delivery_hour_coverage": {
+    "requested_hour_count_per_area": 12768,
+    "required_forecast_types_per_hour": 3,
+    "areas": {
+      "DK1": {
+        "available_hour_count": 12695,
+        "complete_hour_count": 12622,
+        "available_hour_share": 0.9942825814536341,
+        "complete_hour_share": 0.9885651629072681
+      },
+      "DK2": {
+        "available_hour_count": 12695,
+        "complete_hour_count": 12622,
+        "available_hour_share": 0.9942825814536341,
+        "complete_hour_share": 0.9885651629072681
+      }
+    }
+  }
+}

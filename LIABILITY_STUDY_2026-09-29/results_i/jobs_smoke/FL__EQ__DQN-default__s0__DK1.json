@@ -1,0 +1,33 @@
+{
+ "rule": "FL",
+ "obsset": "EQ",
+ "algo": "DQN",
+ "config": "DQN-default",
+ "kwargs": {},
+ "seed": 0,
+ "region": "DK1",
+ "steps": 16384,
+ "eval_split": "train",
+ "lev": {
+  "0": 16.0,
+  "0.02": 16.0,
+  "0.05": 16.0,
+  "0.1": 16.0,
+  "0.25": 16.0,
+  "0.5": 16.0,
+  "1": 4.0,
+  "2": 0.25,
+  "3": 0.25
+ },
+ "drawmean_reported_return_pct": 32.35951562501929,
+ "drawmean_ledger_return_pct": 32.35951562501929,
+ "drawmean_mean_abs_lev_open": 0.2514433871485085,
+ "drawshare_floor_bound": 0.0,
+ "drawshare_closed": 0.0,
+ "draws_reported_return_pct": [
+  24.256159375019905,
+  41.32649375001907,
+  31.495893750018887
+ ],
+ "seconds": 17.6
+}

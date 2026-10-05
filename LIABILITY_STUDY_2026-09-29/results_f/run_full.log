@@ -1,0 +1,8 @@
+60 jobs, 0 complete, running 60 with 7 workers
+10:28:35 done FL__FULL__PPO__s0__DK1.json (1029.6s): L(0.1)=4.87084 L(2)=3.67377
+10:28:38 done FL__EQ__PPO__s0__DK1.json (1031.1s): L(0.1)=0.25 L(2)=4
+10:28:41 done ZF__EQ__PPO__s0__DK1.json (1034.6s): L(0.1)=16 L(2)=0.25
+10:28:43 done FL__EQ__PPO__s0__DK2.json (1036.7s): L(0.1)=4 L(2)=0.25
+10:28:45 done ZF__EQ__PPO__s0__DK2.json (1038.2s): L(0.1)=16 L(2)=0.25
+10:28:46 done LL__EQ__PPO__s0__DK2.json (1040.6s): L(0.1)=16 L(2)=0
+10:28:52 done LL__EQ__PPO__s0__DK1.json (1046.2s): L(0.1)=0.25 L(2)=4

@@ -1,0 +1,32 @@
+    FL iter 0 max change 0.0000 EUR
+DK1 FL: converged after 1 iterations
+    LL iter 0 max change 497.7631 EUR
+    LL iter 10 max change 0.3613 EUR
+DK1 LL: converged after 13 iterations
+    ZF iter 0 max change 2034.2681 EUR
+    ZF iter 10 max change 7.1313 EUR
+DK1 ZF: converged after 19 iterations
+    FL iter 0 max change 0.0000 EUR
+DK2 FL: converged after 1 iterations
+    LL iter 0 max change 587.1489 EUR
+    LL iter 10 max change 0.5728 EUR
+DK2 LL: converged after 13 iterations
+    ZF iter 0 max change 2363.1918 EUR
+    ZF iter 10 max change 8.6160 EUR
+DK2 ZF: converged after 20 iterations
+equity       0.00  0.02  0.05  0.10  0.25  0.50  1.00  2.00
+region rule                                                
+DK1    FL     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
+       LL    16.0  16.0  16.0  16.0  16.0  16.0  16.0   0.0
+       ZF    16.0  16.0  16.0  16.0  16.0  16.0  16.0   0.0
+DK2    FL     0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
+       LL    16.0  16.0  16.0  16.0  16.0  16.0  16.0   0.0
+       ZF    16.0  16.0  16.0  16.0  16.0  16.0  16.0   0.0
+equity        0.00  0.02  0.05  0.10  0.25  0.50  1.00  2.00
+region rule                                                 
+DK1    FL      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
+       LL    325.3   5.3   6.2   6.0   3.9   1.5   0.0   0.0
+       ZF     37.0  33.7  29.5  23.9  13.3   5.1   0.6   0.0
+DK2    FL      0.0   0.0   0.0   0.0   0.0   0.0   0.0   0.0
+       LL    367.1   6.2   7.3   7.3   6.1   3.2   0.4   0.0
+       ZF     43.4  40.0  35.7  29.9  18.3   8.7   1.7   0.0

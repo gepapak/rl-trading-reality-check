@@ -1,0 +1,22 @@
+{
+ "env": "E2",
+ "regime": "S1",
+ "algo": "DQN",
+ "seed": 1,
+ "region": "DK2",
+ "steps": 200000,
+ "seconds": 550.8,
+ "eval_split": "test",
+ "reported": 78055.07512003557,
+ "reality": 476.0489836376154,
+ "rep_reported_return_pct": 78055.07512003557,
+ "rep_ledger_return_pct": 78055.07512003557,
+ "rep_ruined": false,
+ "rep_floor_bound": false,
+ "rep_max_gap_pp": 0.0,
+ "real_reported_return_pct": 476.0489836376154,
+ "real_ledger_return_pct": 476.0489836376154,
+ "real_ruined": false,
+ "real_floor_bound": false,
+ "real_max_gap_pp": 0.0
+}

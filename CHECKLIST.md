@@ -1,32 +1,31 @@
-# Evaluation checklist for AI trading agents in electricity markets
+# Evaluation checklist for RL trading agents and their simulators
 
-Each item points to the evidence in this repository that shows why it matters.
+For anyone who trains or accepts a learned trading controller on the basis of simulated performance. Each item points to the evidence in this repository that shows why it matters.
 
 ## Accounting
-- [ ] **Reconcile the reported return with booked P&L.**
-  - Rebuild equity from per-step booked P&L minus booked costs, and compare it with what the simulator reports (`tools/ledger_check.py`).
-  - Sound accounting agrees within ~1 pp. Here, divergences of 1,000–6,600 pp flagged every false positive.
-- [ ] **Never floor equity silently.**
-  - If cash can hit zero, either end the episode (ruin), or book the debt and recapitalise explicitly.
-  - A zero floor turns losses beyond capital into a free option: reported +21% vs booked −3,332% (`results/ledger_examples/`).
-- [ ] **Report ruin.** State the share of runs whose booked equity path reaches ≤ 5% of initial capital, alongside returns.
+- [ ] **Declare the liability rule.** State how the simulator books losses beyond equity, how positions are sized (fixed allocation or fraction of equity), and what happens at bankruptcy, alongside every reported result. A zero floor or a capped final loss is a modelling decision with behavioral consequences, not a safeguard.
+  - Under a zero floor, agents learned to take maximal leverage near zero equity: 11.1 leverage units of 16 above full-liability agents (`LIABILITY_STUDY_2026-09-29/results_f/`).
+- [ ] **Never floor cash silently; book the debt.** Either end the episode on ruin with the full loss booked, or book any recapitalization as debt in the reward and in the reported result. Real settlement systems require collateral precisely because a distressed party may stop paying.
+  - Capping only the final loss taught far less gambling than a floor that keeps trading (Studies B, F, I, J).
+- [ ] **Reconcile reported equity with booked P&L** for every run, and report the largest gap (`tools/ledger_check.py`).
+  - Sound accounting agrees within about 1 percentage point. In the engine audit the check flagged 53 of 54 affected runs and none of 246 others, without knowledge of the mechanism (`results/`).
+- [ ] **State whether position size scales with equity, and report ruin** (the share of runs whose booked equity reaches zero) alongside returns.
+
+## Tests
+- [ ] **Run a placebo market** (`LIABILITY_STUDY_2026-09-29/placebo_market.py`). Train and evaluate the agent on the same data with the sign of the payoff randomized independently in every period. No policy can profit there in expectation, so any positive expected reported return is a false positive.
+  - Floor-trained agents reported +38% to +148% in the placebo market while booking −15% to −57% (`LIABILITY_STUDY_2026-09-29/results/`).
+- [ ] **Probe the equity response.** Set the equity input of a trained agent to a low and a normal value and compare the risk it takes. The probe needs no access to the simulator's accounting; it is a screening signal, not proof.
+- [ ] **Test sensitivity to simulator assumptions.** Accept a learned controller only if its advantage over the rule survives the removal of each shortcut, and treat an advantage that appears only in markets without a real edge with particular suspicion (`GENERALIZATION_STUDY_2026-09-29/`).
 
 ## Market realism
-- [ ] **Cap positions by executable volume**, not by capital.
-  - Report the ratio of desired to executed volume.
-  - Without a cap, one rule's return grew ×300–1,000 while a learned policy was ruined.
-- [ ] **Model solvency:** margin, loss exit, or a hard budget constraint.
-  - Removing solvency is one of the two necessary components of the reproduced false positive.
-- [ ] **Settle on the actual payoff** (volume × settlement price for the traded product).
-  - Avoid percent-of-price payoffs on a non-storable commodity; they reward a static long position against the window's price drift.
-- [ ] **Respect information timing.**
-  - No interpolation between future prices; no normalisation statistics fitted on test data.
-  - Gate-closure times must match the market (e.g. mFRR request published by T−15).
+- [ ] **Model realistic trading costs.** With a realistic fee, liquidity cap and price impact, agents did not learn to exploit the floor (`LIABILITY_STUDY_2026-09-29/results_h/`), although reported returns still exceeded booked ones when the floor bound.
+- [ ] **Cap executed volume by executable market volume**, not by capital, and report the ratio of desired to executed volume.
+  - Without a cap, one rule's return grew ×300–1,000 while a learned policy was ruined (engine audit).
+- [ ] **Model solvency** (margin, loss exit or a budget constraint) for any account that can lose more than its capital.
+  - A missing liquidity cap and missing solvency rules were jointly necessary for the engine audit's false positive.
+- [ ] **Settle on the actual payoff** of the traded product and **respect information timing**: no interpolation between future prices, no normalization statistics fitted on test data, and gate-closure times that match the market.
 
 ## Statistics and reporting
-- [ ] **Report every seed, and the median alongside the mean and IQM.**
-  - Under zero-floor accounting the mean (+270%) and the IQM (+73%) were fooled; the median (−101%) was not.
-- [ ] **Show per-seed exposure and direction.** A seed that is 99% long is a directional bet, not a strategy.
-- [ ] **Include static and rule baselines**, including always-long and always-short, under the *same* protocol.
-- [ ] **Separate investor-only metrics from fund-level metrics.** Annualise at the decision frequency: 10-minute Sharpe ≈ 175 vs investor daily Sharpe ≈ 3.7.
+- [ ] **Report every seed, and the median alongside the mean**, together with per-seed exposure and direction. Under zero-floor accounting the mean (+270%) and the interquartile mean (+73%) were fooled; the median (−101%) was not.
+- [ ] **Annualize risk metrics at the decision frequency** and separate investor-level from fund-level metrics.
 - [ ] **Pre-register protocol changes and report failed predictions.**

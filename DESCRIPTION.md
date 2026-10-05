@@ -1,41 +1,36 @@
 # Repository description
 
 ## Suggested repository name
-`simulator-decides-the-verdict`
+`simulator-forgives-losses`
 
 ## GitHub "About" text (≤ 350 characters)
-Pre-registered audit of how simulator shortcuts (no liquidity cap, no solvency, zero-floor accounting) turn losing RL trading agents into apparent winners in Nordic balancing markets. Includes a ledger-reconciliation check, an evaluation checklist and a code audit of 21 public energy-RL environments.
+A zero cash floor in a trading simulator teaches RL agents to gamble for resurrection, and standard evaluation reports it as profit. Theory, eleven pre-registered studies on Nordic imbalance spreads (PPO, A2C, DQN), a public-environment audit, a reconciliation check, a placebo-market test and a checklist.
 
 ## Suggested topics
-`reinforcement-learning` `multi-agent-reinforcement-learning` `electricity-markets` `energy-trading` `balancing-market` `imbalance-settlement` `backtesting` `evaluation-methodology` `reproducibility` `pre-registration`
+`reinforcement-learning` `limited-liability` `reward-misspecification` `simulation` `electricity-markets` `energy-trading` `imbalance-settlement` `backtesting` `evaluation-methodology` `pre-registration` `reproducibility`
 
 ## Abstract
-AI trading agents for electricity markets are judged in simulators, and the simulator's accounting can decide the verdict.
+Reinforcement-learning trading agents are trained and accepted in simulators whose accounting is rarely examined. One common convention, flooring an account's cash at zero, gives an agent limited liability, and limited liability rewards risk most strongly near zero equity.
 
-**The case.** A multi-agent reinforcement-learning fund trades Danish imbalance-settlement exposure on held-out 2025 data (DK1, DK2). We re-evaluate its frozen checkpoints in a validated engine under one evaluation shortcut at a time.
+**Theory.** Five propositions with proofs state when simulated limited liability rewards risk: losses beyond equity must be forgiven, and exposure must not shrink with equity.
 
-**What the shortcuts do.**
-- Removing the liquidity cap inflates a deterministic forecast rule's return ×300–1,000, but ruins the learned policy.
-- Removing solvency lets the engine's zero cash floor silently forgive losses. The learned policy's booked P&L loses 7–33× its capital, while the reported return is positive in 13 of 20 runs.
-- A protocol resembling the original thesis reproduces its "MARL wins" claim from checkpoints that come last under strict evaluation: a +270% reported mean vs −535% booked, over 10 seeds.
-- A 56-run leave-one-out decomposition shows the two necessary components are the missing liquidity cap and the missing solvency. The percent-of-price payoff is not necessary.
+**Origin.** In an audit of a validated electricity-market engine, a legacy protocol reported a learned controller first (+270%) while its booked P&L was −535%.
 
-**Detection.** Reconciling reported returns with booked P&L separates sound from unsound accounting in every run.
+**Learning.** In a sign-randomized placebo market, where no policy can profit, floor-trained agents raised their leverage as equity fell and reported +38% to +148% while booking −15% to −57%. When learning was well posed, all ten floor-trained PPO agents learned the theory's threshold policy (11.1 leverage units of 16 above full-liability agents). A2C and DQN agents also gambled near zero equity, often at every equity level. In Finland the threshold policy reappeared where the theory predicts it; in calm southern Norway, where the theory makes the incentive negligible, the effect vanished.
 
-**Generality.** A pre-registered audit of 21 public electricity-RL environments finds that none model capital or solvency and none use zero-floor accounting. The artifact therefore threatens finance-style simulators applied to energy rather than typical energy-RL code.
+**Boundaries.** With realistic trading costs, inside the public simulator gym-mtsim, and with equity-scaled positions, agents did not learn to gamble, or did so only weakly. Reported returns still exceed booked ones wherever a floor binds.
 
-**Reporting.** Every prediction was written into timestamped files before the runs (internal pre-registration), and failed predictions are reported.
+**Reporting.** All studies were pre-registered internally; 19 of 43 liability hypotheses were not supported, and all are reported.
 
 ## Key facts
 | | |
 |---|---|
-| Market | Danish imbalance settlement (DK1, DK2); cross-market checks on FI and NO1–NO5 |
-| Evaluation window | Held-out 2025 data; market data 2025-03-04 → 2026-09-28 |
-| Agents | Plain MAPPO (10 seeds), feasible-action MAPPO (10 seeds), deterministic forecast anchor |
-| Runs | 264 completed engine evaluations (6 further combinations refused by the engine by design), including 3 MARL seeds retrained under the shortcut; engine validated to 1e-8 pp against the frozen campaign |
-| Pre-registered predictions | 18 in the experiments (10 supported, one of them only trivially; 8 not supported) + 4 recorded code-audit expectations (1 met) |
-| Code audit | 337 repositories searched → 21 included and coded at pinned commits |
+| Markets | Danish (DK1, DK2), Finnish (FI) and southern Norwegian (NO2) imbalance spreads, March 2025 → August 2026 |
+| Learners | PPO, A2C and DQN (Stable-Baselines3 2.7.0); frozen MAPPO controllers in the engine audit |
+| Studies | Engine audit; environment-design study A (280 agents); liability studies B–J (534 agents) |
+| Pre-registered liability hypotheses | 43 (24 supported, 19 not supported) |
+| Audits | 18 public RL trading environments (plus FinRL and TensorTrade); 21 public electricity-RL environments |
 | License | Code: MIT. Docs and results: CC BY 4.0. Third-party data: see `THIRD_PARTY_LICENSES.md` |
 
 ## Status
-Accompanies a manuscript in preparation. Model checkpoints and raw per-run logs (~105 GB) are not included in this repository.
+Accompanies a manuscript in preparation for submission. Trained checkpoints and raw per-run logs are not included.

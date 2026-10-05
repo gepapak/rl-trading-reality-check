@@ -1,0 +1,52 @@
+{
+ "liability": "FL",
+ "market": "NE",
+ "algo": "PPO",
+ "seed": 0,
+ "region": "DK1",
+ "steps": 3000,
+ "eval_split": "train(SMOKE)",
+ "reported_return_pct": -100.13019999999626,
+ "ledger_return_pct": -100.13019999999626,
+ "closed": true,
+ "floor_bound": false,
+ "max_gap_pp": 0.0,
+ "mean_abs_lev_open": 1.5889756944444444,
+ "share_max_lev_open": 0.05911915204678363,
+ "open_quarters": 10944,
+ "draws_reported_return_pct": [
+  -100.13019999999626,
+  -107.3135031249999,
+  -100.08153750000012
+ ],
+ "drawmean_reported_return_pct": -102.50841354166543,
+ "draws_ledger_return_pct": [
+  -100.13019999999626,
+  -107.3135031249999,
+  -100.08153750000012
+ ],
+ "drawmean_ledger_return_pct": -102.50841354166543,
+ "draws_mean_abs_lev_open": [
+  1.5889756944444444,
+  2.246558092679651,
+  2.2941955684007707
+ ],
+ "drawmean_mean_abs_lev_open": 2.0432431185082884,
+ "draws_max_gap_pp": [
+  0.0,
+  0.0,
+  0.0
+ ],
+ "drawmean_max_gap_pp": 0.0,
+ "drawshare_floor_bound": 0.0,
+ "drawshare_closed": 1.0,
+ "probe_e0": 2.767460091220068,
+ "probe_e0.02": 2.762400228050171,
+ "probe_e0.05": 2.746436716077537,
+ "probe_e0.1": 2.7045324971493727,
+ "probe_e0.25": 2.6193700114025087,
+ "probe_e0.5": 2.4492588369441277,
+ "probe_e1": 1.885190992018244,
+ "probe_e2": 0.8454247434435576,
+ "seconds": 67.3
+}

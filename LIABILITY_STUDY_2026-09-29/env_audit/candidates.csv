@@ -1,0 +1,232 @@
+full_name,stars,default_branch,description,queries,searched_at
+AminHP/gym-anytrading,2387,master,"The most simple, flexible, and comprehensive OpenAI Gym trading environment (Approved by OpenAI Gym)","2,3",2026-09-30T05:11:05
+Yvictor/TradingGym,1921,master,Trading and Backtesting environment for training reinforcement learning agent or simple rule base algo.,"1,2,3",2026-09-30T05:11:05
+notadamking/RLTrader,1868,master,A cryptocurrency trading environment using deep reinforcement learning and OpenAI's gym,"1,2,3",2026-09-30T05:11:05
+deependersingla/deep_trader,1502,master,This project uses reinforcement learning on stock market and agent tries to learn trading. The goal is to check if the agent can learn to read tape. The project is dedicated to hero in life great Jess,4,2026-09-30T05:11:05
+Ceruleanacg/Personae,1410,master,📈 Personae is a repo of implements and environment of Deep Reinforcement Learning & Supervised Learning for Quantitative Trading.,"1,4",2026-09-30T05:11:05
+sadighian/crypto-rl,968,arctic-streaming-ticks-full,Deep Reinforcement Learning toolkit: record and replay cryptocurrency limit order book data & train a DDQN agent,5,2026-09-30T05:11:05
+notadamking/Stock-Trading-Environment,855,master,A custom OpenAI gym environment for simulating stock trades on historical price data.,"2,3",2026-09-30T05:11:05
+thedimlebowski/Trading-Gym,568,master,Trading Gym is an open source project for the development of reinforcement learning algorithms in the context of trading.,2,2026-09-30T05:11:05
+AminHP/gym-mtsim,526,main,"A general-purpose, flexible, and easy-to-use simulator alongside an OpenAI Gym trading environment for MetaTrader 5 trading platform (Approved by OpenAI Gym)","2,3",2026-09-30T05:11:05
+ClementPerroud/Gym-Trading-Env,498,main,"A  simple, easy, customizable Gymnasium environment for trading.","2,3,9",2026-09-30T05:11:05
+miroblog/deep_rl_trader,414,master,Trading Environment(OpenAI Gym) + DDQN (Keras-RL),"2,3",2026-09-30T05:11:05
+golsun/deep-RL-trading,360,master,playing idealized trading games with deep reinforcement learning,4,2026-09-30T05:11:05
+shenyichen105/Deep-Reinforcement-Learning-in-Stock-Trading,323,master,Using deep actor-critic model to learn best strategies in pair trading ,4,2026-09-30T05:11:05
+ucaiado/rl_trading,289,master,An environment to high-frequency trading agents under reinforcement learning,1,2026-09-30T05:11:05
+miroblog/tf_deep_rl_trader,252,master,Trading Environment(OpenAI Gym) + PPO(TensorForce),"2,3",2026-09-30T05:11:05
+hugocen/freqtrade-gym,231,master,A customized gym environment for developing and comparing reinforcement learning algorithms in crypto trading.,"1,2,3,5",2026-09-30T05:11:05
+ThibautTheate/An-Application-of-Deep-Reinforcement-Learning-to-Algorithmic-Trading,215,main,"Experimental code supporting the results presented in the scientific research paper entitled ""An Application of Deep Reinforcement Learning to Algorithmic Trading""",10,2026-09-30T05:11:05
+danderfer/Comp_Sci_Sem_2,212,main,"According to all known laws of aviation, there is no way that a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway. Because ",2,2026-09-30T05:11:05
+harveybc/gym-fx,209,master,"Gymnasium trading environment for FX and crypto: backtrader execution bridge, protected SL/TP orders, solvency curricula and audit-grade trade diagnostics","2,3,9",2026-09-30T05:11:05
+zero-was-here/tradingbot,200,main,"DRL Trading - AI Gold Trading Bot    Deep reinforcement learning system for autonomous XAUUSD trading using:   - PPO & Dreamer algorithms (PyTorch)   - 140+ features: multi-timeframe, macro data, econ",10,2026-09-30T05:11:05
+CodeLogist/RL-Forex-trader-LSTM,193,master,Deep LSTM Duel DQN Reinforcement Learning Forex EUR/USD Trader ,6,2026-09-30T05:11:05
+MehranTaghian/DQN-Trading,190,master,A Deep Reinforcement Learning Framework for Stock Market Trading,4,2026-09-30T05:11:05
+irisx3/attention_drl_trading,164,main,"Attention-based Deep Reinforcement Learning framework for portfolio allocation on S&P 500 equities. Includes custom environment, policy architecture with cross-sectional attention, PPO/A2C/REINFORCE a","1,7",2026-09-30T05:11:05
+ChuaCheowHuan/gym-continuousDoubleAuction,154,master,A custom MARL (multi-agent reinforcement learning) environment where multiple agents trade against one another (self-play) in a zero-sum continuous double auction. Ray [RLlib] is used for training.,"1,2,3",2026-09-30T05:11:05
+kayuksel/forex-rl-challenge,153,master,A Deep Reinforcement Learning Challenge on Forex Portfolio Management,6,2026-09-30T05:11:05
+samre12/gym-cryptotrading,136,master,OpenAI Gym Environment API based Bitcoin trading environment,"2,3",2026-09-30T05:11:05
+The-FinAI/trials,135,main," Our codebase trials provide an implementation of the Select and Trade paper, which proposes a new paradigm for pair trading using hierarchical reinforcement learning. It includes the code for the pro",4,2026-09-30T05:11:05
+jiewwantan/StarTrader,110,master,This program trains an agent: StarTrader to trade like a human using a deep reinforcement learning algorithm: deep deterministic policy gradient (DDPG) learning algorithm.,10,2026-09-30T05:11:05
+AI4Finance-Foundation/Deep-Reinforcement-Learning-for-Stock-Trading-DDPG-Algorithm-NIPS-2018,102,master,Practical Deep Reinforcement Learning Approach for Stock Trading. NeurIPS 2018 AI in Finance.,4,2026-09-30T05:11:05
+conditionWang/DRQN_Stock_Trading,92,main,"This is the code implementation of the paper ""Financial Trading as a Game: A Deep Reinforcement Learning Approach"".",4,2026-09-30T05:11:05
+gaurav1086/dl-algo-trader,88,master,Training an Agent to make automated trading decisions in a simulated stochastic market environment using Reinforcement Learning or Deep Q-Learning,1,2026-09-30T05:11:05
+mymusise/Trading-Gym,82,master,A Trading environment base on Gym,"2,3",2026-09-30T05:11:05
+horizon-llm/AlphaQuanter,75,main,[ACL2026] AlphaQuanter: An End-to-End Tool-Orchestrated Agentic Reinforcement Learning Framework for Stock Trading.,4,2026-09-30T05:11:05
+JayChanHoi/value-based-deep-reinforcement-learning-trading-model-in-pytorch,72,master,"This is a repo for deep reinforcement learning in trading. I used value based double DQN variant for single stock trading. The agent learn to make decision between selling, holding and buying stock wi","1,4",2026-09-30T05:11:05
+BangaloreSharks/SharkStock,70,master,"Automate swing trading using deep reinforcement learning. The deep deterministic policy gradient-based neural network model trains to choose an action to sell, buy, or hold the stocks to maximize the ","4,10",2026-09-30T05:11:05
+YuriyKolesnikov/rl-trading-binance,67,main,"Reinforcement Learning Agent for Binance Futures — realistic backtesting, CNN + D3QN + PER, and reproducible training pipeline.",8,2026-09-30T05:11:05
+mohdabdin/crypto-trading-RL-environment,64,main,A Crypto-trading reinforcement learning that explores the potential of using RL agents on a trading environment with multiple markets.,"1,5",2026-09-30T05:11:05
+5ymph0en1x/Heptet,64,master,Pair Trading - Reinforcement Learning - with Oanda Trading API,6,2026-09-30T05:11:05
+Amey-Thakur/OPTIMIZING-STOCK-TRADING-STRATEGY-WITH-REINFORCEMENT-LEARNING,58,main,Machine Learning Project to Optimize Stock Trading Strategies Using Reinforcement Learning.,4,2026-09-30T05:11:05
+arturbeg/reinforcement_learning_oe,57,master,"The work aims to explore Value based, Deep Reinforcment Learning (Deep Q-Learning and Double Deep Q-Learning) for the problem of Optimal Trade Execution. The problem of Optimal Trade Execution aims to",4,2026-09-30T05:11:05
+Akhilesh-Gogikar/MultiStockRLTrading,55,main,Trading multiple stocks using custom gym environment and custom neural network with StableBaselines3.,"2,3",2026-09-30T05:11:05
+StateOfTheArt-quant/sharpe,51,main,"sharpe is a unified, interactive, general-purpose environment for backtesting or applying machine learning(supervised learning and reinforcement learning) in the context of quantitative trading ",1,2026-09-30T05:11:05
+matinaghaei/Portfolio-Management-ActorCriticRL,47,master,"Portfolio management using Actor-Critic Deep Reinforcement Learning algorithms including A2C, DDPG, and PPO",10,2026-09-30T05:11:05
+StateOfTheArt-quant/trading_gym,47,master,a unified environment for supervised learning and reinforcement learning in the context of quantitative trading,"1,2,3",2026-09-30T05:11:05
+StephanAkkerman/tensortrade,42,main,"This repository contains my TensorTrade-focused code, including the core program and supplemental tools used in my bachelor's thesis on trading low market capitalization cryptocurrencies using reinfor",5,2026-09-30T05:11:05
+yazzaoui/A3C-Crypto-Trader,41,master,Deep Reinforcement Learning A3C Crypto Trading Bot,5,2026-09-30T05:11:05
+RezaSoleymanifar/neural,40,main,Realtime Algorithmic Trading Using Deep Reinforcement Learning,10,2026-09-30T05:11:05
+charlesashby/trading-rrl,36,master,Automated FOREX trading using recurrent reinforcement learning,6,2026-09-30T05:11:05
+onesamblack/futures-trading-gym,35,main,An OpenAI gym environment for futures trading,"2,3",2026-09-30T05:11:05
+spawnaga/Tensorflow_reinforcement_learning_trade_-ES_Options,35,main,trade ES Futures Options,8,2026-09-30T05:11:05
+naripok/cryptotrader,32,master,This repo contains a cryptocurrency trading environment and agents,"2,3",2026-09-30T05:11:05
+Kenny1941/Crypto_Bot,32,main,Uses Open AI Gym environment to create autonomous cryptocurrency bot to trade cryptocurrencies. ,"2,3",2026-09-30T05:11:05
+amin-sharifi-github/quant-rl-trading-agent,30,main,"End-to-end RL trading framework with PPO agent, self-attention neural network, custom Gym environment, and advanced backtesting.","2,3",2026-09-30T05:11:05
+thomashirtz/portfolio-management,28,main,"Repository for portfolio management using Pytorch, SQLAlchemy and XArray. The management is done using the reinforcement learning algorithm ""Soft Actor-Critic"".",7,2026-09-30T05:11:05
+komo135/trade-rl,28,main,Learn to use reinforcement learning to maximize the profit gained from a trade.,"4,6",2026-09-30T05:11:05
+nguyenviettuan96/mt5_AI_trading_bot,28,main,Apply LSTM neural network and reinforcement learning to trading Forex on mt5,6,2026-09-30T05:11:05
+diovisgood/intraday,28,master,Gym environment which simulates intraday trading,"2,3",2026-09-30T05:11:05
+Solrikk/CriptoWhisper,27,main,"TradeWhisperer is a sophisticated cryptocurrency trading bot that leverages advanced Reinforcement Learning techniques, specifically the Proximal Policy Optimization (PPO) algorithm, to navigate the c",5,2026-09-30T05:11:05
+mablue/mastrade,26,main,"MasTrade is a trading bot in baselines3,pytorch,gym",2,2026-09-30T05:11:05
+talaikis/stock_market_reinforcement_learning,26,master,,4,2026-09-30T05:11:05
+inoue0406/CryptoBot-FinRL,25,main,Crypto trading bot using FinRL reinforcement learning model  ,5,2026-09-30T05:11:05
+kshitija2/Interactive-Multi-objective-Reinforcement-Learning,24,master,"Multi-objective reinforcement learning deals with finding policies for tasks where there are multiple distinct criteria to optimize for. Since there may be trade-offs between the criteria, there does ",10,2026-09-30T05:11:05
+songyunfan/DeepRLTrading,24,master,Trading Stock with Deep Reinforcement Learning,4,2026-09-30T05:11:05
+kivo360/concurrent-rl-training,22,master,A concurrent and possibly highly parallel training environment for Reinforcement Learning Trading Bot,1,2026-09-30T05:11:05
+suraj-maniyar/Stock-Trading-Using-Machine-Learning,22,master,A comprehensive approach for stock trading implemented using Neural Network and Reinforcement Learning separately.,4,2026-09-30T05:11:05
+NickKaparinos/Automated-Cryptocurrency-trading-using-Deep-RL,21,master,Training and evaluation of Deep Reinforcement Learning cruptocurrency trading agent.,5,2026-09-30T05:11:05
+jaybutera/tradebot,21,master,Reinforcement learning for online crypto trading,5,2026-09-30T05:11:05
+namm2008/DRL_stock_trading,21,main,Deep Reinforcement Learning for Stock trading task,4,2026-09-30T05:11:05
+astrologos/tradinggym,21,main,A highly-customizable OpenAI gym environment to train & evaluate RL agents trading stocks and crypto.,"2,3",2026-09-30T05:11:05
+solplayground/solana_gym,20,main,OpenAI Gym Environment for Trading on Solana blockchain,"2,3",2026-09-30T05:11:05
+shaurya-src/Reinforced-Stock-Trading,20,master,Using Reinforcement Learning on S&P500 dataset to predict the future stock prices. The implementation uses deep Q-learning model along with time series modeling to achieve the goal state.,4,2026-09-30T05:11:05
+ksemianov/TradingGym,20,master,OpenAI Gym Environment for Low-Latency Trading,"2,3",2026-09-30T05:11:05
+timeolord/Reinforcement-Learning-Stock-Trader,19,main,Using a modified version of Werner Duvaud's MuZero implementation (https://github.com/werner-duvaud/muzero-general) this reinforcement agent learns to trade stocks based on Yahoo Finance data.,4,2026-09-30T05:11:05
+tradingAI/tbase,18,main,Baselines of reinforcement learning trading agents for China stock market,4,2026-09-30T05:11:05
+RuiHirano/trading_gym_next,16,main,,2,2026-09-30T05:11:05
+LinRiver/Deep-Reinforcement-Learning-on-Futures-Trading,15,master,,8,2026-09-30T05:11:05
+NxRoot/open-ai-trading-bot,15,main,Trading Bot using OpenAI Gym,2,2026-09-30T05:11:05
+spawnaga/FlexTrader,15,main,A multi-task deep reinforcement learning model for trading futures contracts using the Interactive Brokers API and TensorFlow,8,2026-09-30T05:11:05
+JuliuszB12/Optimal-sequential-stock-trading-strategy-with-DDPG,15,main,Implementation of a deep reinforcement learning algorithm to determine the optimal strategy for trading in stock exchanges on the example of companies included in the S&P500 index,"4,10",2026-09-30T05:11:05
+drewstone/gym-trading,15,master,Reinforcement learning environment for trading,"1,2,3",2026-09-30T05:11:05
+negarhonarvar/StockTrading_DRL,14,main,Automated stock trading strategy using deep reinforcement learning and recurrent neural networks,4,2026-09-30T05:11:05
+yegee0/Autonomous-RL-Trading-Bot,14,main,"Autonomous trading agent using Reinforcement Learning (PPO/DQN) to execute data driven strategies in financial markets. Built with Gymnasium, Stable-Baselines3, and integrated with real time data APIs",9,2026-09-30T05:11:05
+WJie12/autotrading_DQN,14,master,CS277 Project: Deep Reinforcement Learning in portfolio Management. This repo is the DQN part which implements a trading agent based on the DQN algorithm.,10,2026-09-30T05:11:05
+white07S/ForexRL,13,main,A Deep Reinforcement Learning model for high volume and frequency Forex Portfolio Management,6,2026-09-30T05:11:05
+Seanman519/RLBOT,13,main,Reinforcement Learning trading,6,2026-09-30T05:11:05
+masonJamesWheeler/Active-Trader,13,main,"Emergent Trading Strategies with DQN in Stock Market Trading This repository contains the implementation of a Deep Q-Network (DQN), applied to the realm of stock market trading. This repository also h",4,2026-09-30T05:11:05
+franespiga/gymfolio,12,master,Reinforcement Learning environment for financial portfolio optimization,7,2026-09-30T05:11:05
+rvdb7345/Commodity-Trading-Agent,12,main,A Reinforcement Learning-based agent for product procurement in an agri-commodity setting.,2,2026-09-30T05:11:05
+DylanSiegel/sheeplz-crypto-bot,11,main,"AI-powered cryptocurrency trading bot built using deep reinforcement learning (DRL). The bot is designed as a research platform for developing and testing advanced trading strategies, emphasizing flex",5,2026-09-30T05:11:05
+MohammadAsadolahi/Reinforcement-learning-algorithm-Deep-Q-learning-for-cryptocurrency-trading,10,main,Deep Q learning algorithm for cryptocurrency trade deployed with Tensorflow (keras) in python,"5,10",2026-09-30T05:11:05
+alextmn/rf-trading-bot,10,master,Reinforcement learning crypto trading bot,5,2026-09-30T05:11:05
+austin-liu-yang/Q-LearningTradingStrategy,10,master,A project that uses Reinforcement Learning (Q-Learning) to trade stock.,4,2026-09-30T05:11:05
+taoyafan/Quantitative-Trading,9,master,目前还不能用，只能提供一种思路。。。使用强化学习做A股的量化交易-Using deep reinforcement learning to do quantitative trading of a shares A-Stock,4,2026-09-30T05:11:05
+DrewArnold1/DeepTraderEnv,9,master,Forex trading simulation environment for gym,3,2026-09-30T05:11:05
+falconzyx/Trading-Brain,9,master,Framework for deep learning in Trading-Gym environment,3,2026-09-30T05:11:05
+Joeyipp/rl-stock-trading,9,master,Stock Trading with Reinforcement Learning (DQN & DDPG),4,2026-09-30T05:11:05
+EpicSanDev/EVIL2ROOT_AI,9,main,"Welcome to the AI-Powered Trading Bot repository! This project is a comprehensive, high-performance trading bot that integrates machine learning, reinforcement learning, and sentiment analysis to make",6,2026-09-30T05:11:05
+OliverJoo/AI_Stocktrading_Reinforcementlearning,8,master,AI Stock Trading System by Reinforcement Learning and Natural Language Processing,4,2026-09-30T05:11:05
+jingyuanz/Deep-Reinforcement-Learning-for-Stock-Trading,8,master,"An implementation of Deep Reinforcement Learning agents (DDQN, Dueling, Distributional, A2C, etc.) for stock trading",4,2026-09-30T05:11:05
+nico-sundev/drl-trading,7,master,Monorepo consisting of a comprehensive ML Pipeline used for financial trading using deep reinforcement learning algorithms.,10,2026-09-30T05:11:05
+harveybc/rl-optimizer,7,master,Legacy reinforcement-learning optimization harness — superseded by gym-fx environments and doin-node/agent-multi distributed optimization; preserved for history,"1,3",2026-09-30T05:11:05
+Vnadh/RL-Crypto-Trading-Bot,7,main,"A reinforcement learning-based cryptocurrency trading bot that implements and compares PPO, A2C, and DQN algorithms for BTC/USDT trading strategies.",5,2026-09-30T05:11:05
+MattsonThieme/RLTrading,7,master,Deep reinforcement learning for algorithmic cryptocurrency trading.,10,2026-09-30T05:11:05
+austinLorenzMccoy/QuantumFlow_AI_Lab,7,main,"The QuantumFlow AI Lab is a cutting-edge AI-driven platform for generating, optimizing, and executing crypto trading strategies. It combines the power of Large Language Models (LLMs), Reinforcement Le",5,2026-09-30T05:11:05
+antconsales/QuantMind,7,main,"An open-source cryptocurrency trading bot powered by AI. Uses Large Language Models for sentiment analysis, and Reinforcement Learning for automated trading on a Raspberry Pi. Optimize your investment",5,2026-09-30T05:11:05
+magnaopus1/Synthron-CFD-Trader-PRO,7,main,"SYNTHRON CFD Trader PRO is a cutting-edge trading platform featuring raw, custom-designed machine learning models. From reinforcement learning for dynamic strategies to predictive analytics, sentiment","5,6,8",2026-09-30T05:11:05
+zhangbppku8663/ReinforcementL_trading,7,master,Implementation of a reinforcement learning algorithm and application on stock trading,4,2026-09-30T05:11:05
+cove9988/tradingformer,7,main,using transformer for time serial to create a model (forecasting next x bars) . applying knowledge distillation to get features extraction fine tuning pre-trained model with the trading pair creating ,3,2026-09-30T05:11:05
+Traxin3/ryan-rl-trader,6,main,"Reinforcement Learning trading environment built on gym-mtsim, re-engineered with transformers and PPO","1,3,9",2026-09-30T05:11:05
+Phoebe0222/RLTradingStrategy,6,master,A trading agent with reinforcement learning in a customised environment ,1,2026-09-30T05:11:05
+Sol0420/TradingAlgoQuantConnect,6,main,An advanced machine learning-powered trading algorithm system that combines deep learning price prediction with reinforcement learning optimization for automated forex and CFD trading.,"6,10",2026-09-30T05:11:05
+Tahernezhad/Deep-Q-Learning-Stock-Trading,5,main,DQN stock-trading agent with a custom Gymnasium environment and yfinance data.,9,2026-09-30T05:11:05
+dema-u/gym-crypto,5,master,Reinforcement Learning environments for crypto-currency trading.,"1,5",2026-09-30T05:11:05
+GioLomia/Energy_Broker_Genetic_Algorithm_RL,5,master,This is a reinforcement learning algorithm designed to effectively trade enrgy withing a simulated environment.,1,2026-09-30T05:11:05
+arora-ansh/DeepRL-AlgoTrading,5,main,Implementing TDQN and TD3QN on the environment presented in An Application of Deep Reinforcement Learning to Algorithmic Trading by Théate et al.,"1,10",2026-09-30T05:11:05
+mvresh/BitcoinTradingBotWithOpenAI,5,master,Training openAI Gym in Bitcoin trading environment.,3,2026-09-30T05:11:05
+MihneaTeodorStoica/StockPredictor,4,main,Reinforcement learning agent that learns to trade stocks by maximizing long-term returns through simulated environments.,1,2026-09-30T05:11:05
+doftorul/fx-trade,4,master,"Free, open source forex trading bot integrated with Oanda and Telegram, with the possibility to implement machine learning and reinforcement learning strategies, besides classical ones.",6,2026-09-30T05:11:05
+anarlavrenov/TradeNinja,4,main,Custom environment for advancing reinforcement learning research in cryptocurrency trading.,1,2026-09-30T05:11:05
+21jumpstart/RL-Cryptocurrency-Trader,4,master,"Uses the reinforcement learning algorithm, PPO, to trade Bitcoin.",5,2026-09-30T05:11:05
+MoHoss007/TradePilot-RL,4,main,This project implements a stock trading simulation environment and trains reinforcement learning agents to make buy/sell/hold decisions.,1,2026-09-30T05:11:05
+MRYingLEE/Portfolio_GYM,4,master,This is an OPENAI gym reinforcement learning environment for investing. There are portfolio performance and risk metrics functions built in. These functions can be used to evaluate your algorithm and ,7,2026-09-30T05:11:05
+LiiLk/trading-bot-RL,3,master,Reinforcement Learning for trading forex and indices,6,2026-09-30T05:11:05
+LuisAugusto0205/trading_environment,3,main,Repositório destinado a disciplina de residência do curso de bacharelado em inteligência artificial (INF-UFG). Um ambiente de simulação simplificado seguindo a interface do Gymnasium para aplicação de,9,2026-09-30T05:11:05
+just-nilux/AdvancedCryptoTradingEnvironment,3,master,"The AdvancedCryptoTradingEnvironment is an OpenAI Gym environment that provides a realistic simulation of cryptocurrency trading with advanced features, including order book dynamics specific to Binan","1,5",2026-09-30T05:11:05
+H-Blues/DRL-crypto-trade,3,main,Deep Reinforcement Learning for Cryptocurrencies Trading,5,2026-09-30T05:11:05
+austinLorenzMccoy/ai_strategylab,3,main,"The OKX AI Strategy Lab is a cutting-edge AI-driven platform for generating, optimizing, and executing crypto trading strategies. It combines the power of Large Language Models (LLMs), Reinforcement L",5,2026-09-30T05:11:05
+GericoVi/Trader-RL,3,master,Experiments with reinforcement learning - within a FOREX trading environment,"1,6",2026-09-30T05:11:05
+fleea/modular-trading-gym-env,3,main,Flexible reinforcement learning environment for simulating financial trading scenarios. Based on gymnasium,"1,9",2026-09-30T05:11:05
+richimf/CryptoBot,3,master,Reinforcement Learning for automatic trading,5,2026-09-30T05:11:05
+igolas0/Crypto-Reinforcement-Learning-Trading-Bot,3,master,Cryptocurrencies Trading Bot Project using Reinforcement Learning and AI Techniques,5,2026-09-30T05:11:05
+Nexis-AI/NexisAI,3,main,"nexisAI is a decentralized AI trading framework that integrates reinforcement learning, blockchain, and edge computing for secure, transparent, and efficient trading. Built by NexisAI, it leads AI-blo",5,2026-09-30T05:11:05
+damey2011/dqn-forex,3,master,[WIP] Reinforcement learning project that uses DQN to trade the forex market,6,2026-09-30T05:11:05
+caoshuo594/Forex_Reinforcement_Learning,3,main,A Forex trading system using Reinforcement Learning with PPO algorithm and MT5 integration,6,2026-09-30T05:11:05
+lucas8338/outrage-trading-env,2,master,A gym-env to do trading (forex/stock/crypto) using reinforcement-learning,6,2026-09-30T05:11:05
+PaulchauvinAI/crypto-rl-bot,2,main,Train and backtest reinforcement learning models for crypto trading,5,2026-09-30T05:11:05
+benwaldner/TradeRL-Env,2,main,Trading Reinforcement Learning Environments,1,2026-09-30T05:11:05
+gregorizeidler/AlphaAgent,2,main,"Advanced Deep Reinforcement Learning trading agent using PPO algorithm. Features multi-modal state representation (OHLCV, fundamentals, FinBERT sentiment), risk management, market regime detection, an",10,2026-09-30T05:11:05
+ian20111999/RL-Crypto,2,main,🚀 基於 PPO 強化學習的加密貨幣合約交易系統 | Cryptocurrency Futures Trading with Reinforcement Learning,8,2026-09-30T05:11:05
+naimelhajj/forex-rl-trading-bot,2,main,"Deep Reinforcement Learning Trading Bot for Forex Markets - DQN agent with advanced risk management, frame stacking, and adaptive position sizing",6,2026-09-30T05:11:05
+Mrugendra7911/Deep_Reinforcement_Learning_Agent,2,main,"Deep Reinforcement Learning trading agent (PPO/DQN) for EUR/USD with regime-based gating and risk-aware reward shaping. Implements bootstrap experience buffers, convex P&L rewards, and drawdown constr",10,2026-09-30T05:11:05
+jtylerleake/Visual-RL-Decision-Making,2,main,A reinforcement learning framework that combines Gramian Angular Field image encodings with multi-stock trading environments to train RL agents on visual representations of timeseries data.,1,2026-09-30T05:11:05
+Ankit-Saha-2003/gym-stock-trading,2,main,Gym environment for reinforcement learning in stock trading,1,2026-09-30T05:11:05
+Pangjing-Wu/algorithmic-trading,2,master,A reinforcement learning environment for algorithmic trading.,1,2026-09-30T05:11:05
+BSkaiTech/crypto-trading-bot,2,main,Reinforcement Learning Crypto Trading Bot,5,2026-09-30T05:11:05
+Alz-Android/crypto-trading-drl,2,main,Deep Reinforcement Learning Cryptocurrency Trading Bot,5,2026-09-30T05:11:05
+denis-mikhalev/reinforcement-learning-trading-agent,2,main,"Deep RL agent for financial market signal generation — PPO/A2C/SAC/TD3, 99 indicators, ensemble signals, 4-level quality gate",9,2026-09-30T05:11:05
+waplebe/rl-trading-bot,2,master,Reinforcement Learning trading bot for NQ futures using PPO + Gymnasium,"8,9",2026-09-30T05:11:05
+stevesato423/CryptoBot-FinRL,2,main,Crypto trading bot using FinRL reinforcement learning model,5,2026-09-30T05:11:05
+netteNz/reinforcement-learning-stocks,2,main,This project focuses on building an RL-powered trading bot using Gymnasium and Stable Baselines3,9,2026-09-30T05:11:05
+zqxie77/Reinforcement-Learning-for-Futures-Quantitative-Trading,2,main,,8,2026-09-30T05:11:05
+hanwCal/crypto_rl,2,main,a reinforcement learning agent for trading in the Solana meme coin market,5,2026-09-30T05:11:05
+thotab13/Deep-reinforcement-learning-based-crypto-trader-,2,main,"Deep reinforcement learning-based crypto trading uses reinforcement learning and neural networks to optimize trading strategies by learning from market data, enabling autonomous decision-making in vol",5,2026-09-30T05:11:05
+anhnh2002/Reinforcement-Learning-in-Finance,2,main," The automation of profit generation in the stock market is possible using DRL, by combining the financial assets price ”prediction” step and the ”allocation” step of the portfolio in one unified proc",7,2026-09-30T05:11:05
+akash25aiml-coder/RL-trading-agent-,1,main,"Regime-aware tabular Q-learning trading agent with ensemble training, transaction-cost sensitivity, and cross-asset validation against Buy & Hold. reinforcement-learning q-learning algorithmic-trading",9,2026-09-30T05:11:05
+robert-vetter/eao-rl,1,main,"Deep RL agent for grid-battery trading on real power markets, benchmarked against perfect-foresight and rolling-intrinsic strategies. Built on Fraunhofer SCAI's EAO framework.",9,2026-09-30T05:11:05
+damraka/deep-cointegration-arbitrage,1,main,A Reinforcement Learning (PPO) based Statistical Arbitrage bot for Pairs Trading. Utilizes Engle-Granger cointegration tests and custom Gymnasium environments to optimize for risk-adjusted returns (Sh,9,2026-09-30T05:11:05
+SAIRISHIR/RL,1,main,"Production-ready Multi-Agent RL Trading System using PyTorch, Stable-Baselines3, Gymnasium & Streamlit. Simulates trading, trains PPO/A2C/DQN agents, tracks ROI, cash, trades, learns multi-stock polic",9,2026-09-30T05:11:05
+gonzow9/DQN-trading-agent,1,main,"Deep Q-Network trading bot that downloads Yahoo Finance data for the top 100 S&P 500 stocks, trains a multi-asset Gymnasium environment with stable-baselines3, logs to TensorBoard, and saves an evalua",9,2026-09-30T05:11:05
+general-liquidity/sharpearena,1,main,A deterministic trading-agent evaluation sandbox and reinforcement-learning environment.,9,2026-09-30T05:11:05
+JacobBrooke1/ai-crypto-trader,1,main,"Experimental PPO reinforcement-learning crypto trading agent with custom Gymnasium environments (Stable-Baselines3, Binance data)",9,2026-09-30T05:11:05
+chinthakat/rl-trading-sandbox,1,main,"A small learning experiment that trains a Stable-Baselines3 PPO agent on a hand-written Gymnasium environment for BTC-USD, using 15-minute Yahoo Finance candles with SMA, RSI and MACD indicators. No f",9,2026-09-30T05:11:05
+archocron/gymnasium-trading,1,main,Gimnasium environment focus on trading strategies,9,2026-09-30T05:11:05
+nick-bellows/ES-Futures-RL-TradingBot,1,main,"Archived reinforcement-learning project documenting Python/C# integration, data pipelines, testing, execution-state failure, and engineering lessons.","8,9",2026-09-30T05:11:05
+chinthakat/trading-bot-v5-rl,1,main,"Reinforcement-learning sandbox for BTC perpetual-futures trading: a Gymnasium environment simulating a leveraged multi-trade futures account, PPO agents on Stable-Baselines3, a synthetic OHLCV generat","8,9",2026-09-30T05:11:05
+chinthakat/trading-bot-v4-rl,1,main,"Experimental reinforcement-learning trading agent for Binance BTC/USDT perpetual futures: a custom Gymnasium environment with multi-position, margin and liquidation simulation, a hand-tuned point-base","8,9",2026-09-30T05:11:05
+chinthakat/tensortrade-btc-rl,1,master,"Reinforcement-learning sandbox for BTC perpetual futures: a Gymnasium environment simulating a Binance USDT-margined futures account (leverage, fees, ATR stops, liquidation) with Stable-Baselines3 PPO","8,9",2026-09-30T05:11:05
+alex-is-busy-coding/rl-order-execution,1,main,Optimal trade execution using Deep Q-Networks (DQN) and PyTorch. Simulates an Almgren-Chriss market environment to outperform TWAP benchmarks.,9,2026-09-30T05:11:05
+sharmaaditya2003/NeuroQuant,1,main,"An autonomous trading agent powered by Deep Reinforcement Learning (PPO). Trained on 8 years of market data using a custom Gymnasium environment with advanced technical indicators (RSI, MACD, SMA) for",9,2026-09-30T05:11:05
+ItsyaBoiJR/an-application-of-deep-reinforcement-learning-to-algorithmic-trading,1,main,Implementation of arXiv paper: An Application of Deep Reinforcement Learning to Algorithmic Trading,10,2026-09-30T05:11:05
+LakshmiVadhanie/Deep-Reinforcement-Learning-Portfolio-Management-System,1,main,A sophisticated portfolio management system using Deep Reinforcement Learning algorithms (DQN and PPO) for automated trading and portfolio optimization. ,10,2026-09-30T05:11:05
+9pm-trading/rl-trader,1,master,Reinforcement Learning Based Forex Trading System ,6,2026-09-30T05:11:05
+claaudelane/ReinforcementTrading_Forex,1,main,Reinforcement Learning for Forex Trading using PPO,6,2026-09-30T05:11:05
+rugern/electroville,1,master,Testing deep reinforcement learning in forex trading,6,2026-09-30T05:11:05
+DanTheMan38/RL_Forex_Trading_EA,1,master,A Forex trading expert advisor (EA) powered by reinforcement learning for automated trading.,6,2026-09-30T05:11:05
+vandyand/RLModelsAlgoTrading,1,master,Reinforcement learning experiments for profitably trading forex and cryptocurrency markets,6,2026-09-30T05:11:05
+Soussieya/RL-Trading,1,master,"RL-Trading est une plateforme de trading Forex utilisant Reinforcement Learning (RL) pour entraîner un agent à prendre des décisions d’achat, de vente ou de maintien sur le marché des devises. L’objec",6,2026-09-30T05:11:05
+KaiserDna23/RL_Trading,1,main,Forex trading using Reinforcement Learning with Meta Trader 5 environment. This will use algorithms such as Actor Critic(A2C) Network with Proximal Policy Optimization (PPO). Subsequently the goal is ,6,2026-09-30T05:11:05
+cmarvinzurich/BESS-Pricing,1,main,"Rainflow‑aware DQN for battery dispatch (arbitrage + FR/reserves): Gymnasium env with safety layer, exact cycle‑based degradation, time features & stacked observations; SB3 training.",9,2026-09-30T05:11:05
+Rashid-hussain-mohammed/ml_eng_A3C,1,main,A3C Design Space Exploration (Automotive) A Deep Reinforcement Learning (DRL) project using the A3C algorithm to optimize vehicle powertrain parameters. Automates the trade-off between Fuel Consumptio,10,2026-09-30T05:11:05
+linnps/ml-10-reinforcement-learning,1,main,Deep Q-Network (PyTorch) on a from-scratch Gridworld environment. Part 10 of an ML portfolio.,7,2026-09-30T05:11:05
+Chaos366273/Reinforcement-Learning-Trading-System,1,main,"Deep Reinforcement Learning framework for multi-asset portfolio allocation using Proximal Policy Optimization (PPO), custom trading environments, and risk-adjusted evaluation.",7,2026-09-30T05:11:05
+muteyaki/RL_Portfolio_env,1,main,It is a portfolio management environment for reinforcement learning.,7,2026-09-30T05:11:05
+pratik-n30/RL-for-Portfolio-Optimization,1,main,Developed a Deep Reinforcement Learning (PPO) agent within a custom Gymnasium environment to optimize multi-asset portfolio allocations. Engineered a robust data pipeline transforming historical OHLCV,7,2026-09-30T05:11:05
+1pperalta/StockSystem,1,main,"Reinforcement Learning environment for stock and crypto trading. A DQN agent built manually with PyTorch learns to buy, sell, or hold assets to maximize portfolio profit. Trained and evaluated on 5 as",7,2026-09-30T05:11:05
+Vitorgb7/alphaquant-rl,1,main,"Research and development platform for algorithmic trading using Deep Reinforcement Learning, PyTorch, and FinRL.",10,2026-09-30T05:11:05
+Naahraf27/Reinforcement-Learning-for-Stock-Trading,1,main,"This project demonstrates the application of reinforcement learning (RL) to stock trading using the Stable Baselines3 library. The project includes custom trading environments for Adidas, Nike, and Pu",10,2026-09-30T05:11:05
+atahabilder1/Alpharl-portfolio,1,main,"Deep reinforcement learning system for dynamic portfolio optimization across equities,  fixed income, and alternatives. Uses PPO algorithm with custom Gym environment to maximize  Sharpe ratio while m",7,2026-09-30T05:11:05
+aarontyler1/deep-rl-trading,1,main,Deep Reinforcement Learning for Algorithmic Trading. Implements and benchmarks Trading Deep Q-Network (TDQN) and a new novel Trading Proximal Policy Optimization (TPPO) agent against classical strateg,10,2026-09-30T05:11:05
+Chaitanya211002/RL-Project,1,main,Reinforcement Learning for Algorithmic Stock Trading: Comparing Tabular Q-Learning and Deep Q-Networks (DQN) on Apple (AAPL) stock data,10,2026-09-30T05:11:05
+Hari-Sri-T/Autonomous-RL-Trading-Bot-Laplace,1,main,An autonomous algorithmic trading system for the Indian Stock Market (NSE) powered by Deep Reinforcement Learning (DQN) and live WebSocket integration.,10,2026-09-30T05:11:05
+anandxkumar/Stock_Trade_Bot,1,master,Developed a Stock Trade Bot using Deep Q-Learning Reinforcement Learning Algorithm. The bot trains using ANN and the Q table gets updated after every epoch. The bot can take decisions of buying and se,10,2026-09-30T05:11:05
+thanhen/GymnasiumStockTrading,0,main,,9,2026-09-30T05:11:05
+amittall/StockTradingSimulationGymnasium,0,main,,9,2026-09-30T05:11:05
+rltraderexp/rl_trader,0,main,Deep Reinforcement Learning Agent for Algorithmic Trading,10,2026-09-30T05:11:05
+LadoLabadze/TradingRL,0,main,Deep Reinforcement learning algorithm for stock ,10,2026-09-30T05:11:05
+NKouppas/deep-reinforcement-learning,0,master,Deep Reinforcement Learning for Algorithmic Trading,10,2026-09-30T05:11:05
+quiquee/BTC_Trading,0,master,An intraday PPO BTC / EUR trader using Gymnasium,9,2026-09-30T05:11:05
+BushraSaleem98/Stock_Trading_Simulation_with_Gymnasium,0,main,A Python project that simulates stock trading using reinforcement learning (PPO) with Gymnasium and Stable Baselines3.,9,2026-09-30T05:11:05
+DataHiveMind/Deep-Reinforcement-Learning-for-Algorithmic-Trading-with-Ensemble-Machine-Learning-Signals,0,main,,10,2026-09-30T05:11:05
+hammad07kashif-ui/Reinforcement-Learning-Arcade,0,main,"Welcome to the Neural Arcade, a premium portfolio showcase of Reinforcement Learning environments built from scratch. This project demonstrates the evolution from simple vector-based AI to DeepMind-st",7,2026-09-30T05:11:05
+deuteriumZzz/BitbotBY,0,main,"AI-hybrid crypto trading bot for Bybit Futures — LLMs (Claude/DeepSeek/GPT/Gemini), SAC reinforcement learning, Amazon Chronos forecasting, 16+ classic strategies, quant risk management (Kelly, CVaR),",8,2026-09-30T05:11:05
+Manan-Goel/Testnet-Trading-RL-agent,0,main,"A robust, production-grade Python CLI and foundation for Reinforcement Learning trading agents on the Binance Futures Testnet. Features custom API signing, structured logging, and multi-order type sup",8,2026-09-30T05:11:05
+Expert68/TradingBot,0,master,An attempt of using reinforcement learning to trade forex,6,2026-09-30T05:11:05
+Hero988/forex-reinforcement-learning,0,main,,6,2026-09-30T05:11:05
+developeralgo8888/forex-rl,0,master,fotrx trading reinforcement learning,6,2026-09-30T05:11:05
+SebastianChaves210/reinforcement-learning-trading-bot,0,main,PPO reinforcement learning trading bot for forex/crypto using Stable Baselines 3,6,2026-09-30T05:11:05
+meethu51/Forex-Trading-Bot-Using-PPO-Reinforcement-Learning-,0,main,,6,2026-09-30T05:11:05
+BhanuPrakash202/Reinforcement-Learning-Based-Automated-Stock-Trading-using-Q-Learning,0,main,"Reinforcement Learning-based stock trading simulator using Q-Learning. Includes a custom trading environment, state discretization, and reward shaping for automated portfolio optimization.",7,2026-09-30T05:11:05
+cristo2401/forex_cuda,0,main,High-throughput CUDA/PyTorch environment for vectorized FX portfolio simulation and reinforcement learning research.,7,2026-09-30T05:11:05
+kunderdhanya07/Dynamic-Portfolio-Optimization-with-PPO-An-End-to-End-Reinforcement-Learning-Framework-for-NIFTY50,0,main,"Proximal Policy Optimization (PPO) for dynamic NIFTY50 portfolio optimization, based on the paper by Kunder et al. It includes data collection, feature engineering, a custom trading environment with t",7,2026-09-30T05:11:05
+raaaaaif/ppo-portfolio-optimizer,0,main,"A reinforcement learning agent using Proximal Policy Optimization to manage a stock portfolio, with custom environments, graph-based architectures, and real-world financial data.",7,2026-09-30T05:11:05
+Fedor277/supportbench-rl-agent-environment,0,main,"Portfolio-grade reinforcement-learning and agent-evaluation environment for simulated customer-support workflows, featuring explicit state, actions, rewards, episodes, trajectories, safety gates, poli",7,2026-09-30T05:11:05
+kshirodray77/stock-portfolio-rl,0,main,"A Gymnasium-compatible reinforcement learning environment for training agents to manage and rebalance multi-asset stock portfolios with realistic transaction costs, slippage, and risk-adjusted reward ",7,2026-09-30T05:11:05
+yuvrajsingh1097/rl-portfolio-optimizer,0,main,Deep Reinforcement Learning portfolio allocation using a PPO agent trained in a custom OpenAI Gym environment. The agent learns to allocate capital across a basket of equities with realistic transacti,7,2026-09-30T05:11:05
+CoderOggy78/OPENENVHACKATHON,0,main,"A production-grade, realistic quantitative trading environment for reinforcement learning agents. Supports portfolio optimization, algorithmic trading, and market-making strategies with professional-g",7,2026-09-30T05:11:05
+aviral07-code/Dynamic_potfolio_management,0,main,This project implements a dynamic portfolio allocation framework using contextual bandit algorithms and deep reinforcement learning (PPO). The environment models daily allocation among multiple financ,7,2026-09-30T05:11:05
+Pranav-Adusumilli/stock-trading-rl,0,main,"A reinforcement learning–based stock trading system using DQN and TD3. Includes multi-asset portfolio optimization, sentiment-enhanced data, custom Gym environments, and full evaluation with Sharpe/So",7,2026-09-30T05:11:05
+shivdev79/OptimaTrade,0,main,"AlphaEnv is a high-performance Reinforcement Learning environment designed for training autonomous trading agents. It simulates real-time market dynamics and portfolio management, challenging AI agent",7,2026-09-30T05:11:05
+godacre/MarketPulse-The-Live-AI-Trading-Hub,0,main,"This Python script simulates stock and options trading using a custom environment and a PPO reinforcement learning model. It features a Tkinter-based live dashboard with real-time portfolio metrics, i",7,2026-09-30T05:11:05
+sathishchandrasekaran007-code/DRL_Trading_Project,0,main,"Deep Reinforcement Learning based trading system where an agent learns buy, sell and hold actions from historical market data. The project builds a custom trading environment, trains a DRL agent to ma",7,2026-09-30T05:11:05
+Azrulfy/automatic-trading,0,master,"code for paper ""Automatic Trading in Futures Market via Convolutional Neural Network and Deep Reinforcement Learning""",8,2026-09-30T05:11:05
+Shhreya-Anand/ReinforcementLearning_FuturesTrading,0,main,,8,2026-09-30T05:11:05
+elinawang626-design/Uncertainty-Aware-Reinforcement-Learning-for-Futures-Trading,0,main,Project on uncertainty-aware prediction and trading using conformal methods,8,2026-09-30T05:11:05
+morales0021/HFT_Futures_Simulator_Engine,0,main,Project for simulating an HFT trading environnement for Reinforcement Learning,8,2026-09-30T05:11:05
+victorl2/rl-futures-trading,0,main,A reinforcement learning exploration using stable baselines 3 applied to trading crytocurrency futures,8,2026-09-30T05:11:05
+J0shusmc/Population-Based-DQN-Training,0,main,Deep reinforcement learning trading system using Population-Based Training to evolve DQN agents on NQ futures data,8,2026-09-30T05:11:05
+LohanNascimento/RL_model_trading,0,main,"Este sistema permite executar um modelo de trading baseado em Reinforcement Learning (RL) na Binance Futures Testnet, simulando operações reais sem arriscar capital.",8,2026-09-30T05:11:05
+erlind10/Trading-Bot,0,main,"ETH-PPO-Bot: A reinforcement learning trading bot for Binance Futures. Uses PPO to trade ETH/USDT based on RSI, ADX, and BB indicators. Includes Discord webhooks and auto-retraining.",8,2026-09-30T05:11:05
+SirNosh/QuantumVIX,0,main,QuantumVIX is an advanced reinforcement learning-based trading system that specializes in exploiting volatility patterns in S&P 500 futures and options markets.,8,2026-09-30T05:11:05
+ChetanBhangare/Portfolio-Optimization-Algorithmic-Trading-using-Deep-Reinforcement-Learning-FinRL-,0,main,"Deep reinforcement learning trading pipeline (FinRL + Stable-Baselines3) that trains A2C, DDPG, PPO, TD3, and SAC agents on DJIA equities, benchmarks them against Mean-Variance Optimization and market",10,2026-09-30T05:11:05

@@ -2,3 +2,6 @@
 * text=auto eol=lf
 *.gz binary
 *.csv text eol=lf
+# Study folders are kept byte-exact: their files are covered by pre-registration hashes
+GENERALIZATION_STUDY_2026-09-29/** -text
+LIABILITY_STUDY_2026-09-29/** -text

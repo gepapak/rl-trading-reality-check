@@ -1,0 +1,22 @@
+{
+ "env": "E2",
+ "regime": "S4",
+ "algo": "PPO",
+ "seed": 0,
+ "region": "DK1",
+ "steps": 200000,
+ "seconds": 758.4,
+ "eval_split": "test",
+ "reported": 1229.444012055798,
+ "reality": 723.1028586718986,
+ "rep_reported_return_pct": 1229.444012055798,
+ "rep_ledger_return_pct": 1229.444012055798,
+ "rep_ruined": false,
+ "rep_floor_bound": false,
+ "rep_max_gap_pp": 0.0,
+ "real_reported_return_pct": 723.1028586718986,
+ "real_ledger_return_pct": 723.1028586718986,
+ "real_ruined": false,
+ "real_floor_bound": false,
+ "real_max_gap_pp": 0.0
+}
