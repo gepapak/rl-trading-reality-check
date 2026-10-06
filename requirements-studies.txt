@@ -1,4 +1,4 @@
-# Studies A-J (GENERALIZATION_STUDY_2026-09-29/, LIABILITY_STUDY_2026-09-29/), Python 3.10.
+# Studies A-K (GENERALIZATION_STUDY_2026-09-29/, LIABILITY_STUDY_2026-09-29/), Python 3.10.
 # Versions are those the studies ran with (CPU only).
 numpy==1.26.4
 pandas==2.3.2

@@ -1,0 +1,14 @@
+{'zone': 'DK1', 'gamma': 0.95, 'dp_median': 1.1099999999999999, 'dp_min': 0.96, 'dp_max': 1.1600000000000001, 'closed_form': 0.4961140843422649, 'length_scale': 0.08017179167850812}
+{'zone': 'DK1', 'gamma': 0.98, 'dp_median': 1.4500000000000002, 'dp_min': 1.25, 'dp_max': 1.4500000000000002, 'closed_form': 0.8614648514693081, 'length_scale': 0.14653740577346527}
+{'zone': 'DK1', 'gamma': 0.99, 'dp_median': 1.8, 'dp_min': 1.6, 'dp_max': 1.82, 'closed_form': 1.2742326781830227, 'length_scale': 0.22652238689228138}
+{'zone': 'DK1', 'gamma': 0.995, 'dp_median': 2.31, 'dp_min': 2.08, 'dp_max': 2.35, 'closed_form': 1.8483153373165373, 'length_scale': 0.34497300823819665}
+{'zone': 'DK2', 'gamma': 0.95, 'dp_median': 1.1400000000000001, 'dp_min': 1.08, 'dp_max': 1.22, 'closed_form': 0.5078801890480248, 'length_scale': 0.08019076865229446}
+{'zone': 'DK2', 'gamma': 0.98, 'dp_median': 1.5, 'dp_min': 1.3900000000000001, 'dp_max': 1.61, 'closed_form': 0.8713420593055534, 'length_scale': 0.14492270478658215}
+{'zone': 'DK2', 'gamma': 0.99, 'dp_median': 1.88, 'dp_min': 1.76, 'dp_max': 2.01, 'closed_form': 1.27753362218006, 'length_scale': 0.22217004083801453}
+{'zone': 'DK2', 'gamma': 0.995, 'dp_median': 2.4299999999999997, 'dp_min': 2.27, 'dp_max': 2.5700000000000003, 'closed_form': 1.866497935584826, 'length_scale': 0.34013114340487516}
+{'zone': 'FI', 'gamma': 0.95, 'dp_median': 2.0, 'dp_min': 1.13, 'dp_max': 2.24, 'closed_form': 0.36402831622989035, 'length_scale': 0.06223489918898454}
+{'zone': 'FI', 'gamma': 0.98, 'dp_median': 2.17, 'dp_min': 1.4100000000000001, 'dp_max': 2.91, 'closed_form': 0.6326004613225474, 'length_scale': 0.11410217411967376}
+{'zone': 'FI', 'gamma': 0.99, 'dp_median': 2.49, 'dp_min': 1.75, 'dp_max': 3.61, 'closed_form': 0.9651280188540959, 'length_scale': 0.18143578932871543}
+{'zone': 'FI', 'gamma': 0.995, 'dp_median': 3.0300000000000002, 'dp_min': 2.2, 'dp_max': 4.32, 'closed_form': 1.4246244142001392, 'length_scale': 0.28099922805186395}
+{'zone': 'NO2', 'gamma': 0.95, 'dp_median': 0.09, 'dp_min': 0.045, 'dp_max': 0.11, 'closed_form': 0.04325066987936551, 'length_scale': 0.01031751212080934}
+{'zone': 'NO2', 'gamma': 0.98, 'dp_median': 0.115, 'dp_min': 0.07, 'dp_max': 0.135, 'closed_form': 0.06770967887304, 'length_scale': 0.017653545787840834}

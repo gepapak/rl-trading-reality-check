@@ -16,7 +16,9 @@ import pandas as pd
 
 HERE = Path(__file__).resolve().parent
 R = pd.read_csv(HERE / "results_j" / "runs_j.csv")
-D = pd.read_csv(HERE / "results_j" / "dp_j.csv")
+# optimum from the full training distribution (dp_full.py); the pre-registered dp_j.csv used a 3,000-quarter-hour sample
+D = pd.read_csv(HERE / "results_k" / "dp_full_b2000_g4.csv")
+D = D[D.gamma == 0.99]
 OUT = next((HERE.parent / "Overleaf Projects (1 items)").glob("*"), HERE / "outputs") / "figures" / "fig_markets.pdf"
 RULE = {"FL": ("Full liability", "#2a78d6", "o"), "LL": ("Capped loss, stop at zero", "#eb6834", "s"),
         "ZF": ("Zero floor, keep trading", "#1baf7a", "^")}
@@ -44,7 +46,7 @@ def main() -> int:
             ax.fill_between(E, lo, hi, color=color, alpha=0.15, lw=0)
             ax.plot(E, M.mean(axis=0), color=color, lw=1.4, marker=mk, ms=4, mec="white", mew=0.5, label=f"{name}, learned")
         for rule in ("ZF", "FL"):
-            opt = [D[(D.region == zone) & (D.rule == rule) & np.isclose(D.equity, e)].opt_abs_lev.mean() for e in E]
+            opt = [float(D[D.zone == zone][f"opt_{e:g}"].iloc[0]) if rule == "ZF" else 0.0 for e in E]
             ax.plot(E, opt, color=RULE[rule][1], lw=1.0, ls="--", label=f"{RULE[rule][0]}, optimum")
         ax.set_xscale("log")
         ax.set_xticks(E, ["0.02", "0.05", "0.1", "0.25", "0.5", "1", "2", "3"], fontsize=6.5)

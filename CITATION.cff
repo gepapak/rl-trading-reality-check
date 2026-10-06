@@ -22,7 +22,7 @@ abstract: >-
   Code, data pipelines, internal pre-registrations and aggregated results for a study of how a common simulator
   accounting convention, flooring an account's cash at zero, teaches reinforcement-learning trading agents to gamble
   for resurrection and makes standard evaluation report the behavior as profit. Includes the theory solvers, the
-  environments and runners of eleven studies (an engine audit, an environment-design study, and liability studies B-J
+  environments and runners of twelve studies (an engine audit, an environment-design study, and liability studies B-K
   with PPO, A2C and DQN agents on Danish, Finnish and Norwegian imbalance spreads, a public simulator and realistic
   trading costs), an audit of public RL trading environments, a reconciliation tool, a placebo-market test and an
   evaluation checklist.

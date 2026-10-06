@@ -1,4 +1,4 @@
-"""Verify the pre-registration hashes of Studies A-J and recompute the paper's headline numbers from the shipped results.
+"""Verify the pre-registration hashes of Studies A-K and recompute the paper's headline numbers from the shipped results.
 
 Needs only this repository (no training, no network). Run from the repository root:
 
@@ -90,6 +90,13 @@ def headlines() -> None:
     G = pd.read_csv(LIAB / "mtsim_study" / "results_g" / "runs_g.csv")
     check("G gym-mtsim runs", float(len(G)), 20, 0)
     check("G largest exposure of any agent", float(G[[col for col in G.columns if col.startswith("x")]].abs().max().max()), 0.0, 0)
+    K = pd.read_csv(LIAB / "results_k" / "runs_k.csv")
+    for g, exp in ((0.95, 1.35), (0.98, 1.475), (0.99, 1.85), (0.995, 1.425)):
+        check(f"K mean gambling region, zero floor, gamma {g}", K[(K.rule == "ZF") & (K.gamma == g)]["T"].mean(), exp, 0.005)
+    check("K full-liability agents with no gambling region (of 20)", float((K[K.rule == "FL"]["T"] == 0).sum()), 17, 0)
+    BM = pd.read_csv(LIAB / "results_k" / "best_moment.csv")
+    check("Theorem 1: largest KS distance, reported vs running maximum (four zones)", BM.ks_D.max(), 0.0785, 0.0005)
+    check("Theorem 1: DK1 mean reported equity (allocations)", BM[BM.zone == "DK1"].mean_reported_K.item(), 2.551, 0.001)
     D = pd.read_csv(LIAB / "env_audit" / "coding_d.csv")
     d = D[D.included == "yes"]
     check("D included environments", float(len(d)), 18, 0)

@@ -6,18 +6,19 @@
 Trading simulators often floor an account's cash at zero, or end an episode at bankruptcy, as a guard against negative balances. Corporate finance has long known what a truncated downside does to a decision maker: limited liability rewards risk, most strongly near zero equity ("gambling for resurrection"). This repository asks whether reinforcement-learning (RL) agents *learn* that incentive from a simulator's accounting, and whether standard evaluation then reports the behavior as profit.
 
 ## Main results
-- **Theory.** Five propositions with proofs: in a market without edge, full liability makes staying flat optimal, while a zero floor on fixed positions makes maximal leverage optimal, most valuably near zero equity. Capping only the final loss forgives at most one overshoot. With equity-scaled positions the hazard appears only above a leverage threshold, and a log reward removes it under a computable condition.
+- **Theory.** Eight propositions and a theorem with proofs: in a market without edge, full liability makes staying flat optimal, while a zero floor on fixed positions makes maximal leverage optimal, most valuably near zero equity. Capping only the final loss forgives at most one overshoot. With equity-scaled positions the hazard appears only above a leverage threshold, and a log reward removes it under a computable condition.
+- **The floor reports the best moment in hindsight.** Under a zero floor, reported equity is the booked ledger reflected at zero (Lindley's recursion). An agent trading from the floor is credited, in distribution, with the running maximum of its P&L: a free floating-strike lookback option on its own profit. In the diffusion limit the false profit has the law of |B_T|, with a universal coefficient of variation of 0.76. In four Nordic zones the mean false profit is predicted without fitted parameters (DK1: 2.57 allocations predicted, 2.55 observed). The optimal policy is a barrier whose width scales with position volatility and, in theory, with patience; learned agents matched the optimum's size but not its widening with the discount factor (Study K).
 - **Origin.** In an audit of a validated electricity-market engine, a legacy protocol reported a learned controller first (**+270%**) while its booked P&L was **−535%**. A missing liquidity cap and missing solvency rules were jointly necessary.
 - **Agents learn the incentive** (placebo market with sign-randomized imbalance spreads, where no policy can profit):
   - with default training, floor-trained agents raised leverage as equity fell and reported **+38% to +148%** while booking **−15% to −57%** (Study B); this replicated on fresh seeds and grew with training (Study C);
   - when learning was well posed, **all ten floor-trained PPO agents learned the theory's threshold policy**, 11.1 leverage units of 16 above full-liability agents (Cohen's d = 2.6, one-sided permutation p = 0.0004; Study F);
   - with A2C and DQN the floor raised leverage near zero equity by 9.2 units pooled, though about a third of their floor-trained agents gambled at every equity level (Study I);
-  - in Finland PPO agents again learned the threshold policy, exactly where the Finnish optimum is maximal; in calm southern Norway, where the theory makes the incentive negligible, the effect vanished (Study J).
+  - in Finland PPO agents again learned the threshold policy; in calm southern Norway, where the theory makes the incentive negligible, the effect vanished (Study J).
 - **Boundaries.** With realistic trading costs (Study H), inside the public simulator gym-mtsim (Study G) and with equity-scaled positions (Study E), agents did not learn to gamble, or did so only weakly. Reported returns still exceed booked ones wherever a floor binds.
 - **Prevalence.** One of the 18 most-starred public RL trading environments meets both enabling conditions (Study D); FinRL and TensorTrade do not; 20 of 21 public electricity-RL environments have no capital account.
 - **Tools.** A reconciliation check of reported against booked returns (flagged 53 of 54 affected engine runs, none of 246 others), a placebo-market test, and an evaluation checklist (`CHECKLIST.md`).
 
-All pre-registered hypotheses are reported, including the 19 of 43 liability hypotheses that were not supported.
+All pre-registered hypotheses are reported, including the 22 of 46 liability hypotheses that were not supported.
 
 ## Studies and where to find them
 | Study | Question | Folder | Pre-registration | Aggregated results |
@@ -33,8 +34,9 @@ All pre-registered hypotheses are reported, including the 19 of 43 liability hyp
 | H | Realistic trading costs | `LIABILITY_STUDY_2026-09-29/` | `PREREGISTRATION_H.md` | `results_h/` |
 | I | Other learners (A2C, DQN) | `LIABILITY_STUDY_2026-09-29/` | `PREREGISTRATION_I.md` | `results_i/`, pilot `results_pilot_i/` |
 | J | Other markets (Finland, southern Norway) | `LIABILITY_STUDY_2026-09-29/` | `PREREGISTRATION_J.md` | `results_j/` |
+| K | Patience: does the gambling region widen with the discount factor? | `LIABILITY_STUDY_2026-09-29/` | `PREREGISTRATION_K.md` | `results_k/` |
 
-Each study folder also holds `PREREGISTRATION_HASHES.txt` (SHA-256 of every registered file, with UTC timestamps) and `RUN_LOG.md` (launches, interruptions, relaunches and changes of job order). Theory solvers: `dp_theory.py` (Denmark), `dp_frictions.py` (Study H), `dp_j.py` (Study J). Placebo-market test: `placebo_market.py`. Exploratory analyses are in `review_rigor.py` and `explore_i.py`.
+Each study folder also holds `PREREGISTRATION_HASHES.txt` (SHA-256 of every registered file, with UTC timestamps) and `RUN_LOG.md` (launches, interruptions, relaunches and changes of job order). Theory solvers: `dp_theory.py` (Denmark), `dp_frictions.py` (Study H), `dp_j.py` (Study J), `dp_full.py` (full training distribution, all zones; supersedes the 3,000-sample solves, see `RUN_LOG.md`), `theory_k.py` and `reflection_barrier.py` (closed-form barrier). Best-moment theorem: `best_moment.py`, `make_best_moment_figure.py`. Placebo-market test: `placebo_market.py`. Exploratory analyses are in `review_rigor.py` and `explore_i.py`.
 
 ## Repository layout
 ```
@@ -43,12 +45,12 @@ CITATION.cff                     citation metadata
 CHECKLIST.md                     evaluation checklist for RL trading agents and their simulators
 LICENSE, LICENSE-docs.md         MIT (code); CC BY 4.0 (docs, results, derived tables)
 THIRD_PARTY_LICENSES.md          sources, licenses and attribution for all third-party material
-requirements*.txt                standalone analyses; engine stack; Studies A-J; Study G (gym-mtsim)
-tools/verify_studies.py          checks every pre-registration hash of Studies A-J and recomputes their headline numbers
+requirements*.txt                standalone analyses; engine stack; Studies A-K; Study G (gym-mtsim)
+tools/verify_studies.py          checks every pre-registration hash of Studies A-K and recomputes their headline numbers
 tools/verify_release.py          recomputes every headline number of the engine audit
 tools/ledger_check.py            standalone reported-vs-booked-P&L reconciliation
 GENERALIZATION_STUDY_2026-09-29/ Study A: environments, runner, aggregation, Energinet data and panels, results
-LIABILITY_STUDY_2026-09-29/      Studies B-J: environments, runners, aggregation, theory solvers, results
+LIABILITY_STUDY_2026-09-29/      Studies B-K: environments, runners, aggregation, theory solvers, results
 engine/, audit/                  engine audit: simulator source (patched audit copy) and audit code
 analysis/, code_audit/           cross-market liquidity test; code audit of 21 electricity-RL repositories
 literature/                      pilot literature survey coding (no PDFs)
@@ -64,7 +66,7 @@ Python 3.10. CPU only.
 **Verification without training (minutes).**
 ```
 pip install -r requirements-studies.txt
-python tools/verify_studies.py      # pre-registration hashes of Studies A-J and their headline numbers
+python tools/verify_studies.py      # pre-registration hashes of Studies A-K and their headline numbers
 python tools/verify_release.py      # headline numbers of the engine audit
 python tools/ledger_check.py results/ledger_examples/L3_marl_seed7_DK1.csv.gz   # a flagged run
 ```
@@ -72,7 +74,9 @@ python tools/ledger_check.py results/ledger_examples/L3_marl_seed7_DK1.csv.gz   
 **Theory and aggregation from the shipped per-run results.** In `LIABILITY_STUDY_2026-09-29/`:
 ```
 python dp_theory.py                 # optimal policies, Denmark (Section 3 of the paper)
-python aggregate_b.py               # and aggregate_e.py, aggregate_f.py, aggregate_h.py, aggregate_i.py, aggregate_j.py
+python aggregate_b.py               # and aggregate_e.py, aggregate_f.py, aggregate_h.py, aggregate_i.py, aggregate_j.py, aggregate_k.py
+python dp_full.py --gammas 0.95 0.98 0.99 0.995   # optimal gambling regions on the full training distribution (all zones)
+python best_moment.py               # Theorem 1: reported equity under the floor vs the running maximum, four zones
 python placebo_market.py --demo     # the placebo-market test on a floor and a full-liability agent
 ```
 Figure and table scripts (`make_*.py`) write to `outputs/` inside each study folder.
@@ -84,8 +88,9 @@ cd LIABILITY_STUDY_2026-09-29
 python run_b.py --phase rules && python run_b.py --phase rl --workers 6   # Study B (the study relaunched with run_b_order.py; see RUN_LOG.md)
 python scaling/run_c.py --workers 7                                       # Study C
 python run_e.py --workers 7 ; python run_f.py --workers 7 ; python run_h.py --workers 7 ; python run_i.py --workers 7
+python run_k.py --workers 7                                               # Study K (discount factor)
 ```
-Study B took about 8 hours and Study I about 2 hours with 7 workers on an 8-core CPU.
+Study B took about 8 hours, Study I about 2 hours and Study K about 3 hours with 7 workers on an 8-core CPU.
 
 **Study J (Finland, southern Norway).** eSett data are not redistributed:
 ```

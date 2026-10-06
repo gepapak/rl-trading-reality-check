@@ -1,6 +1,6 @@
 # Third-party material and licenses
 
-Checked on 29 Sep 2026; updated 5 Oct 2026 for Studies A–J.
+Checked on 29 Sep 2026; updated 5 Oct 2026 for Studies A–K.
 
 | Material | Location in repository | Source | License / terms | How it is used here |
 |---|---|---|---|---|

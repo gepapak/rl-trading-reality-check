@@ -14,6 +14,7 @@ For anyone who trains or accepts a learned trading controller on the basis of si
 ## Tests
 - [ ] **Run a placebo market** (`LIABILITY_STUDY_2026-09-29/placebo_market.py`). Train and evaluate the agent on the same data with the sign of the payoff randomized independently in every period. No policy can profit there in expectation, so any positive expected reported return is a false positive.
   - Floor-trained agents reported +38% to +148% in the placebo market while booking −15% to −57% (`LIABILITY_STUDY_2026-09-29/results/`).
+  - For an agent trading from the floor, five draws flag it about 90% of the time (Theorem 1 and Corollary 2 of the paper). An agent evaluated from a full allocation reaches the floor in only some draws: use 20 or more draws, or several agents.
 - [ ] **Probe the equity response.** Set the equity input of a trained agent to a low and a normal value and compare the risk it takes. The probe needs no access to the simulator's accounting; it is a screening signal, not proof.
 - [ ] **Test sensitivity to simulator assumptions.** Accept a learned controller only if its advantage over the rule survives the removal of each shortcut, and treat an advantage that appears only in markets without a real edge with particular suspicion (`GENERALIZATION_STUDY_2026-09-29/`).
 
